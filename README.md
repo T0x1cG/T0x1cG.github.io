@@ -4,6 +4,8 @@ A self-contained cybersecurity portfolio with a protected publishing desk.
 
 The public interface uses full-screen panels: Home opens first, scrolling is locked, and the left-side index switches between Research, Notes, Certifications, Competitions, and Contact.
 
+The visual system is styled as a cybersecurity field dossier: warm paper, charcoal ink, red annotations, blue ledger lines, stamped labels, and document-style archive cards.
+
 ## Run locally
 
 Run node server.js, then open http://localhost:3000.

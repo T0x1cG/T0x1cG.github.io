@@ -135,7 +135,7 @@ function staticFile(request, response, urlPath) {
   const requested = urlPath === "/" ? "/index.html" : decodeURIComponent(urlPath);
   const file = path.resolve(ROOT, "." + requested);
   const relative = path.relative(ROOT, file);
-  const publicFiles = new Set(["index.html", "styles.css", "credentials.css", "single-page.css", "app.js"]);
+  const publicFiles = new Set(["index.html", "styles.css", "credentials.css", "single-page.css", "paper-theme.css", "app.js"]);
   const publicAsset = relative.startsWith("assets" + path.sep) && !relative.includes("..");
   if (relative.startsWith("..") || path.isAbsolute(relative) || (!publicFiles.has(relative) && !publicAsset)) {
     response.writeHead(404, SECURITY_HEADERS); response.end("Not found"); return;
