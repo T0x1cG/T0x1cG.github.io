@@ -1,0 +1,120 @@
+{
+  "articles": [
+    {
+      "id": "seed-web-001",
+      "label": "Web",
+      "title": "Following a blind SSRF into the internal network",
+      "summary": "A methodical path from a server-side URL fetcher to evidence of internal service reachability.",
+      "tags": ["SSRF", "methodology"],
+      "body": "This sample writeup is ready to replace from the Publishing Desk. It demonstrates the structure used for research posts: a clear title, short context, tags, and the full technical narrative.\n\nStart with the observable behavior. Record every request, response difference and timing clue before attempting an exploit chain. That discipline turns a hunch into a reproducible finding.",
+      "url": "",
+      "createdAt": "2026-06-14T10:00:00.000Z"
+    },
+    {
+      "id": "seed-crypto-001",
+      "label": "Crypto",
+      "title": "When a nonce is only almost random",
+      "summary": "A CTF-sized look at why a small implementation shortcut can collapse the security of a stream cipher.",
+      "tags": ["cryptography", "CTF"],
+      "body": "Cryptographic failures rarely look dramatic in code. Often the implementation is close to correct: a counter starts in the wrong place, an IV gets reused, or a source of entropy is predictable.",
+      "url": "",
+      "createdAt": "2026-05-23T10:00:00.000Z"
+    },
+    {
+      "id": "seed-forensics-001",
+      "label": "Forensics",
+      "title": "Timeline first: extracting a story from volatile artifacts",
+      "summary": "A practical triage workflow for turning scattered memory and filesystem evidence into an investigation timeline.",
+      "tags": ["DFIR", "memory"],
+      "body": "The most useful first deliverable in an investigation is often a timeline, not a conclusion. Build a sequence of events that other analysts can challenge and extend.",
+      "url": "",
+      "createdAt": "2026-04-02T10:00:00.000Z"
+    },
+    {
+      "id": "seed-reverse-001",
+      "label": "Reverse",
+      "title": "Reading a binary’s intent before its instructions",
+      "summary": "How imports, strings, control flow and runtime behavior can guide a faster reverse-engineering session.",
+      "tags": ["reverse", "triage"],
+      "body": "Before digging into individual instructions, map the binary’s visible edges: imported functions, strings, sections, resources and observed execution. That early map makes the deep work much more intentional.",
+      "url": "",
+      "createdAt": "2026-02-19T10:00:00.000Z"
+    }
+  ],
+  "notes": [
+    {
+      "id": "seed-note-001",
+      "label": "WEB TESTING",
+      "title": "A better starting point than a payload list",
+      "summary": "Map the data flow, trust boundaries and side effects before reaching for the usual strings.",
+      "tags": ["web"],
+      "body": "A short note is not a small writeup. It should hold one useful idea with enough context to make it reusable.",
+      "url": "",
+      "createdAt": "2026-06-03T10:00:00.000Z"
+    },
+    {
+      "id": "seed-note-002",
+      "label": "DFIR",
+      "title": "The importance of negative evidence",
+      "summary": "What should have been there? That question frequently narrows an investigation faster than what is.",
+      "tags": ["forensics"],
+      "body": "Absence can be a meaningful artifact when it is measured against a clear baseline.",
+      "url": "",
+      "createdAt": "2026-05-11T10:00:00.000Z"
+    },
+    {
+      "id": "seed-note-003",
+      "label": "TOOLING",
+      "title": "Automate the repeatable, narrate the unusual",
+      "summary": "Scripts should save attention for the decision points that actually require an analyst.",
+      "tags": ["workflow"],
+      "body": "Automation is valuable when it makes expert judgment more visible, not when it hides it.",
+      "url": "",
+      "createdAt": "2026-03-28T10:00:00.000Z"
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cc-isc2-2026",
+      "label": "ISC2",
+      "title": "Certified in Cybersecurity (CC)",
+      "summary": "Certified Mar 2026 · Active through Feb 2029",
+      "tags": [],
+      "body": "",
+      "url": "",
+      "createdAt": "2026-03-01T10:00:00.000Z"
+    },
+    {
+      "id": "ejpt-ine-2025",
+      "label": "INE SECURITY",
+      "title": "eJPT — Junior Penetration Tester",
+      "summary": "Awarded Nov 2025 · Certification ID 165821612",
+      "tags": [],
+      "body": "",
+      "url": "",
+      "createdAt": "2025-11-06T10:00:00.000Z"
+    },
+    {
+      "id": "crta-cwl-2025",
+      "label": "CYBERWARFARE LABS",
+      "title": "Certified Red Team Analyst (CRTA)",
+      "summary": "Awarded Sep 2025 · Hands-on red team certification",
+      "tags": [],
+      "body": "",
+      "url": "",
+      "createdAt": "2025-09-17T10:00:00.000Z"
+    }
+  ],
+  "achievements": [
+    {
+      "id": "cyber-arena-2026",
+      "label": "COMPETITION / CTF",
+      "title": "Cyber Arena 2026 — 1st Place",
+      "summary": "First place with team WillHack4Coffee",
+      "tags": ["CTF", "team"],
+      "body": "Awarded first place at Cyber Arena 2026 as a member of WillHack4Coffee.",
+      "url": "",
+      "createdAt": "2026-01-01T10:00:00.000Z"
+    }
+  ]
+}

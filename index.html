@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101612" />
+    <meta name="description" content="T0x1cG — cybersecurity research, writeups, field notes and certifications." />
+    <title>T0x1cG — Cybersecurity Researcher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="credentials.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="T0x1cG home">
+          <span class="brand-mark"><i></i><i></i><i></i></span>
+          <span>T0<span class="accent">x</span>1cG</span>
+        </a>
+        <div class="topbar-right">
+          <span class="live-status"><b></b> OPEN TO COLLABORATE</span>
+          <button class="utility-button" id="openDesk" type="button"><span class="button-sigil">+</span> PUBLISHING DESK</button>
+        </div>
+      </header>
+
+      <aside class="rail" aria-label="Section navigation">
+        <span class="rail-label">INDEX</span>
+        <nav>
+          <a class="active" href="#top"><span>01</span> Start</a>
+          <a href="#research"><span>02</span> Research</a>
+          <a href="#notes"><span>03</span> Notes</a>
+          <a href="#credentials"><span>04</span> Credentials</a>
+          <a href="#contact"><span>05</span> Contact</a>
+        </nav>
+        <div class="rail-socials">
+          <a href="https://github.com/T0x1cG" target="_blank" rel="noreferrer">GH</a>
+          <a href="mailto:hello@t0x1cg.dev">EM</a>
+        </div>
+      </aside>
+
+      <main id="top">
+        <section class="hero section-pad">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="pulse"></span> INDEPENDENT SECURITY RESEARCHER · 2026</p>
+            <h1>Finding the <em>signal</em><br />inside the noise.</h1>
+            <p class="hero-summary">I’m <strong>T0x1cG / Chanserey Savon</strong> — a cybersecurity researcher focused on offensive security, digital forensics, and the practical details that make systems safer.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#research">Explore research <span>↘</span></a>
+              <a class="text-link" href="#contact">Start a conversation <span>→</span></a>
+            </div>
+          </div>
+          <div class="identity-card">
+            <div class="identity-topline"><span>OPERATOR PROFILE</span><span>00.01</span></div>
+            <div class="radar" aria-hidden="true">
+              <div class="radar-ring ring-1"></div><div class="radar-ring ring-2"></div><div class="radar-ring ring-3"></div><div class="radar-sweep"></div><div class="radar-core">T0</div>
+              <i class="blip b1"></i><i class="blip b2"></i><i class="blip b3"></i>
+            </div>
+            <div class="identity-details">
+              <div><span>FOCUS</span><strong>Offensive Security</strong></div>
+              <div><span>BASED IN</span><strong>Earth / Remote</strong></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="signal-strip section-pad" aria-label="Research focus">
+          <p class="eyebrow">CURRENT FREQUENCIES</p>
+          <div class="frequency-grid">
+            <div><span>01</span><strong>Web Security</strong><em>Attack surface → exploit path</em></div>
+            <div><span>02</span><strong>Forensics</strong><em>Artifacts → defensible story</em></div>
+            <div><span>03</span><strong>Cryptography</strong><em>Assumptions → broken proofs</em></div>
+            <div><span>04</span><strong>CTF Research</strong><em>Challenge → knowledge transfer</em></div>
+          </div>
+        </section>
+
+        <section class="research-section section-pad" id="research">
+          <div class="section-heading">
+            <div><p class="eyebrow">SELECTED WORK</p><h2>Research <em>stream</em></h2></div>
+            <p>Technical writeups and field research, written for people who care how the answer was reached.</p>
+          </div>
+          <div class="filter-row" role="tablist" aria-label="Filter research">
+            <button class="filter active" type="button" data-filter="all">All signals <span id="articleCount">00</span></button>
+            <button class="filter" type="button" data-filter="Web">Web</button><button class="filter" type="button" data-filter="Crypto">Crypto</button>
+            <button class="filter" type="button" data-filter="Forensics">Forensics</button><button class="filter" type="button" data-filter="Reverse">Reverse</button>
+          </div>
+          <div class="research-grid" id="articleGrid" aria-live="polite"><div class="loading-card">Loading research archive…</div></div>
+        </section>
+
+        <section class="notebook-section section-pad" id="notes">
+          <div class="notebook-title">
+            <p class="eyebrow">POCKET REFERENCE</p><h2>Field <em>notes</em></h2><span class="scribble">Short, sharp, useful.</span>
+          </div>
+          <div class="notes-grid" id="notesGrid" aria-live="polite"><div class="loading-card">Loading field notes…</div></div>
+        </section>
+
+        <section class="credentials-section section-pad" id="credentials">
+          <div class="section-heading credentials-heading">
+            <div><p class="eyebrow">VERIFIED LEARNING</p><h2>Credentials<br /><em>&amp; milestones</em></h2></div>
+            <div class="credential-note"><span class="tiny-mark">✦</span>Certifications are checkpoints, not finish lines. The real work is what follows.</div>
+          </div>
+          <div class="credentials-grid" id="certGrid" aria-live="polite"><div class="loading-card">Loading credentials…</div></div>
+        </section>
+
+        <section class="operating-section section-pad">
+          <div class="operating-copy"><p class="eyebrow">WORKING PRINCIPLES</p><h2>Curiosity, with a<br /><em>chain of custody.</em></h2></div>
+          <div class="principles">
+            <article><span>01</span><h3>Observe first</h3><p>Follow the evidence before following the assumption.</p></article>
+            <article><span>02</span><h3>Explain clearly</h3><p>Good research is reproducible, legible and worth sharing.</p></article>
+            <article><span>03</span><h3>Build responsibly</h3><p>Test with permission. Report with care. Leave things stronger.</p></article>
+          </div>
+        </section>
+
+        <section class="contact-section section-pad" id="contact">
+          <div class="contact-orbit" aria-hidden="true"><span>LET’S MAKE THE INTERNET · A LITTLE HARDER TO BREAK · </span></div>
+          <div class="contact-content">
+            <p class="eyebrow">SECURE CHANNEL OPEN</p><h2>Have a problem<br />worth <em>unpacking?</em></h2>
+            <a class="email-link" href="mailto:hello@t0x1cg.dev">hello@t0x1cg.dev <span>↗</span></a>
+            <p class="contact-small">For collaborations, research, CTF teams, or just a well-formed question.</p>
+          </div>
+        </section>
+      </main>
+
+      <footer><span>© <span id="year"></span> T0x1cG</span><span>BUILT FROM THE TERMINAL <i></i> WITH INTENTION</span><a href="#top">Back to top ↑</a></footer>
+    </div>
+
+    <dialog class="article-dialog" id="articleDialog">
+      <div class="dialog-top"><button class="dialog-close" type="button" data-close-dialog aria-label="Close article">×</button><span id="dialogType">RESEARCH / 00</span></div>
+      <article id="dialogContent"></article>
+    </dialog>
+    <dialog class="desk-dialog" id="deskDialog">
+      <div class="desk-wrap">
+        <button class="dialog-close desk-close" type="button" data-close-dialog aria-label="Close publishing desk">×</button>
+        <aside class="desk-aside">
+          <span class="brand-mark"><i></i><i></i><i></i></span><p class="eyebrow">T0X1CG / CMS</p><h2>Publishing<br /><em>desk</em></h2>
+          <p>Manage the material that appears in your public research archive.</p><button class="logout-button" id="logoutButton" type="button" hidden>Log out ↗</button>
+        </aside>
+        <div class="desk-main">
+          <div id="authPanel" class="auth-panel">
+            <p class="eyebrow">PRIVATE ACCESS</p><h3 id="authTitle">Unlock the desk</h3><p id="authHelp">Enter your administrator password to edit the archive.</p>
+            <form id="authForm"><label>Password<input id="passwordInput" type="password" autocomplete="current-password" required minlength="10" /></label><button class="button button-primary" type="submit" id="authSubmit">Enter publishing desk <span>↗</span></button><p class="form-message" id="authMessage"></p></form>
+          </div>
+          <div id="editorPanel" class="editor-panel" hidden>
+            <div class="editor-heading"><div><p class="eyebrow">NEW ENTRY</p><h3>Add to the archive</h3></div><span class="signed-in">AUTHENTICATED <b></b></span></div>
+            <form id="entryForm" class="entry-form">
+              <div class="field-row">
+                <label>Entry type<select name="type"><option value="articles">Research / writeup</option><option value="notes">Field note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
+                <label>Topic / issuer<input name="label" placeholder="e.g. Web Security" required maxlength="60" /></label>
+              </div>
+              <label>Title<input name="title" placeholder="Give this entry a clear title" required maxlength="120" /></label>
+              <label>Description<input name="summary" placeholder="A concise overview for readers" required maxlength="280" /></label>
+              <div class="field-row">
+                <label>Tags (comma separated)<input name="tags" placeholder="research, tooling, web" maxlength="160" /></label>
+                <label>External URL (optional)<input name="url" type="url" placeholder="https://…" maxlength="300" /></label>
+              </div>
+              <label class="body-field">Full entry<textarea name="body" placeholder="Add the full writeup, note, or certification context." maxlength="12000"></textarea></label>
+              <div class="submit-line"><p id="entryMessage" class="form-message"></p><button class="button button-primary" type="submit">Publish entry <span>↗</span></button></div>
+            </form>
+            <div class="manage-section"><p class="eyebrow">ARCHIVE MANAGEMENT</p><div id="manageList"></div></div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+    <script src="app.js"></script>
+  </body>
+</html>
