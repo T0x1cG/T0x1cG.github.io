@@ -375,6 +375,19 @@ async function selectNoteDocument(collectionId, documentId) {
 
 function renderNotes() {
   const collections = noteCollections();
+  if (!$("#noteTree")) {
+    const legacyHost = $("#notesGrid");
+    if (!legacyHost) return;
+    legacyHost.innerHTML = collections.map((collection) => `
+      <article class="note-card">
+        <div class="note-meta"><span>${escapeHtml(collection.label || "FIELD NOTE")}</span><span>·</span><span>${dateLabel(collection.createdAt)}</span></div>
+        <h3>${escapeHtml(collection.title)}</h3>
+        <p>${escapeHtml(collection.summary)}</p>
+        <button class="text-link note-open" type="button" data-legacy-note-id="${escapeHtml(collection.id)}">Open note <span>→</span></button>
+      </article>
+    `).join("") || '<div class="loading-card">No notes published yet.</div>';
+    return;
+  }
   renderNoteTree($("#noteSearch").value);
   if (!collections.length) return;
   const selectedCollection = collections.find((item) => item.id === activeNote.collectionId) || collections[0];
@@ -406,6 +419,10 @@ async function selectWriteup(id) {
 function openWriteupReader(id, updateUrl = true) {
   const item = (archive.writeups || []).find((entry) => entry.id === id);
   if (!item) return;
+  if (!$("#documentDialog")) {
+    openEntry(item);
+    return;
+  }
   if (updateUrl) {
     const url = new URL(location.href);
     url.searchParams.set("writeup", id);
@@ -570,7 +587,7 @@ async function refreshArchive() {
   } else {
     backendOnline = false;
     const archiveUrl = new URL("data/content.json", document.baseURI);
-    archiveUrl.searchParams.set("v", "20260716-document-reader");
+    archiveUrl.searchParams.set("v", "20260716-archive-loading-fix");
     archive = await request(archiveUrl.href, { cache: "no-store" });
   }
   archive.articles ||= [];
@@ -645,20 +662,30 @@ function setupEvents() {
     writeupPage += 1;
     renderWriteups();
   });
-  $("#noteTree").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-note-document]");
-    if (!button) return;
-    selectNoteDocument(button.dataset.noteCollection, button.dataset.noteDocument);
-  });
-  $("#noteSearch").addEventListener("input", (event) => renderNoteTree(event.currentTarget.value));
-  $("#writeupTree").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-writeup-select]");
-    if (!button) return;
-    selectWriteup(button.dataset.writeupSelect);
-  });
-  $("#writeupSearch").addEventListener("input", (event) => renderWriteupTree(event.currentTarget.value));
+  const noteTree = $("#noteTree");
+  if (noteTree) {
+    noteTree.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-note-document]");
+      if (!button) return;
+      selectNoteDocument(button.dataset.noteCollection, button.dataset.noteDocument);
+    });
+  }
+  const noteSearch = $("#noteSearch");
+  if (noteSearch) noteSearch.addEventListener("input", (event) => renderNoteTree(event.currentTarget.value));
+  const writeupTree = $("#writeupTree");
+  if (writeupTree) {
+    writeupTree.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-writeup-select]");
+      if (!button) return;
+      selectWriteup(button.dataset.writeupSelect);
+    });
+  }
+  const writeupSearch = $("#writeupSearch");
+  if (writeupSearch) writeupSearch.addEventListener("input", (event) => renderWriteupTree(event.currentTarget.value));
   ["#noteOutline", "#writeupOutline"].forEach((selector) => {
-    $(selector).addEventListener("click", (event) => {
+    const outline = $(selector);
+    if (!outline) return;
+    outline.addEventListener("click", (event) => {
       const button = event.target.closest("[data-outline-target]");
       if (!button) return;
       const content = selector === "#noteOutline" ? $("#noteDocument") : $("#writeupDocument");
@@ -667,7 +694,9 @@ function setupEvents() {
     });
   });
   ["#noteDocument", "#writeupDocument"].forEach((selector) => {
-    $(selector).addEventListener("click", async (event) => {
+    const documentHost = $(selector);
+    if (!documentHost) return;
+    documentHost.addEventListener("click", async (event) => {
       const button = event.target.closest("[data-copy-code]");
       if (button) {
         const code = button.closest(".code-frame").querySelector("code").textContent;
@@ -702,6 +731,14 @@ function setupEvents() {
       }
     });
   });
+  const legacyNotes = $("#notesGrid");
+  if (legacyNotes) {
+    legacyNotes.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-legacy-note-id]");
+      if (!button) return;
+      openEntry(archive.notes.find((item) => item.id === button.dataset.legacyNoteId));
+    });
+  }
   ["#certGrid", "#competitionGrid"].forEach((selector) => {
     $(selector).addEventListener("click", (event) => {
       const button = event.target.closest("[data-credential-id]");
@@ -710,12 +747,15 @@ function setupEvents() {
     });
   });
   $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
-  $("#documentDialog").addEventListener("close", () => {
-    const url = new URL(location.href);
-    if (!url.searchParams.has("writeup")) return;
-    url.searchParams.delete("writeup");
-    history.replaceState({ pageId: "writeups" }, "", url);
-  });
+  const documentDialog = $("#documentDialog");
+  if (documentDialog) {
+    documentDialog.addEventListener("close", () => {
+      const url = new URL(location.href);
+      if (!url.searchParams.has("writeup")) return;
+      url.searchParams.delete("writeup");
+      history.replaceState({ pageId: "writeups" }, "", url);
+    });
+  }
   $("#openDesk").addEventListener("click", async () => {
     await refreshStatus();
     if (!backendOnline) return;
