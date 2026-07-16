@@ -18,6 +18,8 @@ Certificate and achievement posts can include a JPG, PNG, or WebP image directly
 
 The password is stored only as a one-way scrypt hash in data/settings.json; that file is intentionally ignored by Git. Delete it only if you deliberately want to reset the desk password.
 
+When this folder is connected to the T0x1cG.github.io repository, the backend automatically commits data/content.json and pushes it to the main branch after every publish or removal. GitHub Pages then rebuilds the live site. The editor remains private on the laptop because GitHub Pages itself cannot execute Node.js.
+
 ## Personalize
 
 Update the contact email and GitHub link in index.html, then replace the seed entries using the Publishing Desk.

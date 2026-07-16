@@ -3,6 +3,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+const childProcess = require("child_process");
 
 const ROOT = __dirname;
 const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(ROOT, "data");
@@ -95,6 +96,34 @@ function staticFile(request, response, urlPath) {
   });
 }
 
+function runGit(argumentsList) {
+  return new Promise((resolve, reject) => {
+    childProcess.execFile("git", argumentsList, { cwd: ROOT, timeout: 60000 }, (error, stdout, stderr) => {
+      if (error) {
+        const reason = safe(stderr || stdout || error.message, 500);
+        reject(new Error(reason || "Git command failed."));
+        return;
+      }
+      resolve(stdout.trim());
+    });
+  });
+}
+
+async function publishArchive(action, title) {
+  if (!fs.existsSync(path.join(ROOT, ".git"))) {
+    return { published: false, message: "Saved locally. This folder is not connected to Git." };
+  }
+  try {
+    const message = action + ": " + safe(title, 70);
+    await runGit(["add", "--", "data/content.json"]);
+    await runGit(["commit", "--only", "-m", message, "--", "data/content.json"]);
+    await runGit(["push", "origin", "main"]);
+    return { published: true, message: "Published to GitHub Pages. The live site will update shortly." };
+  } catch (error) {
+    return { published: false, message: "Saved locally, but GitHub publish failed: " + safe(error.message, 240) };
+  }
+}
+
 async function api(request, response, pathname) {
   if (request.method === "GET" && pathname === "/api/content") return send(response, 200, readJson(CONTENT_FILE, EMPTY));
   if (request.method === "GET" && pathname === "/api/admin/status") return send(response, 200, { configured: Boolean(settings()), authenticated: hasAccess(request) });
@@ -136,17 +165,20 @@ async function api(request, response, pathname) {
     };
     archive[input.type].unshift(entry);
     writeJson(CONTENT_FILE, archive);
-    return send(response, 201, entry);
+    const deployment = await publishArchive("Publish", title);
+    return send(response, 201, Object.assign({}, entry, { deployment }));
   }
   const target = pathname.match(/^\/api\/content\/(articles|notes|certifications|achievements)\/([a-zA-Z0-9-]+)$/);
   if (request.method === "DELETE" && target) {
     if (!hasAccess(request)) return send(response, 401, { error: "Administrator access required." });
     const archive = readJson(CONTENT_FILE, EMPTY);
     const before = archive[target[1]].length;
+    const removed = archive[target[1]].find((entry) => entry.id === target[2]);
     archive[target[1]] = archive[target[1]].filter((entry) => entry.id !== target[2]);
     if (before === archive[target[1]].length) return send(response, 404, { error: "Entry not found." });
     writeJson(CONTENT_FILE, archive);
-    return send(response, 200, { ok: true });
+    const deployment = await publishArchive("Remove", removed ? removed.title : "archive entry");
+    return send(response, 200, { ok: true, deployment });
   }
   return send(response, 404, { error: "API endpoint not found." });
 }

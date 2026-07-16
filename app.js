@@ -295,10 +295,10 @@ function setupEvents() {
     message.className = "form-message";
     message.textContent = "Publishing…";
     try {
-      await request("/api/content", { method: "POST", body: JSON.stringify(payload) });
+      const created = await request("/api/content", { method: "POST", body: JSON.stringify(payload) });
       event.currentTarget.reset();
-      message.className = "form-message success";
-      message.textContent = "Published to the archive.";
+      message.className = created.deployment && created.deployment.published ? "form-message success" : "form-message";
+      message.textContent = created.deployment ? created.deployment.message : "Published to the archive.";
       await refreshArchive();
     } catch (error) {
       message.className = "form-message error";
