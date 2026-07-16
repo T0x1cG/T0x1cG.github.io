@@ -19,46 +19,6 @@
       "body": "A practical reference collection created during my eJPTv2 preparation. It includes information gathering, service enumeration, Linux and Windows techniques, web assessment, Metasploit workflows, file transfer, credential testing, and post-exploitation reminders.\n\nI completed the eJPTv2 exam in four hours and achieved 91% using my own notes. I published the collection to help other learners build a repeatable testing workflow.\n\nUse every command only in labs, CTFs, or systems where you have explicit authorization.",
       "url": "https://github.com/T0x1cG/eJPTv2",
       "createdAt": "2025-12-30T03:38:59.000Z"
-    },
-    {
-      "id": "seed-web-001",
-      "label": "Web",
-      "title": "Following a blind SSRF into the internal network",
-      "summary": "A methodical path from a server-side URL fetcher to evidence of internal service reachability.",
-      "tags": ["SSRF", "methodology"],
-      "body": "This sample writeup is ready to replace from the Publishing Desk. It demonstrates the structure used for research posts: a clear title, short context, tags, and the full technical narrative.\n\nStart with the observable behavior. Record every request, response difference and timing clue before attempting an exploit chain. That discipline turns a hunch into a reproducible finding.",
-      "url": "",
-      "createdAt": "2026-06-14T10:00:00.000Z"
-    },
-    {
-      "id": "seed-crypto-001",
-      "label": "Crypto",
-      "title": "When a nonce is only almost random",
-      "summary": "A CTF-sized look at why a small implementation shortcut can collapse the security of a stream cipher.",
-      "tags": ["cryptography", "CTF"],
-      "body": "Cryptographic failures rarely look dramatic in code. Often the implementation is close to correct: a counter starts in the wrong place, an IV gets reused, or a source of entropy is predictable.",
-      "url": "",
-      "createdAt": "2026-05-23T10:00:00.000Z"
-    },
-    {
-      "id": "seed-forensics-001",
-      "label": "Forensics",
-      "title": "Timeline first: extracting a story from volatile artifacts",
-      "summary": "A practical triage workflow for turning scattered memory and filesystem evidence into an investigation timeline.",
-      "tags": ["DFIR", "memory"],
-      "body": "The most useful first deliverable in an investigation is often a timeline, not a conclusion. Build a sequence of events that other analysts can challenge and extend.",
-      "url": "",
-      "createdAt": "2026-04-02T10:00:00.000Z"
-    },
-    {
-      "id": "seed-reverse-001",
-      "label": "Reverse",
-      "title": "Reading a binary’s intent before its instructions",
-      "summary": "How imports, strings, control flow and runtime behavior can guide a faster reverse-engineering session.",
-      "tags": ["reverse", "triage"],
-      "body": "Before digging into individual instructions, map the binary’s visible edges: imported functions, strings, sections, resources and observed execution. That early map makes the deep work much more intentional.",
-      "url": "",
-      "createdAt": "2026-02-19T10:00:00.000Z"
     }
   ],
   "notes": [
