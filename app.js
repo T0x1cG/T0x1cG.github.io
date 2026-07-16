@@ -4,7 +4,8 @@ const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector
 let archive = { articles: [], notes: [], certifications: [], achievements: [] };
 let activeFilter = "all";
 let adminStatus = { configured: false, authenticated: false };
-let backendOnline = true;
+const localBackend = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
+let backendOnline = localBackend;
 
 const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (character) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
@@ -245,11 +246,13 @@ function syncAuthView() {
 }
 
 async function refreshArchive() {
-  try {
+  if (localBackend) {
     archive = await request("/api/content");
-  } catch {
+  } else {
     backendOnline = false;
-    archive = await request("data/content.json");
+    const archiveUrl = new URL("data/content.json", document.baseURI);
+    archiveUrl.searchParams.set("v", "8142398");
+    archive = await request(archiveUrl.href, { cache: "no-store" });
   }
   archive.achievements ||= [];
   renderArticles();
@@ -259,6 +262,13 @@ async function refreshArchive() {
 }
 
 async function refreshStatus() {
+  if (!localBackend) {
+    backendOnline = false;
+    adminStatus = { configured: true, authenticated: false };
+    $("#openDesk").hidden = true;
+    syncAuthView();
+    return;
+  }
   try {
     adminStatus = await request("/api/admin/status");
     backendOnline = true;
@@ -384,7 +394,10 @@ async function initialize() {
   try {
     await Promise.all([refreshArchive(), refreshStatus()]);
   } catch (error) {
-    $("#articleGrid").innerHTML = '<div class="loading-card">Could not connect to the local archive. Start the server with <code>node server.js</code>.</div>';
+    const localHelp = localBackend
+      ? 'Could not connect to the private archive. Start the server with <code>node server.js</code>.'
+      : 'Could not load the public archive. Refresh the page or clear the browser cache.';
+    $("#articleGrid").innerHTML = '<div class="loading-card">' + localHelp + '</div>';
     console.error(error);
   }
 }
