@@ -390,8 +390,10 @@ main>.notebook-section.page-active{
 .code-frame pre{
   margin:0;
   padding:15px 17px;
-  overflow:auto;
+  overflow-x:auto;
+  overflow-y:hidden;
   color:#e8eadf;
+  overscroll-behavior-inline:contain;
   tab-size:2;
 }
 
