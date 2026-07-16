@@ -64,7 +64,8 @@ function activatePage(requestedId, updateHash = true) {
 function renderArticles() {
   const host = $("#articleGrid");
   const items = archive.articles.filter((item) => activeFilter === "all" || item.label === activeFilter);
-  $("#articleCount").textContent = String(archive.articles.length).padStart(2, "0");
+  const articleCount = $("#articleCount");
+  if (articleCount) articleCount.textContent = String(archive.articles.length).padStart(2, "0");
   if (!items.length) {
     host.innerHTML = '<div class="loading-card">No research entries in this frequency yet.</div>';
     return;
