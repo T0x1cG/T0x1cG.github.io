@@ -33,7 +33,7 @@ function readBody(request) {
     let body = "";
     request.on("data", (part) => {
       body += part;
-      if (body.length > 1000000) reject(new Error("Request body is too large."));
+      if (body.length > 2500000) reject(new Error("Request body is too large."));
     });
     request.on("end", () => {
       try { resolve(body ? JSON.parse(body) : {}); } catch { reject(new Error("Request body must be valid JSON.")); }
@@ -43,6 +43,12 @@ function readBody(request) {
 }
 function safe(value, max) {
   return typeof value === "string" ? value.trim().slice(0, max || 500) : "";
+}
+function safeImage(value) {
+  const image = safe(value, 1800000);
+  if (/^data:image\/(?:jpeg|png|webp);base64,[a-zA-Z0-9+/=]+$/.test(image)) return image;
+  if (/^assets\/[a-zA-Z0-9_./-]+\.(?:jpg|jpeg|png|webp)$/i.test(image) && !image.includes("..")) return image;
+  return "";
 }
 function cookie(request) {
   return (request.headers.cookie || "").split(";").reduce((out, part) => {
@@ -74,7 +80,7 @@ function logout(request, response) {
   response.setHeader("Set-Cookie", "t0x_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0");
 }
 function contentType(file) {
-  return { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "application/javascript; charset=utf-8", ".svg": "image/svg+xml" }[path.extname(file)] || "application/octet-stream";
+  return { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "application/javascript; charset=utf-8", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" }[path.extname(file).toLowerCase()] || "application/octet-stream";
 }
 function staticFile(request, response, urlPath) {
   const requested = urlPath === "/" ? "/index.html" : decodeURIComponent(urlPath);
@@ -126,7 +132,7 @@ async function api(request, response, pathname) {
     const entry = {
       id: crypto.randomUUID(), title, summary, label,
       tags: Array.isArray(input.tags) ? input.tags.map((tag) => safe(tag, 35)).filter(Boolean).slice(0, 8) : [],
-      body: safe(input.body, 12000), url: safe(input.url, 300), createdAt: new Date().toISOString()
+      body: safe(input.body, 12000), url: safe(input.url, 300), image: safeImage(input.image), createdAt: new Date().toISOString()
     };
     archive[input.type].unshift(entry);
     writeJson(CONTENT_FILE, archive);

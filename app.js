@@ -22,6 +22,30 @@ async function request(path, options = {}) {
   return payload;
 }
 
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("The selected image could not be read."));
+    reader.readAsDataURL(file);
+  });
+}
+
+const pageIds = ["home", "research", "notes", "credentials", "contact"];
+
+function activatePage(requestedId, updateHash = true) {
+  const pageId = pageIds.includes(requestedId) ? requestedId : "home";
+  $$("main > section").forEach((section) => section.classList.toggle("page-active", section.id === pageId));
+  $$(".rail nav a").forEach((link) => {
+    const active = link.getAttribute("href") === "#" + pageId;
+    link.classList.toggle("active", active);
+    if (active) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  });
+  document.body.dataset.page = pageId;
+  if (updateHash && location.hash !== "#" + pageId) history.pushState({ pageId }, "", "#" + pageId);
+}
+
 function renderArticles() {
   const host = $("#articleGrid");
   const items = archive.articles.filter((item) => activeFilter === "all" || item.label === activeFilter);
@@ -87,13 +111,18 @@ function renderCredentials() {
     return;
   }
   host.innerHTML = credentials.map((item) =>
-    '<article class="cert-card ' + (item.type === "achievements" ? "achievement-card" : "") + '">' +
-      '<div class="cert-badge">' + escapeHtml((item.label || "CERT").slice(0, 3).toUpperCase()) + '</div>' +
-      '<span class="cert-year">' + dateLabel(item.createdAt).slice(-4) + '</span>' +
-      '<h3>' + escapeHtml(item.title) + '</h3>' +
-      '<p>' + escapeHtml(item.label || "Independent learning") + '</p>' +
-      '<small class="cert-detail">' + escapeHtml(item.summary || "") + '</small>' +
-    '</article>'
+    '<button class="cert-card ' + (item.type === "achievements" ? "achievement-card" : "") + '" type="button" data-credential-type="' + item.type + '" data-credential-id="' + escapeHtml(item.id) + '">' +
+      '<span class="cert-image">' +
+        (item.image ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" loading="lazy" />' : '<i>' + escapeHtml((item.label || "CERT").slice(0, 3).toUpperCase()) + '</i>') +
+        '<b>VIEW ORIGINAL ↗</b>' +
+      '</span>' +
+      '<span class="cert-copy">' +
+        '<span class="cert-year">' + dateLabel(item.createdAt).slice(-4) + '</span>' +
+        '<h3>' + escapeHtml(item.title) + '</h3>' +
+        '<p>' + escapeHtml(item.label || "Independent learning") + '</p>' +
+        '<small class="cert-detail">' + escapeHtml(item.summary || "") + '</small>' +
+      '</span>' +
+    '</button>'
   ).join("");
 }
 
@@ -122,6 +151,20 @@ function openEntry(entry) {
     <div class="article-body">${escapeHtml(entry.body || entry.summary).split("\\n").map((line) => `<p>${line || "&nbsp;"}</p>`).join("")}</div>
     ${entry.url ? `<a class="article-external" href="${escapeHtml(entry.url)}" target="_blank" rel="noreferrer">Open referenced resource ↗</a>` : ""}
   `;
+  dialog.showModal();
+}
+
+function openCredential(type, id) {
+  const item = (archive[type] || []).find((entry) => entry.id === id);
+  if (!item) return;
+  const dialog = $("#articleDialog");
+  $("#dialogType").textContent = (type === "achievements" ? "ACHIEVEMENT" : "CERTIFICATE") + " / " + dateLabel(item.createdAt);
+  $("#dialogContent").innerHTML =
+    '<div class="credential-preview">' +
+      (item.image ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" />' : "") +
+      '<h2>' + escapeHtml(item.title) + '</h2>' +
+      '<p>' + escapeHtml(item.label + " · " + item.summary) + '</p>' +
+    '</div>';
   dialog.showModal();
 }
 
@@ -180,6 +223,13 @@ async function refreshStatus() {
 }
 
 function setupEvents() {
+  $$('a[href^="#"]').forEach((link) => link.addEventListener("click", (event) => {
+    const target = link.getAttribute("href").slice(1);
+    if (!pageIds.includes(target)) return;
+    event.preventDefault();
+    activatePage(target);
+  }));
+  window.addEventListener("popstate", () => activatePage(location.hash.slice(1), false));
   $$(".filter").forEach((button) => button.addEventListener("click", () => {
     $$(".filter").forEach((item) => item.classList.remove("active"));
     button.classList.add("active");
@@ -195,6 +245,11 @@ function setupEvents() {
     const button = event.target.closest("[data-note-id]");
     if (!button) return;
     openEntry(archive.notes.find((item) => item.id === button.dataset.noteId));
+  });
+  $("#certGrid").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-credential-id]");
+    if (!button) return;
+    openCredential(button.dataset.credentialType, button.dataset.credentialId);
   });
   $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   $("#openDesk").addEventListener("click", async () => {
@@ -226,6 +281,16 @@ function setupEvents() {
     const message = $("#entryMessage");
     const form = new FormData(event.currentTarget);
     const payload = Object.fromEntries(form.entries());
+    const imageFile = form.get("imageFile");
+    delete payload.imageFile;
+    if (imageFile && imageFile.size) {
+      if (imageFile.size > 1200000) {
+        message.className = "form-message error";
+        message.textContent = "Please choose an image smaller than 1.2 MB.";
+        return;
+      }
+      payload.image = await fileToDataUrl(imageFile);
+    }
     payload.tags = payload.tags.split(",").map((tag) => tag.trim()).filter(Boolean);
     message.className = "form-message";
     message.textContent = "Publishing…";
@@ -253,6 +318,7 @@ function setupEvents() {
   $$("main section[id]").forEach((section) => {
     new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting) return;
+      if (!section.classList.contains("page-active")) return;
       $$(".rail nav a").forEach((link) => link.classList.toggle("active", link.getAttribute("href") === `#${section.id}`));
     }, { rootMargin: "-40% 0px -55% 0px" }).observe(section);
   });
@@ -260,6 +326,7 @@ function setupEvents() {
 
 async function initialize() {
   $("#year").textContent = new Date().getFullYear();
+  activatePage(location.hash.slice(1) || "home", false);
   setupEvents();
   try {
     await Promise.all([refreshArchive(), refreshStatus()]);

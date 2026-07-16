@@ -11,12 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="credentials.css" />
+    <link rel="stylesheet" href="single-page.css" />
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
     <div class="site-shell">
       <header class="topbar">
-        <a class="brand" href="#top" aria-label="T0x1cG home">
+        <a class="brand" href="#home" aria-label="T0x1cG home">
           <span class="brand-mark"><i></i><i></i><i></i></span>
           <span>T0<span class="accent">x</span>1cG</span>
         </a>
@@ -29,7 +30,7 @@
       <aside class="rail" aria-label="Section navigation">
         <span class="rail-label">INDEX</span>
         <nav>
-          <a class="active" href="#top"><span>01</span> Start</a>
+          <a class="active" href="#home"><span>01</span> Start</a>
           <a href="#research"><span>02</span> Research</a>
           <a href="#notes"><span>03</span> Notes</a>
           <a href="#credentials"><span>04</span> Credentials</a>
@@ -42,7 +43,7 @@
       </aside>
 
       <main id="top">
-        <section class="hero section-pad">
+        <section class="hero section-pad page-active" id="home">
           <div class="hero-copy">
             <p class="eyebrow"><span class="pulse"></span> INDEPENDENT SECURITY RESEARCHER · 2026</p>
             <h1>Finding the <em>signal</em><br />inside the noise.</h1>
@@ -122,7 +123,7 @@
         </section>
       </main>
 
-      <footer><span>© <span id="year"></span> T0x1cG</span><span>BUILT FROM THE TERMINAL <i></i> WITH INTENTION</span><a href="#top">Back to top ↑</a></footer>
+      <footer><span>© <span id="year"></span> T0x1cG</span><span>BUILT FROM THE TERMINAL <i></i> WITH INTENTION</span><a href="#home">Back to start ↑</a></footer>
     </div>
 
     <dialog class="article-dialog" id="articleDialog">
@@ -154,6 +155,7 @@
                 <label>Tags (comma separated)<input name="tags" placeholder="research, tooling, web" maxlength="160" /></label>
                 <label>External URL (optional)<input name="url" type="url" placeholder="https://…" maxlength="300" /></label>
               </div>
+              <label>Certificate / achievement image (optional)<input name="imageFile" type="file" accept="image/jpeg,image/png,image/webp" /></label>
               <label class="body-field">Full entry<textarea name="body" placeholder="Add the full writeup, note, or certification context." maxlength="12000"></textarea></label>
               <div class="submit-line"><p id="entryMessage" class="form-message"></p><button class="button button-primary" type="submit">Publish entry <span>↗</span></button></div>
             </form>
