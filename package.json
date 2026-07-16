@@ -1,8 +1,0 @@
-{
-  "name": "t0x1cg-portfolio",
-  "version": "1.0.0",
-  "private": true,
-  "description": "A self-hosted cybersecurity portfolio and publishing desk for T0x1cG.",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=18" }
-}

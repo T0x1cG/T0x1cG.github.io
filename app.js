@@ -37,21 +37,6 @@ function fileToDataUrl(file) {
   });
 }
 
-function enableInspectionDeterrence() {
-  document.addEventListener("contextmenu", (event) => event.preventDefault());
-  document.addEventListener("keydown", (event) => {
-    const key = event.key.toLowerCase();
-    const developerShortcut =
-      key === "f12" ||
-      (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
-      (event.ctrlKey && key === "u");
-    if (developerShortcut) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  }, true);
-}
-
 const pageIds = ["home", "research", "writeups", "notes", "credentials", "competitions", "contact"];
 
 function activatePage(requestedId, updateHash = true) {
@@ -587,7 +572,7 @@ async function refreshArchive() {
   } else {
     backendOnline = false;
     const archiveUrl = new URL("data/content.json", document.baseURI);
-    archiveUrl.searchParams.set("v", "20260716-archive-loading-fix");
+    archiveUrl.searchParams.set("v", String(Date.now()));
     archive = await request(archiveUrl.href, { cache: "no-store" });
   }
   archive.articles ||= [];
@@ -831,7 +816,6 @@ function setupEvents() {
 
 async function initialize() {
   $("#year").textContent = new Date().getFullYear();
-  enableInspectionDeterrence();
   activatePage(location.hash.slice(1) || "home", false);
   setupEvents();
   try {
