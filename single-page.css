@@ -15,8 +15,11 @@ main>.signal-strip,main>.operating-section{display:none!important}
 .section-heading{margin-bottom:clamp(18px,3vh,32px)}
 .section-heading h2,.notebook-title h2{font-size:clamp(38px,4.2vw,61px)}
 .research-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:980px}
+.writeup-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .research-card{min-height:clamp(170px,25vh,235px)}
+.writeup-card{min-height:clamp(138px,20vh,180px)}
 .research-card h3{font-size:clamp(19px,1.7vw,25px);margin-top:clamp(24px,5vh,45px)}
+.writeup-card h3{margin-top:clamp(18px,3vh,30px)}
 .notebook-title{margin-bottom:clamp(24px,5vh,48px)}
 .notes-grid{height:min(45vh,330px)}
 .note-card{min-height:0}
@@ -31,6 +34,7 @@ main>.signal-strip,main>.operating-section{display:none!important}
 @media(max-width:1180px){
   .research-grid{grid-template-columns:repeat(2,1fr)}
   .research-card{min-height:clamp(125px,18vh,155px)}
+  .writeup-card{min-height:120px}
   .research-card h3{margin-top:18px}
   .credentials-grid{grid-template-columns:repeat(2,1fr)}
   .competition-grid{grid-template-columns:minmax(280px,520px)}
@@ -81,10 +85,13 @@ main>.signal-strip,main>.operating-section{display:none!important}
   .filter-row{gap:1px;margin-bottom:10px;padding-bottom:7px}
   .filter{padding:5px;font-size:8px}
   .research-grid{grid-template-columns:1fr}
+  .writeup-grid{grid-template-columns:1fr}
   .research-card{min-height:64px;padding:8px 10px}
+  .writeup-card{min-height:64px}
   .research-card h3{font-size:14px;margin:8px 0 0;max-width:95%}
   .research-card p,.research-card .card-bottom,.research-card:after{display:none}
   .card-top{font-size:8px}
+  .writeup-toolbar{margin-bottom:8px}
   .notes-grid{grid-template-columns:1fr;gap:8px;height:auto}
   .note-card{min-height:0;padding-top:8px;transform:none!important}
   .note-card h3{font-size:15px;margin:7px 0 3px}

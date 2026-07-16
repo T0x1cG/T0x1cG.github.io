@@ -13,7 +13,7 @@ const PORT = Number(process.env.PORT || 3000);
 const HOST = "127.0.0.1";
 const sessions = new Map();
 const loginAttempts = new Map();
-const EMPTY = { articles: [], notes: [], certifications: [], achievements: [] };
+const EMPTY = { articles: [], writeups: [], notes: [], certifications: [], achievements: [] };
 const SECURITY_HEADERS = {
   "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
   "X-Content-Type-Options": "nosniff",
@@ -92,7 +92,7 @@ function logout(request, response) {
   response.setHeader("Set-Cookie", "t0x_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0");
 }
 function contentType(file) {
-  return { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "application/javascript; charset=utf-8", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" }[path.extname(file).toLowerCase()] || "application/octet-stream";
+  return { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "application/javascript; charset=utf-8", ".md": "text/markdown; charset=utf-8", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" }[path.extname(file).toLowerCase()] || "application/octet-stream";
 }
 function sameOrigin(request) {
   const origin = request.headers.origin;
@@ -212,7 +212,7 @@ async function api(request, response, pathname) {
   if (request.method === "POST" && pathname === "/api/content") {
     if (!hasAccess(request)) return send(response, 401, { error: "Administrator access required." });
     const input = await readBody(request);
-    if (!["articles", "notes", "certifications", "achievements"].includes(input.type)) return send(response, 400, { error: "Select a valid entry type." });
+    if (!["articles", "writeups", "notes", "certifications", "achievements"].includes(input.type)) return send(response, 400, { error: "Select a valid entry type." });
     const title = safe(input.title, 120);
     const summary = safe(input.summary, 280);
     const label = safe(input.label, 60);
@@ -223,15 +223,17 @@ async function api(request, response, pathname) {
       tags: Array.isArray(input.tags) ? input.tags.map((tag) => safe(tag, 35)).filter(Boolean).slice(0, 8) : [],
       body: safe(input.body, 12000), url: safe(input.url, 300), image: safeImage(input.image), createdAt: new Date().toISOString()
     };
+    archive[input.type] ||= [];
     archive[input.type].unshift(entry);
     writeJson(CONTENT_FILE, archive);
     const deployment = await publishArchive("Publish", title);
     return send(response, 201, Object.assign({}, entry, { deployment }));
   }
-  const target = pathname.match(/^\/api\/content\/(articles|notes|certifications|achievements)\/([a-zA-Z0-9-]+)$/);
+  const target = pathname.match(/^\/api\/content\/(articles|writeups|notes|certifications|achievements)\/([a-zA-Z0-9-]+)$/);
   if (request.method === "DELETE" && target) {
     if (!hasAccess(request)) return send(response, 401, { error: "Administrator access required." });
     const archive = readJson(CONTENT_FILE, EMPTY);
+    archive[target[1]] ||= [];
     const before = archive[target[1]].length;
     const removed = archive[target[1]].find((entry) => entry.id === target[2]);
     archive[target[1]] = archive[target[1]].filter((entry) => entry.id !== target[2]);

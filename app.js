@@ -1,8 +1,10 @@
 const $ = (selector, parent = document) => parent.querySelector(selector);
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 
-let archive = { articles: [], notes: [], certifications: [], achievements: [] };
+let archive = { articles: [], writeups: [], notes: [], certifications: [], achievements: [] };
 let activeFilter = "all";
+let writeupPage = 0;
+const writeupsPerPage = 4;
 let adminStatus = { configured: false, authenticated: false };
 const localBackend = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
 let backendOnline = localBackend;
@@ -47,7 +49,7 @@ function enableInspectionDeterrence() {
   }, true);
 }
 
-const pageIds = ["home", "research", "notes", "credentials", "competitions", "contact"];
+const pageIds = ["home", "research", "writeups", "notes", "credentials", "competitions", "contact"];
 
 function activatePage(requestedId, updateHash = true) {
   const pageId = pageIds.includes(requestedId) ? requestedId : "home";
@@ -78,6 +80,32 @@ function renderArticles() {
       <p>${escapeHtml(item.summary)}</p>
       <span class="card-bottom">
         <span class="tags">${(item.tags || []).slice(0, 2).map((tag) => `<i class="tag">${escapeHtml(tag)}</i>`).join("")}</span>
+        <i class="read-arrow">↗</i>
+      </span>
+    </button>
+  `).join("");
+}
+
+function renderWriteups() {
+  const host = $("#writeupGrid");
+  const items = archive.writeups || [];
+  const totalPages = Math.max(1, Math.ceil(items.length / writeupsPerPage));
+  writeupPage = Math.min(writeupPage, totalPages - 1);
+  const visible = items.slice(writeupPage * writeupsPerPage, (writeupPage + 1) * writeupsPerPage);
+  $("#writeupPageLabel").textContent = `PAGE ${String(writeupPage + 1).padStart(2, "0")} / ${String(totalPages).padStart(2, "0")}`;
+  $("#writeupPrev").disabled = writeupPage === 0;
+  $("#writeupNext").disabled = writeupPage >= totalPages - 1;
+  if (!visible.length) {
+    host.innerHTML = '<div class="loading-card">No retired-machine writeups published yet.</div>';
+    return;
+  }
+  host.innerHTML = visible.map((item, index) => `
+    <button class="research-card writeup-card" type="button" data-writeup-id="${escapeHtml(item.id)}" data-index="${String((writeupPage * writeupsPerPage) + index + 1).padStart(2, "0")}">
+      <span class="card-top"><span class="topic">${escapeHtml(item.label || "HTB / RETIRED")}</span><span>${dateLabel(item.createdAt)}</span></span>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.summary)}</p>
+      <span class="card-bottom">
+        <span class="tags">${(item.tags || []).slice(0, 3).map((tag) => `<i class="tag">${escapeHtml(tag)}</i>`).join("")}</span>
         <i class="read-arrow">↗</i>
       </span>
     </button>
@@ -190,6 +218,7 @@ function renderManageList() {
 }
 
 function openEntry(entry) {
+  if (!entry) return;
   const dialog = $("#articleDialog");
   $("#dialogType").textContent = `${entry.label || entry.type.toUpperCase()} / ${dateLabel(entry.createdAt)}`;
   $("#dialogContent").innerHTML = `
@@ -251,11 +280,16 @@ async function refreshArchive() {
   } else {
     backendOnline = false;
     const archiveUrl = new URL("data/content.json", document.baseURI);
-    archiveUrl.searchParams.set("v", "8142398");
+    archiveUrl.searchParams.set("v", "20260716-htb-import");
     archive = await request(archiveUrl.href, { cache: "no-store" });
   }
+  archive.articles ||= [];
+  archive.writeups ||= [];
+  archive.notes ||= [];
+  archive.certifications ||= [];
   archive.achievements ||= [];
   renderArticles();
+  renderWriteups();
   renderNotes();
   renderSeparatedCredentials();
   renderManageList();
@@ -299,6 +333,22 @@ function setupEvents() {
     const button = event.target.closest("[data-article-id]");
     if (!button) return;
     openEntry(archive.articles.find((item) => item.id === button.dataset.articleId));
+  });
+  $("#writeupGrid").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-writeup-id]");
+    if (!button) return;
+    openEntry(archive.writeups.find((item) => item.id === button.dataset.writeupId));
+  });
+  $("#writeupPrev").addEventListener("click", () => {
+    if (writeupPage === 0) return;
+    writeupPage -= 1;
+    renderWriteups();
+  });
+  $("#writeupNext").addEventListener("click", () => {
+    const totalPages = Math.max(1, Math.ceil(archive.writeups.length / writeupsPerPage));
+    if (writeupPage >= totalPages - 1) return;
+    writeupPage += 1;
+    renderWriteups();
   });
   $("#notesGrid").addEventListener("click", (event) => {
     const button = event.target.closest("[data-note-id]");
@@ -398,6 +448,7 @@ async function initialize() {
       ? 'Could not connect to the private archive. Start the server with <code>node server.js</code>.'
       : 'Could not load the public archive. Refresh the page or clear the browser cache.';
     $("#articleGrid").innerHTML = '<div class="loading-card">' + localHelp + '</div>';
+    $("#writeupGrid").innerHTML = '<div class="loading-card">' + localHelp + '</div>';
     console.error(error);
   }
 }

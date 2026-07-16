@@ -35,10 +35,11 @@
         <nav>
           <a class="active" href="#home"><span>01</span> Start</a>
           <a href="#research"><span>02</span> Research</a>
-          <a href="#notes"><span>03</span> Notes</a>
-          <a href="#credentials"><span>04</span> Certifications</a>
-          <a href="#competitions"><span>05</span> Competitions</a>
-          <a href="#contact"><span>06</span> Contact</a>
+          <a href="#writeups"><span>03</span> Writeups</a>
+          <a href="#notes"><span>04</span> Notes</a>
+          <a href="#credentials"><span>05</span> Certifications</a>
+          <a href="#competitions"><span>06</span> Competitions</a>
+          <a href="#contact"><span>07</span> Contact</a>
         </nav>
         <div class="rail-socials">
           <a href="https://github.com/T0x1cG" target="_blank" rel="noreferrer">GH</a>
@@ -83,9 +84,24 @@
         <section class="research-section section-pad" id="research">
           <div class="section-heading">
             <div><p class="eyebrow">SELECTED WORK</p><h2>Research <em>stream</em></h2></div>
-            <p>Technical writeups and field research, written for people who care how the answer was reached.</p>
+            <p>Structured learning resources built from practical study, certification preparation, and repeatable security workflows.</p>
           </div>
           <div class="research-grid" id="articleGrid" aria-live="polite"><div class="loading-card">Loading research archive…</div></div>
+        </section>
+
+        <section class="research-section writeup-section section-pad" id="writeups">
+          <div class="section-heading">
+            <div><p class="eyebrow">RETIRED LAB ARCHIVE</p><h2>HTB <em>writeups</em></h2></div>
+            <p>Authorized-lab walkthroughs for retired Hack The Box machines. Flags and transient challenge tokens are removed.</p>
+          </div>
+          <div class="writeup-toolbar" aria-label="Writeup pages">
+            <span id="writeupPageLabel">PAGE 01 / 01</span>
+            <div>
+              <button id="writeupPrev" type="button" aria-label="Previous writeup page">←</button>
+              <button id="writeupNext" type="button" aria-label="Next writeup page">→</button>
+            </div>
+          </div>
+          <div class="research-grid writeup-grid" id="writeupGrid" aria-live="polite"><div class="loading-card">Loading retired-machine writeups…</div></div>
         </section>
 
         <section class="notebook-section section-pad" id="notes">
@@ -153,7 +169,7 @@
             <div class="editor-heading"><div><p class="eyebrow">NEW ENTRY</p><h3>Add to the archive</h3></div><span class="signed-in">AUTHENTICATED <b></b></span></div>
             <form id="entryForm" class="entry-form">
               <div class="field-row">
-                <label>Entry type<select name="type"><option value="articles">Research / writeup</option><option value="notes">Field note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
+                <label>Entry type<select name="type"><option value="articles">Research resource</option><option value="writeups">HTB writeup</option><option value="notes">Field note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
                 <label>Topic / issuer<input name="label" placeholder="e.g. Web Security" required maxlength="60" /></label>
               </div>
               <label>Title<input name="title" placeholder="Give this entry a clear title" required maxlength="120" /></label>

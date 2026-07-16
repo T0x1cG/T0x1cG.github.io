@@ -345,6 +345,41 @@ h2 em{
   background:transparent;
 }
 
+.writeup-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:-6px 0 14px;
+  color:var(--muted);
+  font:500 9px var(--mono);
+  letter-spacing:.1em;
+}
+
+.writeup-toolbar div{
+  display:flex;
+  gap:6px;
+}
+
+.writeup-toolbar button{
+  width:32px;
+  height:28px;
+  border:1px solid var(--line);
+  color:var(--ink);
+  background:rgba(247,243,233,.7);
+  font:500 13px var(--mono);
+}
+
+.writeup-toolbar button:hover:not(:disabled){
+  color:var(--paper-light);
+  border-color:var(--red);
+  background:var(--red);
+}
+
+.writeup-toolbar button:disabled{
+  cursor:not-allowed;
+  opacity:.32;
+}
+
 .research-card{
   color:var(--ink);
   border:1px solid rgba(39,37,31,.38);
@@ -378,6 +413,11 @@ h2 em{
   background:var(--blue);
   font:500 7px var(--mono);
   letter-spacing:.12em;
+}
+
+.writeup-card::before{
+  content:"RETIRED MACHINE";
+  background:var(--red);
 }
 
 .research-card::after{
