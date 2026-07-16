@@ -31,6 +31,21 @@ function fileToDataUrl(file) {
   });
 }
 
+function enableInspectionDeterrence() {
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
+  document.addEventListener("keydown", (event) => {
+    const key = event.key.toLowerCase();
+    const developerShortcut =
+      key === "f12" ||
+      (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
+      (event.ctrlKey && key === "u");
+    if (developerShortcut) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, true);
+}
+
 const pageIds = ["home", "research", "notes", "credentials", "competitions", "contact"];
 
 function activatePage(requestedId, updateHash = true) {
@@ -245,9 +260,12 @@ async function refreshArchive() {
 async function refreshStatus() {
   try {
     adminStatus = await request("/api/admin/status");
+    backendOnline = true;
+    $("#openDesk").hidden = false;
   } catch {
     backendOnline = false;
     adminStatus = { configured: true, authenticated: false };
+    $("#openDesk").hidden = true;
   }
   syncAuthView();
 }
@@ -285,8 +303,9 @@ function setupEvents() {
   });
   $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   $("#openDesk").addEventListener("click", async () => {
-    $("#deskDialog").showModal();
     await refreshStatus();
+    if (!backendOnline) return;
+    $("#deskDialog").showModal();
   });
   $("#authForm").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -358,6 +377,7 @@ function setupEvents() {
 
 async function initialize() {
   $("#year").textContent = new Date().getFullYear();
+  enableInspectionDeterrence();
   activatePage(location.hash.slice(1) || "home", false);
   setupEvents();
   try {

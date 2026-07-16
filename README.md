@@ -24,7 +24,11 @@ When this folder is connected to the T0x1cG.github.io repository, the backend au
 
 The Node backend binds to 127.0.0.1 by default, so the Publishing Desk is not exposed to the local network. It uses scrypt password hashing, HttpOnly SameSite cookies, login rate limiting, same-origin mutation checks, a strict static-file allowlist, CSP, anti-framing headers, and restrictive browser permissions.
 
+The Publishing Desk control is hidden by default and appears only after the browser confirms that the private local backend is available. Visitors to the public GitHub Pages site do not see an administrator entry point.
+
 Browser DevTools cannot be disabled by a website, and this repository is intentionally public. Keep passwords, API keys, tokens, flags, and private research out of frontend files and data/content.json.
+
+The public UI blocks right-click and common inspection shortcuts as a casual deterrent. This is not a security boundary: browser menus, disabled JavaScript, and pre-opened DevTools can bypass client-side shortcut blocking.
 
 ## Personalize
 
