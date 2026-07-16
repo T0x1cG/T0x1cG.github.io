@@ -239,25 +239,16 @@ Login Form:
 Username = admin' OR '1'='1
 Password = ''
 ```
-> Source image was not included in the archive.
 
   
 ![Admin panel showing an SQL query execution: SELECT * FROM logins WHERE username='admin' OR '1'='1' AND password='something'; with a message: Login successful as user: admin](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/33/inject_success.png)
 
-
-> Source image was not included in the archive.
 
 ```
 Login
 
 Username = notAdmin' OR '1'='1 
 ```
-> Source image was not included in the archive.
-
-> Source image was not included in the archive.
-
-> Source image was not included in the archive.
-
 ```
 Note:
 

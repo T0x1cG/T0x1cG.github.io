@@ -34,8 +34,6 @@ Link Payload:
 
 Cross-Site Scripting
 
-> Source image was not included in the archive.
-
 Payloads
 
 ```
@@ -105,7 +103,4 @@ Github: https://github.com/pgaijin66/XSS-Payloads/blob/master/payload/payload.tx
 ```
 To search for CVSS of CVE: https://nvd.nist.gov/
 ```
-
-> Source image was not included in the archive.
-
 

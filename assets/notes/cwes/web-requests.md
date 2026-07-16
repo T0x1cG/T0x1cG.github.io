@@ -1,8 +1,3 @@
-
-> Source image was not included in the archive.
-
-> Source image was not included in the archive.
-
 ```
 curl (Client URL)
 
@@ -189,29 +184,18 @@ Command: curl -b 'PHPSESSID=c1nsa6op7vtk7kdis7bcnbadf1' http://<SERVER_IP>:<PORT
 
 **Request Methods**
 
-> Source image was not included in the archive.
-
 ```
 **Note:** Most modern web applications mainly rely on the `GET` and `POST` methods. However, any web application that utilizes REST APIs also rely on `PUT` and `DELETE`, which are used to update and delete data on the API endpoint, respectively. Refer to the [Introduction to Web Applications](https://academy.hackthebox.com/app/module/75) module for more details.
 ```
 
 **Status Codes**
 
-> Source image was not included in the archive.
-
-> Source image was not included in the archive.
-
-
 **Basic HTTP auth Interface**
-
-> Source image was not included in the archive.
 
 ```
 As we are using `basic HTTP auth`, we see that our HTTP request sets the `Authorization` header to `Basic YWRtaW46YWRtaW4=`, which is the base64 encoded value of `admin:admin`. If we were using a modern method of authentication (e.g. `JWT`), the `Authorization` would be of type `Bearer` and would contain a longer encrypted token.
 
 
-
-> Source image was not included in the archive.
 
 ```
 Read:

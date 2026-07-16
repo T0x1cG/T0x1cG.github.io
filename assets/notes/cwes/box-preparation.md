@@ -27,6 +27,3 @@ From HTB
     
 - **Cronos** – web enumeration + chained vuln paths.
 
-
-> Source image was not included in the archive.
-

@@ -264,9 +264,9 @@ curl http://154.57.164.68:30875/post.php -d "y=SUNWmc"
 cho "IP inlanefreight.htb" | sudo tee -a /etc/hosts
 ```
 
-# **Virtual Host and Subdomain Fuzzing**
+## Virtual Host and Subdomain Fuzzing
 
-# 1️⃣ Subdomain Fuzzing (DNS level)
+### 1. Subdomain Fuzzing (DNS level)
 
 This method checks if the **DNS server knows the subdomain**.
 
@@ -314,7 +314,7 @@ Note: In the latest Gobuster release, `-d` now sets the delay between requests
 
 ---
 
-# 2️⃣ Virtual Host Fuzzing (Web server level)
+### 2. Virtual Host Fuzzing (web server level)
 
 Sometimes the **DNS does NOT contain the subdomain**, but the **web server still has a virtual host configured**.
 
@@ -1029,4 +1029,3 @@ Output:
 [HTB exercise flag removed]
 
 ```
-
