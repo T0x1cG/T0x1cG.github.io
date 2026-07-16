@@ -10,8 +10,18 @@ const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : pat
 const CONTENT_FILE = path.join(DATA_DIR, "content.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 const PORT = Number(process.env.PORT || 3000);
+const HOST = process.env.HOST || "127.0.0.1";
 const sessions = new Map();
+const loginAttempts = new Map();
 const EMPTY = { articles: [], notes: [], certifications: [], achievements: [] };
+const SECURITY_HEADERS = {
+  "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+  "Cross-Origin-Opener-Policy": "same-origin"
+};
 
 function readJson(file, fallback) {
   try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch { return fallback; }
@@ -26,7 +36,7 @@ function ensureData() {
   if (!fs.existsSync(CONTENT_FILE)) writeJson(CONTENT_FILE, EMPTY);
 }
 function send(response, code, value, headers) {
-  response.writeHead(code, Object.assign({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }, headers || {}));
+  response.writeHead(code, Object.assign({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }, SECURITY_HEADERS, headers || {}));
   response.end(JSON.stringify(value));
 }
 function readBody(request) {
@@ -70,10 +80,11 @@ function hasAccess(request) {
   }
   return true;
 }
-function login(response) {
+function login(request, response) {
   const token = crypto.randomBytes(32).toString("hex");
   sessions.set(token, { expires: Date.now() + 43200000 });
-  response.setHeader("Set-Cookie", "t0x_session=" + token + "; HttpOnly; SameSite=Strict; Path=/; Max-Age=43200");
+  const secure = request.socket.encrypted || request.headers["x-forwarded-proto"] === "https";
+  response.setHeader("Set-Cookie", "t0x_session=" + token + "; HttpOnly; SameSite=Strict; Path=/; Max-Age=43200" + (secure ? "; Secure" : ""));
 }
 function logout(request, response) {
   const token = cookie(request).t0x_session;
@@ -83,15 +94,44 @@ function logout(request, response) {
 function contentType(file) {
   return { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "application/javascript; charset=utf-8", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" }[path.extname(file).toLowerCase()] || "application/octet-stream";
 }
+function sameOrigin(request) {
+  const origin = request.headers.origin;
+  if (!origin) return true;
+  try { return new URL(origin).host === request.headers.host; } catch { return false; }
+}
+function loginKey(request) {
+  return request.socket.remoteAddress || "local";
+}
+function loginAllowed(request) {
+  const key = loginKey(request);
+  const record = loginAttempts.get(key);
+  if (!record || record.resetAt < Date.now()) {
+    loginAttempts.delete(key);
+    return true;
+  }
+  return record.count < 6;
+}
+function recordFailedLogin(request) {
+  const key = loginKey(request);
+  const current = loginAttempts.get(key);
+  if (!current || current.resetAt < Date.now()) {
+    loginAttempts.set(key, { count: 1, resetAt: Date.now() + 900000 });
+    return;
+  }
+  current.count += 1;
+}
 function staticFile(request, response, urlPath) {
   const requested = urlPath === "/" ? "/index.html" : decodeURIComponent(urlPath);
   const file = path.resolve(ROOT, "." + requested);
-  if (!file.startsWith(ROOT) || file.includes(path.sep + "data" + path.sep)) {
-    response.writeHead(403); response.end("Forbidden"); return;
+  const relative = path.relative(ROOT, file);
+  const publicFiles = new Set(["index.html", "styles.css", "credentials.css", "single-page.css", "app.js"]);
+  const publicAsset = relative.startsWith("assets" + path.sep) && !relative.includes("..");
+  if (relative.startsWith("..") || path.isAbsolute(relative) || (!publicFiles.has(relative) && !publicAsset)) {
+    response.writeHead(404, SECURITY_HEADERS); response.end("Not found"); return;
   }
   fs.readFile(file, (error, body) => {
-    if (error) { response.writeHead(error.code === "ENOENT" ? 404 : 500); response.end("Not found"); return; }
-    response.writeHead(200, { "Content-Type": contentType(file), "X-Content-Type-Options": "nosniff" });
+    if (error) { response.writeHead(error.code === "ENOENT" ? 404 : 500, SECURITY_HEADERS); response.end("Not found"); return; }
+    response.writeHead(200, Object.assign({ "Content-Type": contentType(file) }, SECURITY_HEADERS));
     request.method === "HEAD" ? response.end() : response.end(body);
   });
 }
@@ -125,24 +165,32 @@ async function publishArchive(action, title) {
 }
 
 async function api(request, response, pathname) {
+  if (["POST", "PUT", "PATCH", "DELETE"].includes(request.method) && !sameOrigin(request)) {
+    return send(response, 403, { error: "Cross-origin request blocked." });
+  }
   if (request.method === "GET" && pathname === "/api/content") return send(response, 200, readJson(CONTENT_FILE, EMPTY));
   if (request.method === "GET" && pathname === "/api/admin/status") return send(response, 200, { configured: Boolean(settings()), authenticated: hasAccess(request) });
   if (request.method === "POST" && pathname === "/api/admin/setup") {
     if (settings()) return send(response, 409, { error: "The publishing desk is already configured." });
     const input = await readBody(request);
-    if (typeof input.password !== "string" || input.password.length < 10) return send(response, 400, { error: "Choose a password with at least 10 characters." });
+    if (typeof input.password !== "string" || input.password.length < 12) return send(response, 400, { error: "Choose a password with at least 12 characters." });
     const salt = crypto.randomBytes(16).toString("hex");
     writeJson(SETTINGS_FILE, { salt, passwordHash: hash(input.password, salt), createdAt: new Date().toISOString() });
-    login(response);
+    login(request, response);
     return send(response, 201, { ok: true });
   }
   if (request.method === "POST" && pathname === "/api/admin/login") {
+    if (!loginAllowed(request)) return send(response, 429, { error: "Too many login attempts. Try again in 15 minutes." });
     const current = settings();
     if (!current) return send(response, 400, { error: "Set up the publishing desk first." });
     const input = await readBody(request);
     const submitted = hash(safe(input.password, 1000), current.salt);
-    if (!crypto.timingSafeEqual(Buffer.from(submitted), Buffer.from(current.passwordHash))) return send(response, 401, { error: "That password did not match." });
-    login(response);
+    if (!crypto.timingSafeEqual(Buffer.from(submitted), Buffer.from(current.passwordHash))) {
+      recordFailedLogin(request);
+      return send(response, 401, { error: "That password did not match." });
+    }
+    loginAttempts.delete(loginKey(request));
+    login(request, response);
     return send(response, 200, { ok: true });
   }
   if (request.method === "POST" && pathname === "/api/admin/logout") {
@@ -194,7 +242,7 @@ http.createServer(async (request, response) => {
     console.error(error);
     send(response, 400, { error: error.message || "Unexpected server error." });
   }
-}).listen(PORT, () => {
-  console.log("T0x1cG portfolio is running at http://localhost:" + PORT);
+}).listen(PORT, HOST, () => {
+  console.log("T0x1cG portfolio is running at http://" + HOST + ":" + PORT);
   console.log("Open Publishing Desk from the top-right button to create its password.");
 });

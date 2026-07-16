@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#101612" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="description" content="T0x1cG — cybersecurity research, writeups, field notes and certifications." />
     <title>T0x1cG — Cybersecurity Researcher</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,8 +35,9 @@
           <a class="active" href="#home"><span>01</span> Start</a>
           <a href="#research"><span>02</span> Research</a>
           <a href="#notes"><span>03</span> Notes</a>
-          <a href="#credentials"><span>04</span> Credentials</a>
-          <a href="#contact"><span>05</span> Contact</a>
+          <a href="#credentials"><span>04</span> Certifications</a>
+          <a href="#competitions"><span>05</span> Competitions</a>
+          <a href="#contact"><span>06</span> Contact</a>
         </nav>
         <div class="rail-socials">
           <a href="https://github.com/T0x1cG" target="_blank" rel="noreferrer">GH</a>
@@ -98,10 +101,18 @@
 
         <section class="credentials-section section-pad" id="credentials">
           <div class="section-heading credentials-heading">
-            <div><p class="eyebrow">VERIFIED LEARNING</p><h2>Credentials<br /><em>&amp; milestones</em></h2></div>
-            <div class="credential-note"><span class="tiny-mark">✦</span>Certifications are checkpoints, not finish lines. The real work is what follows.</div>
+            <div><p class="eyebrow">VERIFIED LEARNING</p><h2>Professional<br /><em>certifications</em></h2></div>
+            <div class="credential-note"><span class="tiny-mark">✦</span>Validated technical training across offensive security, red teaming, and cybersecurity foundations.</div>
           </div>
-          <div class="credentials-grid" id="certGrid" aria-live="polite"><div class="loading-card">Loading credentials…</div></div>
+          <div class="credentials-grid" id="certGrid" aria-live="polite"><div class="loading-card">Loading certifications…</div></div>
+        </section>
+
+        <section class="competitions-section section-pad" id="competitions">
+          <div class="section-heading credentials-heading">
+            <div><p class="eyebrow">COMPETITIVE SECURITY</p><h2>Competition<br /><em>achievements</em></h2></div>
+            <div class="credential-note"><span class="tiny-mark">◆</span>Team results earned through practical problem solving, collaboration, and technical execution.</div>
+          </div>
+          <div class="credentials-grid competition-grid" id="competitionGrid" aria-live="polite"><div class="loading-card">Loading competition results…</div></div>
         </section>
 
         <section class="operating-section section-pad">
@@ -140,7 +151,7 @@
         <div class="desk-main">
           <div id="authPanel" class="auth-panel">
             <p class="eyebrow">PRIVATE ACCESS</p><h3 id="authTitle">Unlock the desk</h3><p id="authHelp">Enter your administrator password to edit the archive.</p>
-            <form id="authForm"><label>Password<input id="passwordInput" type="password" autocomplete="current-password" required minlength="10" /></label><button class="button button-primary" type="submit" id="authSubmit">Enter publishing desk <span>↗</span></button><p class="form-message" id="authMessage"></p></form>
+            <form id="authForm"><label>Password<input id="passwordInput" type="password" autocomplete="current-password" required minlength="12" /></label><button class="button button-primary" type="submit" id="authSubmit">Enter publishing desk <span>↗</span></button><p class="form-message" id="authMessage"></p></form>
           </div>
           <div id="editorPanel" class="editor-panel" hidden>
             <div class="editor-heading"><div><p class="eyebrow">NEW ENTRY</p><h3>Add to the archive</h3></div><span class="signed-in">AUTHENTICATED <b></b></span></div>

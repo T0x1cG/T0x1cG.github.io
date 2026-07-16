@@ -31,7 +31,7 @@ function fileToDataUrl(file) {
   });
 }
 
-const pageIds = ["home", "research", "notes", "credentials", "contact"];
+const pageIds = ["home", "research", "notes", "credentials", "competitions", "contact"];
 
 function activatePage(requestedId, updateHash = true) {
   const pageId = pageIds.includes(requestedId) ? requestedId : "home";
@@ -126,6 +126,36 @@ function renderCredentials() {
   ).join("");
 }
 
+function credentialCards(items, type) {
+  return items.map((item) =>
+    '<button class="cert-card ' + (type === "achievements" ? "achievement-card" : "") + '" type="button" data-credential-type="' + type + '" data-credential-id="' + escapeHtml(item.id) + '">' +
+      '<span class="cert-image">' +
+        (item.image ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" loading="lazy" />' : '<i>' + escapeHtml((item.label || "CERT").slice(0, 3).toUpperCase()) + '</i>') +
+        '<b>VIEW ORIGINAL ↗</b>' +
+      '</span>' +
+      '<span class="cert-copy">' +
+        '<span class="cert-year">' + dateLabel(item.createdAt).slice(-4) + '</span>' +
+        '<h3>' + escapeHtml(item.title) + '</h3>' +
+        '<p>' + escapeHtml(item.label || "Independent learning") + '</p>' +
+        '<small class="cert-detail">' + escapeHtml(item.summary || "") + '</small>' +
+      '</span>' +
+    '</button>'
+  ).join("");
+}
+
+function renderSeparatedCredentials() {
+  const certificationHost = $("#certGrid");
+  const competitionHost = $("#competitionGrid");
+  const certifications = archive.certifications || [];
+  const achievements = archive.achievements || [];
+  certificationHost.innerHTML = certifications.length
+    ? credentialCards(certifications, "certifications")
+    : '<div class="loading-card">No certifications published yet.</div>';
+  competitionHost.innerHTML = achievements.length
+    ? credentialCards(achievements, "achievements")
+    : '<div class="loading-card">No competition results published yet.</div>';
+}
+
 function allEntries() {
   return Object.entries(archive).flatMap(([type, entries]) => entries.map((entry) => ({ ...entry, type })))
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -193,7 +223,7 @@ function syncAuthView() {
   editor.hidden = true;
   panel.hidden = false;
   $("#authTitle").textContent = adminStatus.configured ? "Unlock the desk" : "Set up the desk";
-  $("#authHelp").textContent = adminStatus.configured ? "Enter your administrator password to edit the archive." : "Choose a password of at least 10 characters. This is only needed once.";
+  $("#authHelp").textContent = adminStatus.configured ? "Enter your administrator password to edit the archive." : "Choose a password of at least 12 characters. This is only needed once.";
   $("#authSubmit").innerHTML = adminStatus.configured ? 'Enter publishing desk <span>↗</span>' : 'Create secure desk <span>↗</span>';
   $("#passwordInput").autocomplete = adminStatus.configured ? "current-password" : "new-password";
 }
@@ -208,7 +238,7 @@ async function refreshArchive() {
   archive.achievements ||= [];
   renderArticles();
   renderNotes();
-  renderCredentials();
+  renderSeparatedCredentials();
   renderManageList();
 }
 
@@ -246,10 +276,12 @@ function setupEvents() {
     if (!button) return;
     openEntry(archive.notes.find((item) => item.id === button.dataset.noteId));
   });
-  $("#certGrid").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-credential-id]");
-    if (!button) return;
-    openCredential(button.dataset.credentialType, button.dataset.credentialId);
+  ["#certGrid", "#competitionGrid"].forEach((selector) => {
+    $(selector).addEventListener("click", (event) => {
+      const button = event.target.closest("[data-credential-id]");
+      if (!button) return;
+      openCredential(button.dataset.credentialType, button.dataset.credentialId);
+    });
   });
   $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
   $("#openDesk").addEventListener("click", async () => {
