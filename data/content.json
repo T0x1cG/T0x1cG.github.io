@@ -30,6 +30,7 @@
       "tags": ["retired", "Hoverfly", "privilege escalation"],
       "body": "Retired Hack The Box walkthrough.\n\nThe notes document the recovered Hoverfly administration path, command execution through middleware configuration, and a root escalation caused by unsafe privileged script execution.\n\nThe transient bearer token and root flag were removed from the public copy. Use only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/devarea.md",
+      "document": "assets/writeups/devarea.md",
       "createdAt": "2026-03-28T00:00:00.000Z"
     },
     {
@@ -40,6 +41,7 @@
       "tags": ["retired", "web", "CVE research"],
       "body": "Retired Hack The Box walkthrough.\n\nThe chain begins with subdomain and Git-history discovery, then moves through hardcoded credentials, path traversal, font-processing vulnerabilities, a user pivot through archive handling, and a root escalation involving setuptools path traversal.\n\nUser and root flags were removed from the public copy. Use only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/variatype.md",
+      "document": "assets/writeups/variatype.md",
       "createdAt": "2026-03-14T00:00:00.000Z"
     },
     {
@@ -50,6 +52,7 @@
       "tags": ["retired", "JWT", "SSH certificates"],
       "body": "Retired Hack The Box walkthrough.\n\nThe notes trace application enumeration into a JWE/JWT trust weakness, administrative API access, deployment credential discovery, and root access through an exposed SSH certificate-authority workflow.\n\nChallenge tokens and flags were removed from the public copy. Use only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/principal.md",
+      "document": "assets/writeups/principal.md",
       "createdAt": "2026-03-12T00:00:00.000Z"
     },
     {
@@ -60,6 +63,7 @@
       "tags": ["retired", "recon", "Jetty"],
       "body": "Retired Hack The Box reconnaissance notes.\n\nThis is an early-stage record rather than a complete walkthrough. It preserves the initial Nmap findings for SSH, Jetty over HTTP, HTTPS, and HTTP method behavior.\n\nUse only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/interpreter.md",
+      "document": "assets/writeups/interpreter.md",
       "createdAt": "2026-02-21T00:00:00.000Z"
     },
     {
@@ -70,6 +74,7 @@
       "tags": ["retired", "panel", "Linux"],
       "body": "Retired Hack The Box lab notes.\n\nThe documented path covers virtual-host discovery, panel exploitation, environment and MariaDB enumeration, recovery of account hashes, and local privilege-escalation research.\n\nUse only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/pterodactyl.md",
+      "document": "assets/writeups/pterodactyl.md",
       "createdAt": "2026-02-07T00:00:00.000Z"
     },
     {
@@ -80,6 +85,7 @@
       "tags": ["retired", "browser extension", "Python"],
       "body": "Retired Hack The Box walkthrough.\n\nThe chain uses a malicious browser extension to observe internal browsing, reaches a local application with command injection, and escalates by replacing trusted Python bytecode in a writable cache directory.\n\nUser and root flags were removed from the public copy. Use only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/browsed.md",
+      "document": "assets/writeups/browsed.md",
       "createdAt": "2026-01-10T00:00:00.000Z"
     },
     {
@@ -90,6 +96,7 @@
       "tags": ["retired", "MSSQL", "Active Directory"],
       "body": "Retired Hack The Box walkthrough.\n\nThe notes cover MSSQL enumeration and impersonation, application-data access, offline password recovery, user discovery, password spraying, and WinRM foothold activity.\n\nThe user flag was removed from the public copy. Use only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/eighteen.md",
+      "document": "assets/writeups/eighteen.md",
       "createdAt": "2025-11-15T00:00:00.000Z"
     },
     {
@@ -100,6 +107,7 @@
       "tags": ["retired", "IPsec", "IKE"],
       "body": "Retired Hack The Box research notes.\n\nThis partial record focuses on IKE enumeration, aggressive-mode identity leakage, exporting material for PSK cracking, and testing candidate keys.\n\nUse only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/expressway.md",
+      "document": "assets/writeups/expressway.md",
       "createdAt": "2025-09-20T00:00:00.000Z"
     },
     {
@@ -110,6 +118,7 @@
       "tags": ["retired", "LDAP", "RBCD"],
       "body": "Retired Hack The Box walkthrough.\n\nThe path starts with anonymous SMB access and analysis of a support utility, recovers its LDAP bind secret, maps Active Directory rights with BloodHound, and abuses resource-based constrained delegation.\n\nUser and root flags were removed from the public copy. Use only in authorized labs.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/support.md",
+      "document": "assets/writeups/support.md",
       "createdAt": "2022-07-30T00:00:00.000Z"
     }
   ],
@@ -122,6 +131,74 @@
       "tags": ["web security", "CWES", "reference"],
       "body": "My CWES study collection has been organized into separate Markdown references for web application foundations, HTTP requests, SQL injection, file inclusion, web and command fuzzing, JavaScript deobfuscation, and preparation notes.\n\nExercise flags were removed, existing images were relinked, and missing source screenshots are clearly marked.\n\nUse every technique only in authorized labs or systems where you have explicit permission.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/notes/cwes/README.md",
+      "documents": [
+        {
+          "id": "cwes-overview",
+          "title": "CWES Overview",
+          "group": "Getting started",
+          "document": "assets/notes/cwes/README.md"
+        },
+        {
+          "id": "cwes-introduction-web-applications",
+          "title": "Introduction to Web Applications",
+          "group": "Foundations",
+          "document": "assets/notes/cwes/introduction-to-web-applications.md"
+        },
+        {
+          "id": "cwes-web-requests",
+          "title": "Web Requests",
+          "group": "Foundations",
+          "document": "assets/notes/cwes/web-requests.md"
+        },
+        {
+          "id": "cwes-sql-injection",
+          "title": "SQL Injection",
+          "group": "Web exploitation",
+          "document": "assets/notes/cwes/database-testing.md"
+        },
+        {
+          "id": "cwes-file-inclusion",
+          "title": "File Inclusion",
+          "group": "Web exploitation",
+          "document": "assets/notes/cwes/file-inclusion.md"
+        },
+        {
+          "id": "cwes-web-fuzzing",
+          "title": "Web Fuzzing",
+          "group": "Discovery",
+          "document": "assets/notes/cwes/web-fuzzing.md"
+        },
+        {
+          "id": "cwes-command-fuzzing",
+          "title": "Command Fuzzing",
+          "group": "Discovery",
+          "document": "assets/notes/cwes/command-fuzzing.md"
+        },
+        {
+          "id": "cwes-javascript-deobfuscation",
+          "title": "JavaScript Deobfuscation",
+          "group": "Client-side",
+          "document": "assets/notes/cwes/javascript-deobfuscation.md"
+        },
+        {
+          "id": "cwes-box-preparation",
+          "title": "Box Preparation",
+          "group": "Lab preparation",
+          "document": "assets/notes/cwes/box-preparation.md"
+        },
+        {
+          "id": "cwes-twomillion",
+          "title": "TwoMillion",
+          "group": "Lab preparation",
+          "document": "assets/notes/cwes/twomillion.md"
+        },
+        {
+          "id": "cwes-cap",
+          "title": "Cap",
+          "group": "Lab preparation",
+          "document": "assets/notes/cwes/cap.md"
+        }
+      ],
       "createdAt": "2026-07-16T00:00:00.000Z"
     },
     {
@@ -132,6 +209,20 @@
       "tags": ["CPTS", "pentesting", "quick reference"],
       "body": "A compact CPTS quick-reference note imported from my local study archive.\n\nIt covers common local file inclusion targets, SQLite inspection, stream wrappers, and related command reminders. The supplied reference image is included with the note.\n\nUse every command only in an environment where you have explicit authorization.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/notes/cpts/README.md",
+      "documents": [
+        {
+          "id": "cpts-overview",
+          "title": "CPTS Overview",
+          "group": "Getting started",
+          "document": "assets/notes/cpts/README.md"
+        },
+        {
+          "id": "cpts-quick-reference",
+          "title": "Penetration Testing Quick Reference",
+          "group": "Quick reference",
+          "document": "assets/notes/cpts/quick-reference.md"
+        }
+      ],
       "createdAt": "2026-07-16T00:00:00.000Z"
     }
   ],

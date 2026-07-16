@@ -61,6 +61,11 @@ function safeImage(value) {
   if (/^assets\/[a-zA-Z0-9_./-]+\.(?:jpg|jpeg|png|webp)$/i.test(image) && !image.includes("..")) return image;
   return "";
 }
+function safeDocument(value) {
+  const documentPath = safe(value, 300);
+  if (/^assets\/(?:notes|writeups)\/[a-zA-Z0-9_./-]+\.md$/i.test(documentPath) && !documentPath.includes("..")) return documentPath;
+  return "";
+}
 function cookie(request) {
   return (request.headers.cookie || "").split(";").reduce((out, part) => {
     const pieces = part.trim().split("=");
@@ -135,7 +140,7 @@ function staticFile(request, response, urlPath) {
   const requested = urlPath === "/" ? "/index.html" : decodeURIComponent(urlPath);
   const file = path.resolve(ROOT, "." + requested);
   const relative = path.relative(ROOT, file);
-  const publicFiles = new Set(["index.html", "styles.css", "credentials.css", "single-page.css", "paper-theme.css", "app.js"]);
+  const publicFiles = new Set(["index.html", "styles.css", "credentials.css", "single-page.css", "paper-theme.css", "knowledge.css", "app.js"]);
   const publicAsset = relative.startsWith("assets" + path.sep) && !relative.includes("..");
   if (relative.startsWith("..") || path.isAbsolute(relative) || (!publicFiles.has(relative) && !publicAsset)) {
     response.writeHead(404, SECURITY_HEADERS); response.end("Not found"); return;
@@ -221,7 +226,7 @@ async function api(request, response, pathname) {
     const entry = {
       id: crypto.randomUUID(), title, summary, label,
       tags: Array.isArray(input.tags) ? input.tags.map((tag) => safe(tag, 35)).filter(Boolean).slice(0, 8) : [],
-      body: safe(input.body, 12000), url: safe(input.url, 300), image: safeImage(input.image), createdAt: new Date().toISOString()
+      body: safe(input.body, 60000), url: safe(input.url, 300), document: safeDocument(input.document), image: safeImage(input.image), createdAt: new Date().toISOString()
     };
     archive[input.type] ||= [];
     archive[input.type].unshift(entry);

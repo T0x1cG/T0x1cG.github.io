@@ -5,6 +5,9 @@ let archive = { articles: [], writeups: [], notes: [], certifications: [], achie
 let activeFilter = "all";
 let writeupPage = 0;
 const writeupsPerPage = 4;
+let activeNote = { collectionId: "", documentId: "" };
+let activeWriteupId = "";
+const markdownCache = new Map();
 let adminStatus = { configured: false, authenticated: false };
 const localBackend = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
 let backendOnline = localBackend;
@@ -112,20 +115,307 @@ function renderWriteups() {
   `).join("");
 }
 
-function renderNotes() {
-  const host = $("#notesGrid");
-  if (!archive.notes.length) {
-    host.innerHTML = '<div class="loading-card">No notes published yet.</div>';
+function safeDocumentUrl(value) {
+  if (!value || typeof value !== "string") return "";
+  try {
+    const url = new URL(value, document.baseURI);
+    return url.origin === location.origin && /^\/?assets\/(?:notes|writeups)\//.test(url.pathname.replace(/^\/+/, "")) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function safeLinkUrl(value, sourcePath) {
+  try {
+    const base = sourcePath ? new URL(sourcePath, document.baseURI) : new URL(document.baseURI);
+    const url = new URL(value.trim(), base);
+    return ["http:", "https:", "mailto:"].includes(url.protocol) ? url : null;
+  } catch {
+    return null;
+  }
+}
+
+function formatInline(value, sourcePath) {
+  const tokens = [];
+  const preserve = (html) => {
+    const marker = `\uE000${tokens.length}\uE001`;
+    tokens.push(html);
+    return marker;
+  };
+  let text = String(value || "");
+  text = text.replace(/`([^`\n]+)`/g, (_, code) => preserve(`<code>${escapeHtml(code)}</code>`));
+  text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, target) => {
+    const url = safeLinkUrl(target, sourcePath);
+    if (!url || url.origin !== location.origin) return preserve(`<span class="markdown-image-missing">Image omitted: ${escapeHtml(alt || target)}</span>`);
+    return preserve(`<img src="${escapeHtml(url.href)}" alt="${escapeHtml(alt)}" loading="lazy" />`);
+  });
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, target) => {
+    const url = safeLinkUrl(target, sourcePath);
+    if (!url) return escapeHtml(label);
+    const external = url.origin !== location.origin;
+    return preserve(`<a href="${escapeHtml(url.href)}"${external ? ' target="_blank" rel="noreferrer"' : ""}>${escapeHtml(label)}</a>`);
+  });
+  let html = escapeHtml(text)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/__([^_]+)__/g, "<strong>$1</strong>")
+    .replace(/(^|[\s(])\*([^*\n]+)\*(?=$|[\s).,])/g, "$1<em>$2</em>")
+    .replace(/~~([^~]+)~~/g, "<del>$1</del>");
+  tokens.forEach((token, index) => {
+    html = html.replace(`\uE000${index}\uE001`, token);
+  });
+  return html;
+}
+
+function markdownToHtml(markdown, sourcePath) {
+  const lines = String(markdown || "").replace(/\r\n?/g, "\n").split("\n");
+  const html = [];
+  const headings = [];
+  const slugCounts = new Map();
+  const slugFor = (value) => {
+    const base = String(value).toLowerCase().replace(/<[^>]+>/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "section";
+    const count = (slugCounts.get(base) || 0) + 1;
+    slugCounts.set(base, count);
+    return count === 1 ? base : `${base}-${count}`;
+  };
+  const tableCells = (line) => line.trim().replace(/^\||\|$/g, "").split("|").map((cell) => cell.trim());
+  const startsBlock = (index) => {
+    const line = lines[index] || "";
+    const next = lines[index + 1] || "";
+    return !line.trim() ||
+      /^```/.test(line) ||
+      /^#{1,6}\s+/.test(line) ||
+      /^>\s?/.test(line) ||
+      /^\s*(?:[-+*]|\d+\.)\s+/.test(line) ||
+      /^\s*(?:---+|\*\*\*+|___+)\s*$/.test(line) ||
+      (line.includes("|") && /^\s*\|?\s*:?-{3,}/.test(next));
+  };
+
+  for (let index = 0; index < lines.length;) {
+    const line = lines[index];
+    if (!line.trim()) {
+      index += 1;
+      continue;
+    }
+
+    const fence = line.match(/^```\s*([a-zA-Z0-9_+-]*)\s*$/);
+    if (fence) {
+      const code = [];
+      index += 1;
+      while (index < lines.length && !/^```\s*$/.test(lines[index])) {
+        code.push(lines[index]);
+        index += 1;
+      }
+      if (index < lines.length) index += 1;
+      html.push(`<div class="code-frame"><div class="code-frame-top"><span>${escapeHtml(fence[1] || "TERMINAL")}</span><button type="button" data-copy-code>Copy</button></div><pre><code>${escapeHtml(code.join("\n"))}</code></pre></div>`);
+      continue;
+    }
+
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      const level = heading[1].length;
+      const title = heading[2].replace(/\s+#+\s*$/, "").trim();
+      const id = slugFor(title);
+      headings.push({ id, level, title: title.replace(/[*_`]/g, "") });
+      html.push(`<h${level} id="${id}">${formatInline(title, sourcePath)}</h${level}>`);
+      index += 1;
+      continue;
+    }
+
+    if (line.includes("|") && /^\s*\|?\s*:?-{3,}/.test(lines[index + 1] || "")) {
+      const headers = tableCells(line);
+      index += 2;
+      const rows = [];
+      while (index < lines.length && lines[index].includes("|") && lines[index].trim()) {
+        rows.push(tableCells(lines[index]));
+        index += 1;
+      }
+      html.push(`<div class="table-wrap"><table><thead><tr>${headers.map((cell) => `<th>${formatInline(cell, sourcePath)}</th>`).join("")}</tr></thead><tbody>${rows.map((row) => `<tr>${headers.map((_, cellIndex) => `<td>${formatInline(row[cellIndex] || "", sourcePath)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`);
+      continue;
+    }
+
+    if (/^\s*(?:---+|\*\*\*+|___+)\s*$/.test(line)) {
+      html.push("<hr />");
+      index += 1;
+      continue;
+    }
+
+    if (/^>\s?/.test(line)) {
+      const quote = [];
+      while (index < lines.length && /^>\s?/.test(lines[index])) {
+        quote.push(lines[index].replace(/^>\s?/, ""));
+        index += 1;
+      }
+      html.push(`<blockquote>${quote.map((part) => formatInline(part, sourcePath)).join("<br />")}</blockquote>`);
+      continue;
+    }
+
+    const listMatch = line.match(/^\s*([-+*]|\d+\.)\s+(.+)$/);
+    if (listMatch) {
+      const ordered = /\d+\./.test(listMatch[1]);
+      const tag = ordered ? "ol" : "ul";
+      const items = [];
+      while (index < lines.length) {
+        const match = lines[index].match(/^\s*([-+*]|\d+\.)\s+(.+)$/);
+        if (!match || /\d+\./.test(match[1]) !== ordered) break;
+        items.push(match[2]);
+        index += 1;
+      }
+      html.push(`<${tag}>${items.map((item) => `<li>${formatInline(item, sourcePath)}</li>`).join("")}</${tag}>`);
+      continue;
+    }
+
+    const paragraph = [];
+    while (index < lines.length && !startsBlock(index)) {
+      paragraph.push(lines[index]);
+      index += 1;
+    }
+    if (!paragraph.length) {
+      paragraph.push(line);
+      index += 1;
+    }
+    html.push(`<p>${paragraph.map((part) => formatInline(part, sourcePath)).join("<br />")}</p>`);
+  }
+
+  return { html: html.join(""), headings };
+}
+
+async function readMarkdown(item) {
+  const sourcePath = item.document || "";
+  if (!sourcePath) {
+    return { markdown: `# ${item.title}\n\n${item.body || item.summary || "No content published yet."}`, sourcePath: "" };
+  }
+  const url = safeDocumentUrl(sourcePath);
+  if (!url) throw new Error("This document path is not allowed.");
+  if (!markdownCache.has(url)) {
+    markdownCache.set(url, fetch(url, { cache: "no-store" }).then(async (response) => {
+      if (!response.ok) throw new Error("The document could not be loaded.");
+      return response.text();
+    }));
+  }
+  return { markdown: await markdownCache.get(url), sourcePath };
+}
+
+function renderOutline(headings, hostSelector) {
+  const host = $(hostSelector);
+  const visible = headings.filter((heading) => heading.level <= 3);
+  host.innerHTML = visible.length
+    ? visible.map((heading) => `<button type="button" class="outline-level-${heading.level}" data-outline-target="${heading.id}">${escapeHtml(heading.title)}</button>`).join("")
+    : '<span class="outline-empty">No headings</span>';
+}
+
+async function displayMarkdown(item, options) {
+  const content = $(options.content);
+  const scroll = $(options.scroll);
+  content.innerHTML = '<p class="knowledge-loading">Opening document…</p>';
+  $(options.title).textContent = item.title;
+  if (options.label) $(options.label).textContent = options.labelText || item.label || "NOTES";
+  try {
+    const { markdown, sourcePath } = await readMarkdown(item);
+    const rendered = markdownToHtml(markdown, sourcePath);
+    content.innerHTML = rendered.html || '<p>No content published yet.</p>';
+    renderOutline(rendered.headings, options.outline);
+    scroll.scrollTop = 0;
+  } catch (error) {
+    content.innerHTML = `<div class="document-error"><strong>Document unavailable</strong><p>${escapeHtml(error.message)}</p></div>`;
+    $(options.outline).innerHTML = "";
+  }
+}
+
+function noteCollections() {
+  return (archive.notes || []).map((collection) => ({
+    ...collection,
+    documents: Array.isArray(collection.documents) && collection.documents.length
+      ? collection.documents
+      : [{ id: collection.id, title: collection.title, body: collection.body, summary: collection.summary, group: "Published notes" }]
+  }));
+}
+
+function renderNoteTree(query = "") {
+  const host = $("#noteTree");
+  const normalized = query.trim().toLowerCase();
+  const collections = noteCollections();
+  if (!collections.length) {
+    host.innerHTML = '<p class="knowledge-loading">No notes published yet.</p>';
     return;
   }
-  host.innerHTML = archive.notes.map((item) => `
-    <article class="note-card">
-      <div class="note-meta"><span>${escapeHtml(item.label || "FIELD NOTE")}</span><span>·</span><span>${dateLabel(item.createdAt)}</span></div>
-      <h3>${escapeHtml(item.title)}</h3>
-      <p>${escapeHtml(item.summary)}</p>
-      <button class="text-link note-open" type="button" data-note-id="${escapeHtml(item.id)}">Open note <span>→</span></button>
-    </article>
-  `).join("");
+  host.innerHTML = collections.map((collection) => {
+    let lastGroup = "";
+    const documents = collection.documents.filter((item) => !normalized || `${item.title} ${item.group || ""} ${collection.label}`.toLowerCase().includes(normalized));
+    if (!documents.length) return "";
+    return `
+      <section class="knowledge-tree-section">
+        <div class="knowledge-collection"><span>${escapeHtml(collection.label || "NOTES")}</span><small>${documents.length}</small></div>
+        ${documents.map((item) => {
+          const group = item.group || "Reference";
+          const groupLabel = group !== lastGroup ? `<span class="knowledge-group">${escapeHtml(group)}</span>` : "";
+          lastGroup = group;
+          const active = activeNote.collectionId === collection.id && activeNote.documentId === item.id;
+          return `${groupLabel}<button class="${active ? "active" : ""}" type="button" data-note-collection="${escapeHtml(collection.id)}" data-note-document="${escapeHtml(item.id)}"><i></i>${escapeHtml(item.title)}</button>`;
+        }).join("")}
+      </section>
+    `;
+  }).join("") || '<p class="knowledge-loading">No notes matched your search.</p>';
+}
+
+async function selectNoteDocument(collectionId, documentId) {
+  const collection = noteCollections().find((item) => item.id === collectionId);
+  const item = collection && collection.documents.find((documentItem) => documentItem.id === documentId);
+  if (!collection || !item) return;
+  activeNote = { collectionId, documentId };
+  renderNoteTree($("#noteSearch").value);
+  await displayMarkdown(item, {
+    content: "#noteDocument",
+    scroll: "#noteScroll",
+    outline: "#noteOutline",
+    title: "#noteDocumentTitle",
+    label: "#noteCollectionLabel",
+    labelText: collection.label || "NOTES"
+  });
+}
+
+function renderNotes() {
+  const collections = noteCollections();
+  renderNoteTree($("#noteSearch").value);
+  if (!collections.length) return;
+  const selectedCollection = collections.find((item) => item.id === activeNote.collectionId) || collections[0];
+  const selectedDocument = selectedCollection.documents.find((item) => item.id === activeNote.documentId) || selectedCollection.documents[0];
+  selectNoteDocument(selectedCollection.id, selectedDocument.id);
+}
+
+function renderWriteupTree(query = "") {
+  const normalized = query.trim().toLowerCase();
+  const items = (archive.writeups || []).filter((item) => !normalized || `${item.title} ${item.label} ${(item.tags || []).join(" ")}`.toLowerCase().includes(normalized));
+  $("#writeupTree").innerHTML = items.length
+    ? items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml((item.label || "HTB").replace(/^HTB\s*·?\s*/i, ""))}</small></button>`).join("")
+    : '<p class="knowledge-loading">No writeups matched your search.</p>';
+}
+
+async function selectWriteup(id) {
+  const item = (archive.writeups || []).find((entry) => entry.id === id);
+  if (!item) return;
+  activeWriteupId = id;
+  renderWriteupTree($("#writeupSearch").value);
+  await displayMarkdown(item, {
+    content: "#writeupDocument",
+    scroll: "#writeupScroll",
+    outline: "#writeupOutline",
+    title: "#writeupDocumentTitle"
+  });
+}
+
+function openWriteupReader(id, updateUrl = true) {
+  const item = (archive.writeups || []).find((entry) => entry.id === id);
+  if (!item) return;
+  if (updateUrl) {
+    const url = new URL(location.href);
+    url.searchParams.set("writeup", id);
+    url.hash = "writeups";
+    history.pushState({ pageId: "writeups", writeup: id }, "", url);
+    activatePage("writeups", false);
+  }
+  const dialog = $("#documentDialog");
+  if (!dialog.open) dialog.showModal();
+  selectWriteup(id);
 }
 
 function renderCertifications() {
@@ -280,7 +570,7 @@ async function refreshArchive() {
   } else {
     backendOnline = false;
     const archiveUrl = new URL("data/content.json", document.baseURI);
-    archiveUrl.searchParams.set("v", "20260716-htb-import");
+    archiveUrl.searchParams.set("v", "20260716-document-reader");
     archive = await request(archiveUrl.href, { cache: "no-store" });
   }
   archive.articles ||= [];
@@ -293,6 +583,11 @@ async function refreshArchive() {
   renderNotes();
   renderSeparatedCredentials();
   renderManageList();
+  const requestedWriteup = new URL(location.href).searchParams.get("writeup");
+  if (requestedWriteup && archive.writeups.some((item) => item.id === requestedWriteup)) {
+    activatePage("writeups", false);
+    openWriteupReader(requestedWriteup, false);
+  }
 }
 
 async function refreshStatus() {
@@ -337,7 +632,7 @@ function setupEvents() {
   $("#writeupGrid").addEventListener("click", (event) => {
     const button = event.target.closest("[data-writeup-id]");
     if (!button) return;
-    openEntry(archive.writeups.find((item) => item.id === button.dataset.writeupId));
+    openWriteupReader(button.dataset.writeupId);
   });
   $("#writeupPrev").addEventListener("click", () => {
     if (writeupPage === 0) return;
@@ -350,10 +645,62 @@ function setupEvents() {
     writeupPage += 1;
     renderWriteups();
   });
-  $("#notesGrid").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-note-id]");
+  $("#noteTree").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-note-document]");
     if (!button) return;
-    openEntry(archive.notes.find((item) => item.id === button.dataset.noteId));
+    selectNoteDocument(button.dataset.noteCollection, button.dataset.noteDocument);
+  });
+  $("#noteSearch").addEventListener("input", (event) => renderNoteTree(event.currentTarget.value));
+  $("#writeupTree").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-writeup-select]");
+    if (!button) return;
+    selectWriteup(button.dataset.writeupSelect);
+  });
+  $("#writeupSearch").addEventListener("input", (event) => renderWriteupTree(event.currentTarget.value));
+  ["#noteOutline", "#writeupOutline"].forEach((selector) => {
+    $(selector).addEventListener("click", (event) => {
+      const button = event.target.closest("[data-outline-target]");
+      if (!button) return;
+      const content = selector === "#noteOutline" ? $("#noteDocument") : $("#writeupDocument");
+      const target = content.querySelector(`#${button.dataset.outlineTarget}`);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+  ["#noteDocument", "#writeupDocument"].forEach((selector) => {
+    $(selector).addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-copy-code]");
+      if (button) {
+        const code = button.closest(".code-frame").querySelector("code").textContent;
+        try {
+          await navigator.clipboard.writeText(code);
+          button.textContent = "Copied";
+          window.setTimeout(() => { button.textContent = "Copy"; }, 1200);
+        } catch {
+          button.textContent = "Select";
+        }
+        return;
+      }
+      const link = event.target.closest("a");
+      if (!link) return;
+      const url = new URL(link.href, document.baseURI);
+      if (url.origin !== location.origin || !url.pathname.toLowerCase().endsWith(".md")) return;
+      const documentPath = url.pathname.replace(/^\/+/, "");
+      if (selector === "#noteDocument") {
+        for (const collection of noteCollections()) {
+          const item = collection.documents.find((entry) => entry.document === documentPath);
+          if (!item) continue;
+          event.preventDefault();
+          selectNoteDocument(collection.id, item.id);
+          return;
+        }
+      } else {
+        const item = archive.writeups.find((entry) => entry.document === documentPath);
+        if (item) {
+          event.preventDefault();
+          selectWriteup(item.id);
+        }
+      }
+    });
   });
   ["#certGrid", "#competitionGrid"].forEach((selector) => {
     $(selector).addEventListener("click", (event) => {
@@ -363,6 +710,12 @@ function setupEvents() {
     });
   });
   $$("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => button.closest("dialog").close()));
+  $("#documentDialog").addEventListener("close", () => {
+    const url = new URL(location.href);
+    if (!url.searchParams.has("writeup")) return;
+    url.searchParams.delete("writeup");
+    history.replaceState({ pageId: "writeups" }, "", url);
+  });
   $("#openDesk").addEventListener("click", async () => {
     await refreshStatus();
     if (!backendOnline) return;
