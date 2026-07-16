@@ -14,8 +14,8 @@ main>.signal-strip,main>.operating-section{display:none!important}
 .research-section,.notebook-section,.credentials-section,.competitions-section{padding-top:clamp(28px,5vh,54px);padding-bottom:clamp(25px,4vh,48px)}
 .section-heading{margin-bottom:clamp(18px,3vh,32px)}
 .section-heading h2,.notebook-title h2{font-size:clamp(38px,4.2vw,61px)}
-.research-grid{grid-template-columns:repeat(4,1fr)}
-.research-card{min-height:clamp(245px,43vh,340px)}
+.research-grid{grid-template-columns:repeat(3,1fr)}
+.research-card{min-height:clamp(170px,25vh,235px)}
 .research-card h3{font-size:clamp(19px,1.7vw,25px);margin-top:clamp(24px,5vh,45px)}
 .notebook-title{margin-bottom:clamp(24px,5vh,48px)}
 .notes-grid{height:min(45vh,330px)}
@@ -30,7 +30,7 @@ main>.signal-strip,main>.operating-section{display:none!important}
 .credential-preview p{color:var(--muted);font:11px var(--mono)}
 @media(max-width:1180px){
   .research-grid{grid-template-columns:repeat(2,1fr)}
-  .research-card{min-height:clamp(170px,26vh,225px)}
+  .research-card{min-height:clamp(125px,18vh,155px)}
   .research-card h3{margin-top:18px}
   .credentials-grid{grid-template-columns:repeat(2,1fr)}
   .competition-grid{grid-template-columns:minmax(280px,520px)}
@@ -44,7 +44,7 @@ main>.signal-strip,main>.operating-section{display:none!important}
   .section-heading h2,.notebook-title h2{font-size:38px}
   .section-heading .eyebrow,.notebook-title .eyebrow{margin-bottom:8px}
   .filter-row{margin-bottom:12px}
-  .research-card{min-height:185px}
+  .research-card{min-height:120px}
   .research-card p{display:none}
   .credentials-grid{gap:8px}
   .cert-image{min-height:95px}
@@ -81,8 +81,8 @@ main>.signal-strip,main>.operating-section{display:none!important}
   .filter-row{gap:1px;margin-bottom:10px;padding-bottom:7px}
   .filter{padding:5px;font-size:8px}
   .research-grid{grid-template-columns:1fr}
-  .research-card{min-height:78px;padding:10px 12px}
-  .research-card h3{font-size:15px;margin:12px 0 0;max-width:95%}
+  .research-card{min-height:64px;padding:8px 10px}
+  .research-card h3{font-size:14px;margin:8px 0 0;max-width:95%}
   .research-card p,.research-card .card-bottom,.research-card:after{display:none}
   .card-top{font-size:8px}
   .notes-grid{grid-template-columns:1fr;gap:8px;height:auto}

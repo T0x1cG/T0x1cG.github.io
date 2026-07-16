@@ -1,6 +1,26 @@
 {
   "articles": [
     {
+      "id": "isc2-cc-study-guide-2026",
+      "label": "Learning",
+      "title": "ISC2 Certified in Cybersecurity Study Guide",
+      "summary": "My structured CC notes covering security principles, continuity and recovery, access control, network security, and security operations.",
+      "tags": ["ISC2 CC", "study guide", "security fundamentals"],
+      "body": "After passing the ISC2 Certified in Cybersecurity exam, I organized my notes and useful resources into a public study guide for other learners.\n\nThe repository covers all five CC domains: Security Principles; Business Continuity, Disaster Recovery and Incident Response; Access Controls; Network Security; and Security Operations.\n\nThese are independent study notes, not official ISC2 course material. Verify objectives against the current official exam outline before preparing for an exam.",
+      "url": "https://github.com/T0x1cG/Certified-in-Cybersecurity",
+      "createdAt": "2026-02-12T05:27:36.000Z"
+    },
+    {
+      "id": "ejptv2-practical-notes-2025",
+      "label": "Learning",
+      "title": "eJPTv2 Practical Penetration Testing Notes",
+      "summary": "The personal reconnaissance, Linux, Windows, and web-exploitation reference notes I used to complete eJPTv2 in four hours with a 91% score.",
+      "tags": ["eJPTv2", "penetration testing", "cheatsheet"],
+      "body": "A practical reference collection created during my eJPTv2 preparation. It includes information gathering, service enumeration, Linux and Windows techniques, web assessment, Metasploit workflows, file transfer, credential testing, and post-exploitation reminders.\n\nI completed the eJPTv2 exam in four hours and achieved 91% using my own notes. I published the collection to help other learners build a repeatable testing workflow.\n\nUse every command only in labs, CTFs, or systems where you have explicit authorization.",
+      "url": "https://github.com/T0x1cG/eJPTv2",
+      "createdAt": "2025-12-30T03:38:59.000Z"
+    },
+    {
       "id": "seed-web-001",
       "label": "Web",
       "title": "Following a blind SSRF into the internal network",
