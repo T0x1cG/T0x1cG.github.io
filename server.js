@@ -10,7 +10,7 @@ const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : pat
 const CONTENT_FILE = path.join(DATA_DIR, "content.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || "127.0.0.1";
+const HOST = "127.0.0.1";
 const sessions = new Map();
 const loginAttempts = new Map();
 const EMPTY = { articles: [], notes: [], certifications: [], achievements: [] };
@@ -99,6 +99,17 @@ function sameOrigin(request) {
   if (!origin) return true;
   try { return new URL(origin).host === request.headers.host; } catch { return false; }
 }
+function localApiRequest(request) {
+  const remote = request.socket.remoteAddress || "";
+  const loopback = remote === "127.0.0.1" || remote === "::1" || remote === "::ffff:127.0.0.1";
+  if (!loopback) return false;
+  try {
+    const hostname = new URL("http://" + request.headers.host).hostname;
+    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
+  } catch {
+    return false;
+  }
+}
 function loginKey(request) {
   return request.socket.remoteAddress || "local";
 }
@@ -165,6 +176,7 @@ async function publishArchive(action, title) {
 }
 
 async function api(request, response, pathname) {
+  if (!localApiRequest(request)) return send(response, 404, { error: "Not found." });
   if (["POST", "PUT", "PATCH", "DELETE"].includes(request.method) && !sameOrigin(request)) {
     return send(response, 403, { error: "Cross-origin request blocked." });
   }
