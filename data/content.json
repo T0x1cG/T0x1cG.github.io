@@ -200,30 +200,6 @@
         }
       ],
       "createdAt": "2026-07-16T00:00:00.000Z"
-    },
-    {
-      "id": "cpts-quick-reference-2026",
-      "label": "CPTS",
-      "title": "Penetration Testing Quick Reference",
-      "summary": "Compact CPTS reminders for local file inclusion, private-key discovery, SQLite inspection, wrappers, and common command patterns.",
-      "tags": ["CPTS", "pentesting", "quick reference"],
-      "body": "A compact CPTS quick-reference note imported from my local study archive.\n\nIt covers common local file inclusion targets, SQLite inspection, stream wrappers, and related command reminders. The supplied reference image is included with the note.\n\nUse every command only in an environment where you have explicit authorization.",
-      "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/notes/cpts/README.md",
-      "documents": [
-        {
-          "id": "cpts-overview",
-          "title": "CPTS Overview",
-          "group": "Getting started",
-          "document": "assets/notes/cpts/README.md"
-        },
-        {
-          "id": "cpts-quick-reference",
-          "title": "Penetration Testing Quick Reference",
-          "group": "Quick reference",
-          "document": "assets/notes/cpts/quick-reference.md"
-        }
-      ],
-      "createdAt": "2026-07-16T00:00:00.000Z"
     }
   ],
   "certifications": [
