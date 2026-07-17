@@ -2,6 +2,10 @@ data/settings.json
 data/*.tmp
 .DS_Store
 
+# Environment files may contain credentials. Keep all local variants private.
+.env
+.env.*
+
 # Local-only publishing backend. Never deploy these through GitHub Pages.
 server.js
 package.json

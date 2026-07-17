@@ -44,6 +44,11 @@ async function refreshHtbRank() {
     if (!trustedRankImage) throw new Error("HTB rank artwork source is invalid.");
 
     $("#htbRankTitle").textContent = profile.rank;
+    $("#htbUsername").textContent = profile.username || "T0x1cG";
+    const countryRank = Number(profile.countryRank);
+    $("#htbCountryRank").textContent = Number.isInteger(countryRank) && countryRank > 0
+      ? `#${new Intl.NumberFormat("en").format(countryRank)}`
+      : "—";
     $("#htbRankLevel").textContent = String(level);
     $("#htbRankGrade").textContent = Number.isFinite(grade) ? String(grade).padStart(2, "0") : "--";
     $("#htbRankXp").textContent = `${new Intl.NumberFormat("en").format(totalXp)} XP`;

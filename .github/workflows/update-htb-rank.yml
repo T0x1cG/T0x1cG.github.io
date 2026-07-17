@@ -45,6 +45,7 @@ jobs:
           ' "$response" >/dev/null
 
           updated_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          country_rank="$(jq -r 'if ((.countryRank | type) == "number") and .countryRank > 0 then .countryRank else 5 end' data/htb-profile.json 2>/dev/null || echo 5)"
           rank_image="$(jq -r '.rankImage' "$response")"
           curl --fail --silent --show-error --retry 3 --retry-all-errors \
             --connect-timeout 15 --max-time 60 --max-filesize 1048576 \
@@ -56,12 +57,16 @@ jobs:
             --arg account_id "$HTB_ACCOUNT_ID" \
             --arg profile_url "$HTB_PROFILE_URL" \
             --arg username "T0x1cG" \
+            --arg country "Cambodia" \
+            --argjson country_rank "$country_rank" \
             --arg updated_at "$updated_at" \
             '{
               profileId: $profile_id,
               accountId: $account_id,
               profileUrl: $profile_url,
               username: $username,
+              country: $country,
+              countryRank: $country_rank,
               rank: .levelTitle,
               rankImage: .rankImage,
               level: .level,
