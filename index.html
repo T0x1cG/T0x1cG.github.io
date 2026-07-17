@@ -14,7 +14,7 @@
     <script src="theme.js?v=20260717-theme-switch"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css?v=20260716-security-hardening" />
     <link rel="stylesheet" href="credentials.css?v=20260716-security-hardening" />
     <link rel="stylesheet" href="single-page.css?v=20260716-security-hardening" />
@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="knowledge.css?v=20260716-web-request-cleanup" />
     <link rel="stylesheet" href="profile.css?v=20260716-home-profile-v3" />
     <link rel="stylesheet" href="trace-theme.css?v=20260717-dual-theme" />
+    <link rel="stylesheet" href="caseboard-theme.css?v=20260717-chain-of-custody" />
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
@@ -60,6 +61,22 @@
 
       <main id="top">
         <section class="hero profile-hero section-pad page-active" id="home">
+          <div class="case-banner" aria-hidden="true">
+            <div class="capture-meta">
+              <span>CAPTURE / T0-0717</span>
+              <span>INTERFACE / ETH0</span>
+              <span>STATE / AUTHORIZED</span>
+            </div>
+            <div class="capture-console">
+              <span><b>08:41:07</b> SYN → surface-map</span>
+              <span><b>08:41:12</b> ACK → validate-path</span>
+              <span><b>08:41:19</b> DATA → report-impact</span>
+            </div>
+            <div class="capture-route">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <strong>CHAIN OF CUSTODY / OFFENSIVE OPERATIONS</strong>
+          </div>
           <div class="hero-copy profile-copy">
             <p class="eyebrow"><span class="pulse"></span> T0X1CG / OPERATOR PROFILE</p>
             <h1>Penetration Tester<br /><em>wannabe Red Team.</em></h1>
