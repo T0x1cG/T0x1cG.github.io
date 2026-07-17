@@ -4,6 +4,8 @@ const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector
 let archive = { articles: [], writeups: [], notes: [], certifications: [], achievements: [] };
 let activeFilter = "all";
 let writeupPage = 0;
+let activeWriteupCollection = "boot2root";
+let activeJeopardyCategory = "all";
 const writeupsPerPage = 4;
 let activeNote = { collectionId: "", documentId: "" };
 let activeWriteupId = "";
@@ -112,9 +114,38 @@ function renderArticles() {
   `).join("");
 }
 
+function writeupCollection(item) {
+  return item.collection === "jeopardy" ? "jeopardy" : "boot2root";
+}
+
+function filteredWriteups() {
+  return (archive.writeups || []).filter((item) => {
+    if (writeupCollection(item) !== activeWriteupCollection) return false;
+    return activeWriteupCollection !== "jeopardy"
+      || activeJeopardyCategory === "all"
+      || item.category === activeJeopardyCategory;
+  });
+}
+
 function renderWriteups() {
   const host = $("#writeupGrid");
-  const items = archive.writeups || [];
+  const items = filteredWriteups();
+  const boot2rootCount = (archive.writeups || []).filter((item) => writeupCollection(item) === "boot2root").length;
+  const jeopardyCount = (archive.writeups || []).filter((item) => writeupCollection(item) === "jeopardy").length;
+  $("#boot2rootCount").textContent = String(boot2rootCount).padStart(2, "0");
+  $("#jeopardyCount").textContent = String(jeopardyCount).padStart(2, "0");
+  $$('[data-writeup-collection]').forEach((button) => {
+    const active = button.dataset.writeupCollection === activeWriteupCollection;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  const categoryBar = $("#jeopardyCategories");
+  categoryBar.hidden = activeWriteupCollection !== "jeopardy";
+  $$('[data-jeopardy-category]').forEach((button) => {
+    const active = button.dataset.jeopardyCategory === activeJeopardyCategory;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
   const totalPages = Math.max(1, Math.ceil(items.length / writeupsPerPage));
   writeupPage = Math.min(writeupPage, totalPages - 1);
   const visible = items.slice(writeupPage * writeupsPerPage, (writeupPage + 1) * writeupsPerPage);
@@ -122,7 +153,7 @@ function renderWriteups() {
   $("#writeupPrev").disabled = writeupPage === 0;
   $("#writeupNext").disabled = writeupPage >= totalPages - 1;
   if (!visible.length) {
-    host.innerHTML = '<div class="loading-card">No retired-machine writeups published yet.</div>';
+    host.innerHTML = '<div class="loading-card">No writeups are published in this category yet.</div>';
     return;
   }
   host.innerHTML = visible.map((item, index) => `
@@ -420,9 +451,16 @@ function renderNotes() {
 
 function renderWriteupTree(query = "") {
   const normalized = query.trim().toLowerCase();
-  const items = (archive.writeups || []).filter((item) => !normalized || `${item.title} ${item.label} ${(item.tags || []).join(" ")}`.toLowerCase().includes(normalized));
-  $("#writeupTree").innerHTML = items.length
-    ? items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml((item.label || "HTB").replace(/^HTB\s*·?\s*/i, ""))}</small></button>`).join("")
+  const items = (archive.writeups || []).filter((item) => !normalized || `${item.title} ${item.label} ${item.category || ""} ${(item.tags || []).join(" ")}`.toLowerCase().includes(normalized));
+  const groups = [
+    { label: "BOOT2ROOT / HACK THE BOX", items: items.filter((item) => writeupCollection(item) === "boot2root") },
+    ...["Crypto", "Forensics", "Misc"].map((category) => ({
+      label: `JEOPARDY / ${category.toUpperCase()}`,
+      items: items.filter((item) => writeupCollection(item) === "jeopardy" && item.category === category)
+    }))
+  ].filter((group) => group.items.length);
+  $("#writeupTree").innerHTML = groups.length
+    ? groups.map((group) => `<section class="writeup-tree-section"><p>${escapeHtml(group.label)}</p>${group.items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml((item.label || item.category || "WRITEUP").replace(/^HTB\s*·?\s*/i, ""))}</small></button>`).join("")}</section>`).join("")
     : '<p class="knowledge-loading">No writeups matched your search.</p>';
 }
 
@@ -674,13 +712,23 @@ function setupEvents() {
     if (!button) return;
     openWriteupReader(button.dataset.writeupId);
   });
+  $$('[data-writeup-collection]').forEach((button) => button.addEventListener("click", () => {
+    activeWriteupCollection = button.dataset.writeupCollection;
+    writeupPage = 0;
+    renderWriteups();
+  }));
+  $$('[data-jeopardy-category]').forEach((button) => button.addEventListener("click", () => {
+    activeJeopardyCategory = button.dataset.jeopardyCategory;
+    writeupPage = 0;
+    renderWriteups();
+  }));
   $("#writeupPrev").addEventListener("click", () => {
     if (writeupPage === 0) return;
     writeupPage -= 1;
     renderWriteups();
   });
   $("#writeupNext").addEventListener("click", () => {
-    const totalPages = Math.max(1, Math.ceil(archive.writeups.length / writeupsPerPage));
+    const totalPages = Math.max(1, Math.ceil(filteredWriteups().length / writeupsPerPage));
     if (writeupPage >= totalPages - 1) return;
     writeupPage += 1;
     renderWriteups();
@@ -804,6 +852,18 @@ function setupEvents() {
     await request("/api/admin/logout", { method: "POST", body: "{}" });
     await refreshStatus();
   });
+  const entryType = $("#entryType");
+  const entryWriteupCollection = $("#entryWriteupCollection");
+  const entryJeopardyCategory = $("#entryJeopardyCategory");
+  const syncWriteupFields = () => {
+    const isWriteup = entryType.value === "writeups";
+    $("#writeupMetaFields").hidden = !isWriteup;
+    entryWriteupCollection.disabled = !isWriteup;
+    entryJeopardyCategory.disabled = !isWriteup || entryWriteupCollection.value !== "jeopardy";
+  };
+  entryType.addEventListener("change", syncWriteupFields);
+  entryWriteupCollection.addEventListener("change", syncWriteupFields);
+  syncWriteupFields();
   $("#entryForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const message = $("#entryMessage");
@@ -825,6 +885,7 @@ function setupEvents() {
     try {
       const created = await request("/api/content", { method: "POST", body: JSON.stringify(payload) });
       event.currentTarget.reset();
+      syncWriteupFields();
       message.className = created.deployment && created.deployment.published ? "form-message success" : "form-message";
       message.textContent = created.deployment ? created.deployment.message : "Published to the archive.";
       await refreshArchive();

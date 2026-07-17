@@ -632,6 +632,97 @@ h2 em,
   background:var(--blue);
 }
 
+.writeup-classifier{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.writeup-classifier button{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:4px 16px;
+  min-height:74px;
+  padding:14px 16px;
+  text-align:left;
+  color:var(--ink);
+  border:1px solid var(--line);
+  background:rgba(248,251,249,.72);
+}
+
+.writeup-classifier button span{
+  font:600 16px/1.1 var(--display);
+}
+
+.writeup-classifier button small{
+  grid-column:1;
+  color:var(--muted);
+  font:10px/1.4 var(--mono);
+}
+
+.writeup-classifier button b{
+  grid-column:2;
+  grid-row:1/3;
+  align-self:center;
+  color:var(--blue);
+  font:500 22px/1 var(--mono);
+}
+
+.writeup-classifier button:hover,
+.writeup-classifier button.active{
+  border-color:var(--blue);
+  box-shadow:inset 3px 0 0 var(--blue);
+}
+
+.writeup-classifier button:focus-visible,
+.jeopardy-categories button:focus-visible{
+  outline:2px solid var(--cyan);
+  outline-offset:2px;
+}
+
+.jeopardy-categories{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin:0 0 10px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  background:rgba(248,251,249,.5);
+}
+
+.jeopardy-categories[hidden]{display:none}
+
+.jeopardy-categories>span{
+  margin-right:auto;
+  color:var(--muted);
+  font:9px var(--mono);
+  letter-spacing:.1em;
+}
+
+.jeopardy-categories button{
+  padding:6px 10px;
+  color:var(--muted);
+  border:1px solid transparent;
+  background:transparent;
+  font:9px var(--mono);
+}
+
+.jeopardy-categories button:hover,
+.jeopardy-categories button.active{
+  color:#fff;
+  border-color:var(--blue);
+  background:var(--blue);
+}
+
+.writeup-tree-section>p{
+  margin:14px 12px 6px;
+  color:var(--blue);
+  font:600 8px/1.4 var(--mono);
+  letter-spacing:.09em;
+}
+
 .notebook-section{
   color:var(--ink);
   background:linear-gradient(90deg,rgba(237,242,239,.97),rgba(237,242,239,.9));
@@ -817,6 +908,11 @@ h2 em,
 .markdown-document code{
   color:#1748dd;
   background:rgba(36,87,255,.075);
+}
+
+.markdown-document .code-frame code{
+  color:#fff;
+  background:transparent;
 }
 
 .code-frame{
@@ -1331,6 +1427,9 @@ html[data-theme="light"] .theme-toggle-track i{
 .theme-ready .document-dialog-outline,
 .theme-ready .loading-card,
 .theme-ready .writeup-toolbar,
+.theme-ready .writeup-classifier button,
+.theme-ready .jeopardy-categories,
+.theme-ready .jeopardy-categories button,
 .theme-ready .theme-toggle-track,
 .theme-ready .theme-toggle-track i{
   transition:
@@ -1524,6 +1623,22 @@ html[data-theme="dark"] .writeup-toolbar button{
   border-color:rgba(255,255,255,.15);
 }
 
+html[data-theme="dark"] .writeup-classifier button,
+html[data-theme="dark"] .jeopardy-categories{
+  color:#fff;
+  border-color:rgba(255,255,255,.13);
+  background:rgba(20,29,30,.9);
+}
+
+html[data-theme="dark"] .writeup-classifier button small{
+  color:#aebcba;
+}
+
+html[data-theme="dark"] .writeup-classifier button:hover,
+html[data-theme="dark"] .writeup-classifier button.active{
+  border-color:#7593ff;
+}
+
 html[data-theme="dark"] .knowledge-shell{
   border-color:rgba(255,255,255,.14);
   background:#101819;
@@ -1572,11 +1687,49 @@ html[data-theme="dark"] .markdown-document code{
   background:rgba(36,87,255,.18);
 }
 
+html[data-theme="dark"] .markdown-document .code-frame code{
+  color:#fff;
+  background:transparent;
+}
+
 html[data-theme="dark"] .achievement-card{
   background:linear-gradient(135deg,rgba(0,167,160,.17),rgba(20,29,30,.96) 60%);
 }
 
 @media(max-width:680px){
+  .writeup-classifier{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .writeup-classifier button{
+    min-height:56px;
+    padding:10px;
+  }
+
+  .writeup-classifier button span{
+    font-size:12px;
+  }
+
+  .writeup-classifier button small{
+    display:none;
+  }
+
+  .writeup-classifier button b{
+    grid-row:1;
+    font-size:16px;
+  }
+
+  .jeopardy-categories{
+    flex-wrap:wrap;
+    gap:3px;
+    padding:5px;
+  }
+
+  .jeopardy-categories>span{
+    display:none;
+  }
+
   .theme-toggle{
     min-width:36px;
     padding:7px;

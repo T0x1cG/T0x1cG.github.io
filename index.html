@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="paper-theme.css?v=20260716-security-hardening" />
     <link rel="stylesheet" href="knowledge.css?v=20260716-web-request-cleanup" />
     <link rel="stylesheet" href="profile.css?v=20260716-home-profile-v3" />
-    <link rel="stylesheet" href="trace-theme.css?v=20260717-dual-theme" />
+    <link rel="stylesheet" href="trace-theme.css?v=20260717-writeup-taxonomy" />
     <link rel="stylesheet" href="caseboard-theme.css?v=20260717-contact-channels" />
   </head>
   <body>
@@ -156,8 +156,23 @@
 
         <section class="research-section writeup-section section-pad" id="writeups">
           <div class="section-heading">
-            <div><p class="eyebrow">RETIRED LAB ARCHIVE</p><h2>HTB <em>writeups</em></h2></div>
-            <p>Authorized-lab walkthroughs for retired Hack The Box machines. Flags and transient challenge tokens are removed.</p>
+            <div><p class="eyebrow">AUTHORIZED LAB ARCHIVE</p><h2>Writeup <em>archive</em></h2></div>
+            <p>Boot2Root attack paths and categorized Jeopardy CTF research. Flags, credentials, and transient challenge tokens are removed.</p>
+          </div>
+          <div class="writeup-classifier" aria-label="Writeup collection">
+            <button class="active" type="button" data-writeup-collection="boot2root" aria-pressed="true">
+              <span>Boot2Root</span><small>Machines and attack paths</small><b id="boot2rootCount">00</b>
+            </button>
+            <button type="button" data-writeup-collection="jeopardy" aria-pressed="false">
+              <span>Jeopardy CTF</span><small>Challenges grouped by category</small><b id="jeopardyCount">00</b>
+            </button>
+          </div>
+          <div class="jeopardy-categories" id="jeopardyCategories" aria-label="Jeopardy CTF category" hidden>
+            <span>FILTER CATEGORY</span>
+            <button class="active" type="button" data-jeopardy-category="all" aria-pressed="true">All</button>
+            <button type="button" data-jeopardy-category="Crypto" aria-pressed="false">Crypto</button>
+            <button type="button" data-jeopardy-category="Forensics" aria-pressed="false">Forensics</button>
+            <button type="button" data-jeopardy-category="Misc" aria-pressed="false">Misc</button>
           </div>
           <div class="writeup-toolbar" aria-label="Writeup pages">
             <span id="writeupPageLabel">PAGE 01 / 01</span>
@@ -166,7 +181,7 @@
               <button id="writeupNext" type="button" aria-label="Next writeup page">→</button>
             </div>
           </div>
-          <div class="research-grid writeup-grid" id="writeupGrid" aria-live="polite"><div class="loading-card">Loading retired-machine writeups…</div></div>
+          <div class="research-grid writeup-grid" id="writeupGrid" aria-live="polite"><div class="loading-card">Loading writeup archive…</div></div>
         </section>
 
         <section class="notebook-section section-pad" id="notes">
@@ -283,8 +298,12 @@
             <div class="editor-heading"><div><p class="eyebrow">NEW ENTRY</p><h3>Add to the archive</h3></div><span class="signed-in">AUTHENTICATED <b></b></span></div>
             <form id="entryForm" class="entry-form">
               <div class="field-row">
-                <label>Entry type<select name="type"><option value="articles">Shared resource</option><option value="writeups">HTB writeup</option><option value="notes">Research note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
+                <label>Entry type<select name="type" id="entryType"><option value="articles">Shared resource</option><option value="writeups">Writeup</option><option value="notes">Research note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
                 <label>Topic / issuer<input name="label" placeholder="e.g. Web Security" required maxlength="60" /></label>
+              </div>
+              <div class="field-row" id="writeupMetaFields" hidden>
+                <label>Writeup format<select name="collection" id="entryWriteupCollection" disabled><option value="boot2root">Boot2Root</option><option value="jeopardy">Jeopardy CTF</option></select></label>
+                <label>Jeopardy category<select name="category" id="entryJeopardyCategory" disabled><option value="Crypto">Crypto</option><option value="Forensics">Forensics</option><option value="Web">Web</option><option value="Pwn">Pwn</option><option value="Reverse">Reverse</option><option value="Misc">Misc</option></select></label>
               </div>
               <label>Title<input name="title" placeholder="Give this entry a clear title" required maxlength="120" /></label>
               <label>Description<input name="summary" placeholder="A concise overview for readers" required maxlength="280" /></label>
@@ -306,22 +325,22 @@
       <div class="document-dialog-shell">
         <header class="document-dialog-header">
           <div>
-            <span>RETIRED LAB ARCHIVE</span>
-            <strong id="writeupDocumentTitle">HTB Writeup</strong>
+            <span>AUTHORIZED WRITEUP ARCHIVE</span>
+            <strong id="writeupDocumentTitle">Select a writeup</strong>
           </div>
           <button class="dialog-close" type="button" data-close-dialog aria-label="Close writeup">×</button>
         </header>
         <aside class="document-dialog-sidebar">
           <label class="knowledge-search">
             <span>SEARCH WRITEUPS</span>
-            <input id="writeupSearch" type="search" placeholder="Search machines…" autocomplete="off" />
+            <input id="writeupSearch" type="search" placeholder="Search writeups…" autocomplete="off" />
           </label>
           <nav class="knowledge-tree" id="writeupTree"></nav>
         </aside>
         <article class="document-dialog-reader">
           <div class="knowledge-scroll" id="writeupScroll">
             <div class="markdown-document" id="writeupDocument">
-              <p class="knowledge-loading">Select a retired-machine writeup.</p>
+              <p class="knowledge-loading">Select a writeup from the archive.</p>
             </div>
           </div>
         </article>
@@ -331,6 +350,6 @@
         </aside>
       </div>
     </dialog>
-    <script src="app.js?v=20260717-career-projects"></script>
+    <script src="app.js?v=20260717-writeup-taxonomy"></script>
   </body>
 </html>
