@@ -414,17 +414,11 @@ html[data-theme="dark"] .profile-copy h1 em{
 }
 
 .profile-dossier::after{
-  content:"SCOPE / VERIFIED";
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  padding-bottom:92px;
-  color:var(--case-cyan);
+  content:"";
+  padding:0;
   background-image:radial-gradient(circle,rgba(232,239,233,.42) .7px,transparent .8px);
   background-size:18px 18px;
-  font:700 clamp(24px,2.6vw,40px) var(--case-slab);
-  letter-spacing:.08em;
-  opacity:.085;
+  opacity:.08;
   transform:none;
 }
 
@@ -448,6 +442,107 @@ html[data-theme="dark"] .profile-copy h1 em{
 
 .profile-specialties article{
   min-height:49px;
+}
+
+.htb-rank-card{
+  position:relative;
+  z-index:3;
+  display:grid;
+  grid-template-columns:64px minmax(0,1fr) 28px;
+  align-items:center;
+  gap:12px;
+  min-height:98px;
+  margin:0 17px 17px;
+  padding:14px;
+  color:#f7fbf9;
+  border:1px solid rgba(103,215,229,.25);
+  background:
+    linear-gradient(100deg,rgba(103,215,229,.08),transparent 38%),
+    rgba(5,16,18,.88);
+  transition:border-color .22s,background .22s,transform .22s;
+}
+
+.htb-rank-card:hover{
+  border-color:var(--case-cyan);
+  background:
+    linear-gradient(100deg,rgba(103,215,229,.13),transparent 42%),
+    #09181a;
+  transform:translateY(-2px);
+}
+
+.htb-rank-mark{
+  display:grid;
+  width:58px;
+  height:58px;
+  place-items:center;
+  color:#081315;
+  border:1px solid #b4ff39;
+  background:#9fef00;
+  font:700 13px var(--mono);
+  letter-spacing:-.05em;
+  clip-path:polygon(50% 0,93% 24%,93% 76%,50% 100%,7% 76%,7% 24%);
+}
+
+.htb-rank-copy{
+  display:grid;
+  min-width:0;
+  gap:5px;
+}
+
+.htb-rank-copy small{
+  color:#7f9690;
+  font:500 7px var(--mono);
+  letter-spacing:.14em;
+}
+
+.htb-rank-copy small b{
+  color:#9fef00;
+  font-weight:600;
+}
+
+.htb-rank-copy>strong{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  color:#fff;
+  font:600 25px/1 var(--case-slab);
+}
+
+.htb-rank-copy>strong i{
+  flex:none;
+  color:var(--case-cyan);
+  font:500 9px var(--mono);
+  letter-spacing:.08em;
+}
+
+.htb-rank-metrics{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px 12px;
+}
+
+.htb-rank-metrics b{
+  color:#aebfbb;
+  font:500 7px var(--mono);
+  letter-spacing:.08em;
+}
+
+.htb-rank-arrow{
+  color:#9fef00;
+  font:500 22px var(--mono);
+}
+
+.htb-rank-card[data-state="loading"] .htb-rank-mark{
+  animation:htb-sync-pulse 1.4s ease-in-out infinite;
+}
+
+.htb-rank-card[data-state="stale"] .htb-rank-copy small b{
+  color:var(--case-orange);
+}
+
+@keyframes htb-sync-pulse{
+  50%{opacity:.58}
 }
 
 .section-heading,
@@ -667,6 +762,27 @@ html[data-theme="light"] .cert-copy h3{
   color:#111d1b;
 }
 
+html[data-theme="light"] .htb-rank-card{
+  color:#14201e;
+  border-color:rgba(8,19,21,.22);
+  background:
+    linear-gradient(100deg,rgba(49,92,255,.08),transparent 40%),
+    rgba(239,244,240,.92);
+}
+
+html[data-theme="light"] .htb-rank-card:hover{
+  border-color:var(--case-blue);
+  background:#f5f8f6;
+}
+
+html[data-theme="light"] .htb-rank-copy>strong{
+  color:#101a19;
+}
+
+html[data-theme="light"] .htb-rank-metrics b{
+  color:#52635f;
+}
+
 html[data-theme="light"] .card-top,
 html[data-theme="light"] .research-card p,
 html[data-theme="light"] .cert-copy p,
@@ -837,6 +953,45 @@ html[data-theme="light"] .cert-card::after{
     transform:none;
   }
 
+  .htb-rank-card{
+    grid-template-columns:34px minmax(0,1fr) 14px;
+    gap:7px;
+    min-height:53px;
+    margin:0 8px 7px;
+    padding:6px 7px;
+  }
+
+  .htb-rank-mark{
+    width:32px;
+    height:32px;
+    font-size:8px;
+  }
+
+  .htb-rank-copy{
+    gap:2px;
+  }
+
+  .htb-rank-copy small,
+  .htb-rank-metrics b{
+    font-size:4.5px;
+  }
+
+  .htb-rank-copy>strong{
+    font-size:12px;
+  }
+
+  .htb-rank-copy>strong i{
+    font-size:5px;
+  }
+
+  .htb-rank-metrics{
+    gap:3px 7px;
+  }
+
+  .htb-rank-arrow{
+    font-size:12px;
+  }
+
   .profile-dossier-top{
     padding-top:10px;
   }
@@ -866,5 +1021,9 @@ html[data-theme="light"] .cert-card::after{
   .case-banner::before{
     animation:none;
     left:68%;
+  }
+
+  .htb-rank-card[data-state="loading"] .htb-rank-mark{
+    animation:none;
   }
 }

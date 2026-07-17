@@ -1,0 +1,80 @@
+name: Update HTB rank
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-htb-rank
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      HTB_ACCOUNT_ID: 9ef94565-2b8b-40c3-a6e0-ab5b00f00b52
+      HTB_PROFILE_ID: 019c848b-a2c1-70ac-b264-2582fdf54af0
+      HTB_PROFILE_URL: https://profile.hackthebox.com/profile/019c848b-a2c1-70ac-b264-2582fdf54af0
+    steps:
+      - name: Check out portfolio
+        uses: actions/checkout@v4
+
+      - name: Fetch public HTB rank
+        shell: bash
+        run: |
+          set -euo pipefail
+          endpoint="https://labs.hackthebox.com/api/experience/v1/account/${HTB_ACCOUNT_ID}"
+          response="$(mktemp)"
+          output="$(mktemp)"
+
+          curl --fail --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 15 --max-time 60 \
+            "$endpoint" -o "$response"
+
+          jq -e '
+            (.level | type == "number") and
+            (.levelTitle | type == "string") and
+            (.totalExperiencePoints | type == "number")
+          ' "$response" >/dev/null
+
+          updated_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          jq \
+            --arg profile_id "$HTB_PROFILE_ID" \
+            --arg account_id "$HTB_ACCOUNT_ID" \
+            --arg profile_url "$HTB_PROFILE_URL" \
+            --arg username "T0x1cG" \
+            --arg updated_at "$updated_at" \
+            '{
+              profileId: $profile_id,
+              accountId: $account_id,
+              profileUrl: $profile_url,
+              username: $username,
+              rank: .levelTitle,
+              level: .level,
+              grade: (.levelGrade | tonumber),
+              totalExperiencePoints: .totalExperiencePoints,
+              levelExperiencePoints: .levelExperiencePoints,
+              experienceUntilNextLevel: .experienceUntilNextLevel,
+              streakWeeks: .streakData.counter,
+              updatedAt: $updated_at
+            }' "$response" > "$output"
+
+          mkdir -p data
+          mv "$output" data/htb-profile.json
+
+      - name: Publish changed rank
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/htb-profile.json
+          if git diff --cached --quiet; then
+            echo "HTB rank is already current."
+            exit 0
+          fi
+          git commit -m "Update HTB rank snapshot"
+          git push

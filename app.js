@@ -21,6 +21,33 @@ const dateLabel = (date) => {
   return Number.isNaN(parsed.valueOf()) ? "" : parsed.toLocaleDateString("en", { month: "short", year: "numeric" }).toUpperCase();
 };
 
+async function refreshHtbRank() {
+  const card = $("#htbRankCard");
+  if (!card) return;
+  try {
+    const response = await fetch(`data/htb-profile.json?v=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) throw new Error("HTB rank snapshot is unavailable.");
+    const profile = await response.json();
+    const level = Number(profile.level);
+    const grade = Number(profile.grade);
+    const totalXp = Number(profile.totalExperiencePoints);
+    const streak = Number(profile.streakWeeks);
+    if (!profile.rank || !Number.isFinite(level) || !Number.isFinite(totalXp)) throw new Error("HTB rank snapshot is invalid.");
+
+    $("#htbRankTitle").textContent = profile.rank;
+    $("#htbRankLevel").textContent = String(level);
+    $("#htbRankGrade").textContent = Number.isFinite(grade) ? String(grade).padStart(2, "0") : "--";
+    $("#htbRankXp").textContent = `${new Intl.NumberFormat("en").format(totalXp)} XP`;
+    $("#htbRankStreak").textContent = Number.isFinite(streak) ? String(streak) : "--";
+    $("#htbRankSync").textContent = "AUTO-SYNCED";
+    card.dataset.state = "live";
+  } catch (error) {
+    $("#htbRankSync").textContent = "PUBLIC PROFILE";
+    card.dataset.state = "stale";
+    console.warn(error.message);
+  }
+}
+
 async function request(path, options = {}) {
   const response = await fetch(path, { headers: { "Content-Type": "application/json", ...(options.headers || {}) }, ...options });
   const payload = await response.json().catch(() => ({}));
@@ -819,7 +846,7 @@ async function initialize() {
   activatePage(location.hash.slice(1) || "home", false);
   setupEvents();
   try {
-    await Promise.all([refreshArchive(), refreshStatus()]);
+    await Promise.all([refreshArchive(), refreshStatus(), refreshHtbRank()]);
   } catch (error) {
     const localHelp = localBackend
       ? 'Could not connect to the private archive. Start the server with <code>node server.js</code>.'
