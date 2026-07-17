@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,8 +9,9 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
-    <meta name="description" content="T0x1cG — penetration tester and offensive security engineer specializing in web, API, network and infrastructure security." />
-    <title>T0x1cG — Penetration Tester &amp; Offensive Security Engineer</title>
+    <meta name="description" content="T0x1cG — Penetration Tester and wannabe Red Team practitioner." />
+    <title>T0x1cG — Penetration Tester &amp; Wannabe Red Team</title>
+    <script src="theme.js?v=20260717-theme-switch"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -20,7 +21,7 @@
     <link rel="stylesheet" href="paper-theme.css?v=20260716-security-hardening" />
     <link rel="stylesheet" href="knowledge.css?v=20260716-web-request-cleanup" />
     <link rel="stylesheet" href="profile.css?v=20260716-home-profile-v3" />
-    <link rel="stylesheet" href="trace-theme.css?v=20260717-trace-console" />
+    <link rel="stylesheet" href="trace-theme.css?v=20260717-dual-theme" />
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
@@ -32,6 +33,10 @@
         </a>
         <div class="topbar-right">
           <span class="live-status"><b></b> OPEN TO COLLABORATE</span>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" aria-pressed="true">
+            <span class="theme-toggle-track" aria-hidden="true"><i></i></span>
+            <span class="theme-toggle-label">DARK</span>
+          </button>
           <button class="utility-button" id="openDesk" type="button" hidden><span class="button-sigil">+</span> PUBLISHING DESK</button>
         </div>
       </header>
@@ -40,7 +45,7 @@
         <span class="rail-label">INDEX</span>
         <nav>
           <a class="active" href="#home"><span>01</span> Start</a>
-          <a href="#research"><span>02</span> Research</a>
+          <a href="#research"><span>02</span> Sharing</a>
           <a href="#writeups"><span>03</span> Writeups</a>
           <a href="#notes"><span>04</span> Notes</a>
           <a href="#credentials"><span>05</span> Certifications</a>
@@ -57,7 +62,7 @@
         <section class="hero profile-hero section-pad page-active" id="home">
           <div class="hero-copy profile-copy">
             <p class="eyebrow"><span class="pulse"></span> T0X1CG / OPERATOR PROFILE</p>
-            <h1>Penetration tester <span class="profile-amp">&amp;</span><br /><em>offensive security engineer.</em></h1>
+            <h1>Penetration Tester<br /><em>wannabe Red Team.</em></h1>
             <p class="hero-summary">I’m <strong>T0x1cG / Chanserey Savon</strong>, specializing in web application, API, network, and infrastructure security. I identify weaknesses, validate impact through responsible proof-of-concept exploits, and support red team operations that strengthen real-world defenses. I hold professional certifications, track emerging attack vectors, publish technical notes, develop tools, and contribute knowledge to the security community.</p>
             <div class="hero-actions">
               <a class="button button-primary" href="#research">Explore my work <span>↘</span></a>
@@ -96,7 +101,7 @@
           </aside>
         </section>
 
-        <section class="signal-strip section-pad" aria-label="Research focus">
+        <section class="signal-strip section-pad" aria-label="Sharing focus">
           <p class="eyebrow">CURRENT FREQUENCIES</p>
           <div class="frequency-grid">
             <div><span>01</span><strong>Web Security</strong><em>Attack surface → exploit path</em></div>
@@ -108,10 +113,10 @@
 
         <section class="research-section section-pad" id="research">
           <div class="section-heading">
-            <div><p class="eyebrow">SELECTED WORK</p><h2>Research <em>stream</em></h2></div>
+            <div><p class="eyebrow">SELECTED WORK</p><h2>Sharing <em>stream</em></h2></div>
             <p>Structured learning resources built from practical study, certification preparation, and repeatable security workflows.</p>
           </div>
-          <div class="research-grid" id="articleGrid" aria-live="polite"><div class="loading-card">Loading research archive…</div></div>
+          <div class="research-grid" id="articleGrid" aria-live="polite"><div class="loading-card">Loading sharing archive…</div></div>
         </section>
 
         <section class="research-section writeup-section section-pad" id="writeups">
@@ -204,7 +209,7 @@
     </div>
 
     <dialog class="article-dialog" id="articleDialog">
-      <div class="dialog-top"><button class="dialog-close" type="button" data-close-dialog aria-label="Close article">×</button><span id="dialogType">RESEARCH / 00</span></div>
+      <div class="dialog-top"><button class="dialog-close" type="button" data-close-dialog aria-label="Close article">×</button><span id="dialogType">SHARING / 00</span></div>
       <article id="dialogContent"></article>
     </dialog>
     <dialog class="desk-dialog" id="deskDialog">
@@ -212,7 +217,7 @@
         <button class="dialog-close desk-close" type="button" data-close-dialog aria-label="Close publishing desk">×</button>
         <aside class="desk-aside">
           <span class="brand-mark"><i></i><i></i><i></i></span><p class="eyebrow">T0X1CG / CMS</p><h2>Publishing<br /><em>desk</em></h2>
-          <p>Manage the material that appears in your public research archive.</p><button class="logout-button" id="logoutButton" type="button" hidden>Log out ↗</button>
+          <p>Manage the material that appears in your public sharing archive.</p><button class="logout-button" id="logoutButton" type="button" hidden>Log out ↗</button>
         </aside>
         <div class="desk-main">
           <div id="authPanel" class="auth-panel">
@@ -223,13 +228,13 @@
             <div class="editor-heading"><div><p class="eyebrow">NEW ENTRY</p><h3>Add to the archive</h3></div><span class="signed-in">AUTHENTICATED <b></b></span></div>
             <form id="entryForm" class="entry-form">
               <div class="field-row">
-                <label>Entry type<select name="type"><option value="articles">Research resource</option><option value="writeups">HTB writeup</option><option value="notes">Field note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
+                <label>Entry type<select name="type"><option value="articles">Shared resource</option><option value="writeups">HTB writeup</option><option value="notes">Field note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
                 <label>Topic / issuer<input name="label" placeholder="e.g. Web Security" required maxlength="60" /></label>
               </div>
               <label>Title<input name="title" placeholder="Give this entry a clear title" required maxlength="120" /></label>
               <label>Description<input name="summary" placeholder="A concise overview for readers" required maxlength="280" /></label>
               <div class="field-row">
-                <label>Tags (comma separated)<input name="tags" placeholder="research, tooling, web" maxlength="160" /></label>
+                <label>Tags (comma separated)<input name="tags" placeholder="sharing, tooling, web" maxlength="160" /></label>
                 <label>External URL (optional)<input name="url" type="url" placeholder="https://…" maxlength="300" /></label>
               </div>
               <label>Local Markdown path (optional)<input name="document" placeholder="assets/writeups/example.md" maxlength="300" /></label>
@@ -271,6 +276,6 @@
         </aside>
       </div>
     </dialog>
-    <script src="app.js?v=20260716-home-profile"></script>
+    <script src="app.js?v=20260717-sharing-copy"></script>
   </body>
 </html>

@@ -58,7 +58,7 @@ function renderArticles() {
   const articleCount = $("#articleCount");
   if (articleCount) articleCount.textContent = String(archive.articles.length).padStart(2, "0");
   if (!items.length) {
-    host.innerHTML = '<div class="loading-card">No research entries in this frequency yet.</div>';
+    host.innerHTML = '<div class="loading-card">No shared entries in this frequency yet.</div>';
     return;
   }
   host.innerHTML = items.map((item, index) => `
@@ -544,7 +544,7 @@ function syncAuthView() {
     editor.hidden = true;
     panel.hidden = false;
     $("#authTitle").textContent = "Read-only public archive";
-    $("#authHelp").textContent = "This GitHub Pages version publishes your research but cannot run the private editor. Use your self-hosted backend to publish new entries.";
+    $("#authHelp").textContent = "This GitHub Pages version publishes your shared work but cannot run the private editor. Use your self-hosted backend to publish new entries.";
     $("#authSubmit").disabled = true;
     $("#authSubmit").innerHTML = "Backend required";
     $("#passwordInput").disabled = true;
@@ -823,7 +823,7 @@ async function initialize() {
   } catch (error) {
     const localHelp = localBackend
       ? 'Could not connect to the private archive. Start the server with <code>node server.js</code>.'
-      : 'Could not load the public archive. Refresh the page or clear the browser cache.';
+      : 'Could not load the public sharing archive. Refresh the page or clear the browser cache.';
     $("#articleGrid").innerHTML = '<div class="loading-card">' + localHelp + '</div>';
     $("#writeupGrid").innerHTML = '<div class="loading-card">' + localHelp + '</div>';
     console.error(error);
