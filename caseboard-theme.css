@@ -265,7 +265,7 @@ h3,
   display:grid;
   align-content:center;
   gap:5px;
-  color:#90a49f;
+  color:#f7fbf9;
   font:500 clamp(7px,.62vw,9px) var(--mono);
   letter-spacing:.03em;
 }
