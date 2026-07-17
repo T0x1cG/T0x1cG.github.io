@@ -4,6 +4,7 @@
   "profileUrl": "https://profile.hackthebox.com/profile/019c848b-a2c1-70ac-b264-2582fdf54af0",
   "username": "T0x1cG",
   "rank": "Master",
+  "rankImage": "https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/rank_master.svg",
   "level": 67,
   "grade": 2,
   "totalExperiencePoints": 60295,

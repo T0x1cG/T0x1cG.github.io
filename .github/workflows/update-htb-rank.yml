@@ -30,6 +30,7 @@ jobs:
           endpoint="https://labs.hackthebox.com/api/experience/v1/account/${HTB_ACCOUNT_ID}"
           response="$(mktemp)"
           output="$(mktemp)"
+          rank_output="$(mktemp)"
 
           curl --fail --silent --show-error --retry 3 --retry-all-errors \
             --connect-timeout 15 --max-time 60 \
@@ -38,10 +39,18 @@ jobs:
           jq -e '
             (.level | type == "number") and
             (.levelTitle | type == "string") and
+            (.rankImage | type == "string") and
+            (.rankImage | startswith("https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/")) and
             (.totalExperiencePoints | type == "number")
           ' "$response" >/dev/null
 
           updated_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          rank_image="$(jq -r '.rankImage' "$response")"
+          curl --fail --silent --show-error --retry 3 --retry-all-errors \
+            --connect-timeout 15 --max-time 60 --max-filesize 1048576 \
+            "$rank_image" -o "$rank_output"
+          grep -q '<svg' "$rank_output"
+
           jq \
             --arg profile_id "$HTB_PROFILE_ID" \
             --arg account_id "$HTB_ACCOUNT_ID" \
@@ -54,6 +63,7 @@ jobs:
               profileUrl: $profile_url,
               username: $username,
               rank: .levelTitle,
+              rankImage: .rankImage,
               level: .level,
               grade: (.levelGrade | tonumber),
               totalExperiencePoints: .totalExperiencePoints,
@@ -65,13 +75,14 @@ jobs:
 
           mkdir -p data
           mv "$output" data/htb-profile.json
+          mv "$rank_output" data/htb-rank.svg
 
       - name: Publish changed rank
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/htb-profile.json
+          git add data/htb-profile.json data/htb-rank.svg
           if git diff --cached --quiet; then
             echo "HTB rank is already current."
             exit 0

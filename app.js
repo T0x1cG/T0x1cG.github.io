@@ -34,11 +34,19 @@ async function refreshHtbRank() {
     const streak = Number(profile.streakWeeks);
     if (!profile.rank || !Number.isFinite(level) || !Number.isFinite(totalXp)) throw new Error("HTB rank snapshot is invalid.");
 
+    const rankImage = new URL(profile.rankImage);
+    const trustedRankImage = rankImage.protocol === "https:"
+      && rankImage.hostname === "htb-experience-prod-public-storage.s3.amazonaws.com"
+      && rankImage.pathname.startsWith("/assets/ranks/svg/");
+    if (!trustedRankImage) throw new Error("HTB rank artwork source is invalid.");
+
     $("#htbRankTitle").textContent = profile.rank;
     $("#htbRankLevel").textContent = String(level);
     $("#htbRankGrade").textContent = Number.isFinite(grade) ? String(grade).padStart(2, "0") : "--";
     $("#htbRankXp").textContent = `${new Intl.NumberFormat("en").format(totalXp)} XP`;
     $("#htbRankStreak").textContent = Number.isFinite(streak) ? String(streak) : "--";
+    $("#htbRankImage").src = `data/htb-rank.svg?v=${encodeURIComponent(profile.updatedAt || profile.rank)}`;
+    $("#htbRankImage").alt = `Hack The Box ${profile.rank} rank emblem`;
     $("#htbRankSync").textContent = "AUTO-SYNCED";
     card.dataset.state = "live";
   } catch (error) {

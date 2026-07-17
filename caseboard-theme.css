@@ -471,16 +471,16 @@ html[data-theme="dark"] .profile-copy h1 em{
 }
 
 .htb-rank-mark{
-  display:grid;
   width:58px;
   height:58px;
-  place-items:center;
-  color:#081315;
-  border:1px solid #b4ff39;
-  background:#9fef00;
-  font:700 13px var(--mono);
-  letter-spacing:-.05em;
-  clip-path:polygon(50% 0,93% 24%,93% 76%,50% 100%,7% 76%,7% 24%);
+  object-fit:contain;
+  filter:drop-shadow(0 7px 12px rgba(254,62,93,.24));
+  transition:filter .22s,transform .22s;
+}
+
+.htb-rank-card:hover .htb-rank-mark{
+  filter:drop-shadow(0 8px 15px rgba(254,62,93,.38));
+  transform:scale(1.05);
 }
 
 .htb-rank-copy{
