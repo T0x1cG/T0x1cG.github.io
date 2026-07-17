@@ -32,6 +32,7 @@ async function refreshHtbRank() {
     const grade = Number(profile.grade);
     const totalXp = Number(profile.totalExperiencePoints);
     const streak = Number(profile.streakWeeks);
+    const updatedAt = Date.parse(profile.updatedAt);
     if (!profile.rank || !Number.isFinite(level) || !Number.isFinite(totalXp)) throw new Error("HTB rank snapshot is invalid.");
 
     const rankImage = new URL(profile.rankImage);
@@ -47,8 +48,10 @@ async function refreshHtbRank() {
     $("#htbRankStreak").textContent = Number.isFinite(streak) ? String(streak) : "--";
     $("#htbRankImage").src = `data/htb-rank.svg?v=${encodeURIComponent(profile.updatedAt || profile.rank)}`;
     $("#htbRankImage").alt = `Hack The Box ${profile.rank} rank emblem`;
-    $("#htbRankSync").textContent = "AUTO-SYNCED";
-    card.dataset.state = "live";
+    const syncAge = Date.now() - updatedAt;
+    const recentlySynced = Number.isFinite(updatedAt) && syncAge >= -300000 && syncAge <= 43200000;
+    $("#htbRankSync").textContent = recentlySynced ? "AUTO-SYNCED" : "LAST VERIFIED";
+    card.dataset.state = recentlySynced ? "live" : "stale";
   } catch (error) {
     $("#htbRankSync").textContent = "PUBLIC PROFILE";
     card.dataset.state = "stale";
@@ -72,7 +75,7 @@ function fileToDataUrl(file) {
   });
 }
 
-const pageIds = ["home", "research", "writeups", "notes", "credentials", "competitions", "contact"];
+const pageIds = ["home", "research", "writeups", "notes", "projects", "credentials", "competitions", "contact"];
 
 function activatePage(requestedId, updateHash = true) {
   const pageId = pageIds.includes(requestedId) ? requestedId : "home";
