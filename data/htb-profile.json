@@ -7,11 +7,11 @@
   "countryRank": 5,
   "rank": "Master",
   "rankImage": "https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/rank_master.svg",
-  "level": 69,
+  "level": 70,
   "grade": 2,
-  "totalExperiencePoints": 66340,
-  "levelExperiencePoints": 1591,
-  "experienceUntilNextLevel": 770,
+  "totalExperiencePoints": 67250,
+  "levelExperiencePoints": 140,
+  "experienceUntilNextLevel": 2293,
   "streakWeeks": 11,
-  "updatedAt": "2026-07-24T03:45:01Z"
+  "updatedAt": "2026-07-24T08:43:45Z"
 }
