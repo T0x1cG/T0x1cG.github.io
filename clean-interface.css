@@ -1425,9 +1425,15 @@ html[data-theme="dark"] .button-primary:hover{
 }
 
 .markdown-document a{
-  color:var(--clean-accent);
+  color:var(--clean-text);
   text-decoration:underline;
+  text-decoration-color:var(--clean-accent);
   text-underline-offset:3px;
+}
+
+.markdown-document strong,
+.markdown-document em{
+  color:var(--clean-text);
 }
 
 .markdown-document code{
@@ -1491,7 +1497,35 @@ html[data-theme="dark"] .button-primary:hover{
 }
 
 .markdown-document th{
+  color:var(--clean-text);
+  border-bottom:2px solid var(--clean-accent);
+  background:var(--clean-panel-2);
   font:700 12px/1.35 var(--mono);
+}
+
+html[data-theme="dark"] .markdown-document a,
+html[data-theme="light"] .markdown-document a{
+  color:var(--clean-text);
+  text-decoration-color:var(--clean-accent);
+}
+
+html[data-theme="dark"] .markdown-document code,
+html[data-theme="light"] .markdown-document code{
+  color:var(--clean-text);
+  background:var(--clean-panel-2);
+}
+
+html[data-theme="dark"] .markdown-document .code-frame code,
+html[data-theme="light"] .markdown-document .code-frame code{
+  color:#f5f8f7;
+  background:transparent;
+}
+
+html[data-theme="dark"] .markdown-document th,
+html[data-theme="light"] .markdown-document th{
+  color:var(--clean-text);
+  border-bottom:2px solid var(--clean-accent);
+  background:var(--clean-panel-2);
 }
 
 .outline-empty,
