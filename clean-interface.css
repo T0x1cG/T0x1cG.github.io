@@ -1,26 +1,26 @@
 :root{
-  --ink:#111a22;
-  --paper:#f7f9f8;
-  --warm:#dbe4e1;
-  --acid:#008f8a;
-  --muted:#52616b;
-  --line:rgba(17,26,34,.14);
+  --ink:#0d1720;
+  --paper:#ffffff;
+  --warm:#dbe5e1;
+  --acid:#007c78;
+  --muted:#3f505a;
+  --line:rgba(13,23,32,.2);
   --display:"Space Grotesk",Arial,sans-serif;
   --sans:"Atkinson Hyperlegible",Arial,sans-serif;
   --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
   --serif:var(--display);
   --case-slab:var(--display);
-  --clean-bg:#edf2f0;
+  --clean-bg:#e8efec;
   --clean-panel:#ffffff;
-  --clean-panel-2:#f4f7f6;
-  --clean-text:#111a22;
-  --clean-muted:#52616b;
-  --clean-soft:#dce6e2;
-  --clean-line:rgba(17,26,34,.14);
-  --clean-accent:#008f8a;
-  --clean-accent-2:#c47b00;
-  --clean-blue:#315f7d;
-  --clean-shadow:0 14px 38px rgba(17,26,34,.08);
+  --clean-panel-2:#f1f5f3;
+  --clean-text:#0d1720;
+  --clean-muted:#3f505a;
+  --clean-soft:#d5e2dd;
+  --clean-line:rgba(13,23,32,.2);
+  --clean-accent:#007c78;
+  --clean-accent-2:#a96400;
+  --clean-blue:#254f6b;
+  --clean-shadow:0 12px 30px rgba(13,23,32,.12);
   --clean-radius:12px;
 }
 
@@ -2361,6 +2361,338 @@ dialog::backdrop{
   .code-frame code{
     font-size:14px;
   }
+}
+
+html[data-theme="light"]{
+  color-scheme:light;
+}
+
+html[data-theme="light"] body{
+  color:var(--clean-text);
+  background:
+    linear-gradient(118deg,transparent 0 72%,rgba(0,124,120,.055) 72%),
+    var(--clean-bg);
+}
+
+html[data-theme="light"] .site-shell,
+html[data-theme="light"] main{
+  color:var(--clean-text);
+  background:transparent;
+}
+
+html[data-theme="light"] main>section,
+html[data-theme="light"] .notebook-section,
+html[data-theme="light"] .projects-section,
+html[data-theme="light"] .credentials-section,
+html[data-theme="light"] .competitions-section,
+html[data-theme="light"] .contact-section{
+  color:var(--clean-text);
+  background:transparent;
+}
+
+html[data-theme="light"] .topbar{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:rgba(255,255,255,.96);
+  box-shadow:0 1px 0 rgba(13,23,32,.06);
+}
+
+html[data-theme="light"] .brand,
+html[data-theme="light"] .theme-toggle,
+html[data-theme="light"] .utility-button{
+  color:var(--clean-text);
+}
+
+html[data-theme="light"] .brand-mark,
+html[data-theme="light"] .theme-toggle,
+html[data-theme="light"] .utility-button,
+html[data-theme="light"] .live-status{
+  border-color:var(--clean-line);
+  background:#fff;
+}
+
+html[data-theme="light"] .theme-toggle-track{
+  background:#dce7e3;
+}
+
+html[data-theme="light"] .theme-toggle-track i{
+  background:var(--clean-accent);
+  box-shadow:0 1px 4px rgba(13,23,32,.22);
+}
+
+html[data-theme="light"] .rail{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:rgba(247,250,249,.97);
+}
+
+html[data-theme="light"] .rail-label,
+html[data-theme="light"] .rail nav a,
+html[data-theme="light"] .rail nav a span{
+  color:var(--clean-muted);
+}
+
+html[data-theme="light"] .rail nav a:hover,
+html[data-theme="light"] .rail nav a.active{
+  color:var(--clean-text);
+  border-color:rgba(0,124,120,.32);
+  background:#dcefeb;
+}
+
+html[data-theme="light"] .rail nav a.active span{
+  color:var(--clean-accent);
+}
+
+html[data-theme="light"] .rail-socials a{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#fff;
+}
+
+html[data-theme="light"] .profile-copy,
+html[data-theme="light"] .profile-dossier,
+html[data-theme="light"] .research-card,
+html[data-theme="light"] .cert-card,
+html[data-theme="light"] .project-card,
+html[data-theme="light"] .loading-card,
+html[data-theme="light"] .writeup-classifier button,
+html[data-theme="light"] .jeopardy-categories button,
+html[data-theme="light"] .writeup-toolbar button,
+html[data-theme="light"] .filter,
+html[data-theme="light"] .email-link,
+html[data-theme="light"] .linkedin-link{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#fff;
+  box-shadow:var(--clean-shadow);
+}
+
+html[data-theme="light"] .profile-copy h1,
+html[data-theme="light"] .profile-copy h1 em,
+html[data-theme="light"] .section-heading h2,
+html[data-theme="light"] .notebook-title h2,
+html[data-theme="light"] .contact-content h2,
+html[data-theme="light"] .research-card h3,
+html[data-theme="light"] .cert-copy h3,
+html[data-theme="light"] .project-card h3,
+html[data-theme="light"] .profile-record strong,
+html[data-theme="light"] .profile-specialties strong{
+  color:var(--clean-text);
+}
+
+html[data-theme="light"] .profile-copy h1 em,
+html[data-theme="light"] .section-heading h2 em,
+html[data-theme="light"] .notebook-title h2 em,
+html[data-theme="light"] .contact-content h2 em{
+  color:var(--clean-blue);
+}
+
+html[data-theme="light"] .profile-copy .hero-summary,
+html[data-theme="light"] .profile-copy .hero-summary strong,
+html[data-theme="light"] .section-heading>p,
+html[data-theme="light"] .credential-note,
+html[data-theme="light"] .contact-small,
+html[data-theme="light"] .research-card p,
+html[data-theme="light"] .project-card p,
+html[data-theme="light"] .cert-detail,
+html[data-theme="light"] .cert-copy p,
+html[data-theme="light"] .card-top,
+html[data-theme="light"] .project-card-top,
+html[data-theme="light"] .project-card-bottom{
+  color:var(--clean-muted);
+}
+
+html[data-theme="light"] .profile-record,
+html[data-theme="light"] .profile-specialties article{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:var(--clean-panel-2);
+}
+
+html[data-theme="light"] .profile-status{
+  border-color:rgba(0,124,120,.38);
+  background:#e3f2ef;
+}
+
+html[data-theme="light"] .hero-proof,
+html[data-theme="light"] .tag,
+html[data-theme="light"] .htb-rank-metrics b{
+  color:var(--clean-muted);
+  border-color:var(--clean-line);
+  background:var(--clean-panel-2);
+}
+
+html[data-theme="light"] .hero-proof b,
+html[data-theme="light"] .htb-rank-metrics b span{
+  color:var(--clean-text);
+  background:#fff;
+}
+
+html[data-theme="light"] .htb-rank-card{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#fff;
+}
+
+html[data-theme="light"] .htb-rank-copy>strong{
+  color:var(--clean-text);
+}
+
+html[data-theme="light"] .research-card:hover,
+html[data-theme="light"] .cert-card:hover,
+html[data-theme="light"] .project-card:hover,
+html[data-theme="light"] .project-card:focus-within{
+  border-color:rgba(0,124,120,.5);
+  background:#fff;
+}
+
+html[data-theme="light"] .button-primary{
+  color:#fff;
+  background:var(--clean-text);
+}
+
+html[data-theme="light"] .text-link{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#fff;
+}
+
+html[data-theme="light"] .knowledge-shell{
+  border-color:var(--clean-line);
+  background:#fff;
+  box-shadow:var(--clean-shadow);
+}
+
+html[data-theme="light"] .knowledge-sidebar,
+html[data-theme="light"] .document-dialog-sidebar{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#f4f8f6;
+}
+
+html[data-theme="light"] .knowledge-search{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#eaf1ee;
+}
+
+html[data-theme="light"] .knowledge-search input{
+  color:var(--clean-text);
+  border-color:rgba(13,23,32,.28);
+  background:#fff;
+}
+
+html[data-theme="light"] .knowledge-collection,
+html[data-theme="light"] .knowledge-group,
+html[data-theme="light"] .knowledge-tree button{
+  color:var(--clean-muted);
+  border-color:var(--clean-line);
+}
+
+html[data-theme="light"] .knowledge-tree button:hover,
+html[data-theme="light"] .knowledge-tree button.active{
+  color:var(--clean-text);
+  border-color:rgba(0,124,120,.32);
+  background:#dcefeb;
+}
+
+html[data-theme="light"] .knowledge-tree button.active i{
+  background:var(--clean-accent);
+}
+
+html[data-theme="light"] .knowledge-reader,
+html[data-theme="light"] .document-dialog-reader{
+  color:var(--clean-text);
+  background:#fff;
+}
+
+html[data-theme="light"] .knowledge-reader-header,
+html[data-theme="light"] .document-dialog-header{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:var(--clean-panel-2);
+}
+
+html[data-theme="light"] .knowledge-reader-header strong,
+html[data-theme="light"] .document-dialog-header strong,
+html[data-theme="light"] .markdown-document,
+html[data-theme="light"] .markdown-document h1,
+html[data-theme="light"] .markdown-document h2,
+html[data-theme="light"] .markdown-document h3,
+html[data-theme="light"] .markdown-document h4,
+html[data-theme="light"] .markdown-document strong,
+html[data-theme="light"] .markdown-document em{
+  color:var(--clean-text);
+}
+
+html[data-theme="light"] .markdown-document p,
+html[data-theme="light"] .markdown-document li,
+html[data-theme="light"] .markdown-document blockquote{
+  color:#33454f;
+}
+
+html[data-theme="light"] .markdown-document code{
+  color:var(--clean-text);
+  background:#e6eeeb;
+}
+
+html[data-theme="light"] .markdown-document blockquote,
+html[data-theme="light"] .table-wrap{
+  border-color:var(--clean-line);
+  background:var(--clean-panel-2);
+}
+
+html[data-theme="light"] .markdown-document th{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  border-bottom-color:var(--clean-accent);
+  background:#e6eeeb;
+}
+
+html[data-theme="light"] .markdown-document td{
+  color:#263740;
+  border-color:var(--clean-line);
+  background:#fff;
+}
+
+html[data-theme="light"] .code-frame{
+  border-color:#22313a;
+  background:#111c24;
+  box-shadow:0 8px 20px rgba(13,23,32,.16);
+}
+
+html[data-theme="light"] .code-frame-top{
+  color:#c5d0d4;
+  border-color:rgba(255,255,255,.14);
+  background:#172630;
+}
+
+html[data-theme="light"] .code-frame pre,
+html[data-theme="light"] .markdown-document .code-frame code{
+  color:#f5f8f7;
+  background:#111c24;
+}
+
+html[data-theme="light"] dialog{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#fff;
+}
+
+html[data-theme="light"] .dialog-top,
+html[data-theme="light"] .desk-aside{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:var(--clean-panel-2);
+}
+
+html[data-theme="light"] .entry-form input,
+html[data-theme="light"] .entry-form textarea,
+html[data-theme="light"] .entry-form select,
+html[data-theme="light"] .auth-panel input{
+  color:var(--clean-text);
+  border-color:var(--clean-line);
+  background:#fff;
 }
 
 @media(prefers-reduced-motion:reduce){
