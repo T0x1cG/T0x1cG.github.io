@@ -9,9 +9,9 @@
   "rankImage": "https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/rank_master.svg",
   "level": 73,
   "grade": 3,
-  "totalExperiencePoints": 75135,
-  "levelExperiencePoints": 501,
-  "experienceUntilNextLevel": 2161,
+  "totalExperiencePoints": 75215,
+  "levelExperiencePoints": 581,
+  "experienceUntilNextLevel": 2081,
   "streakWeeks": 13,
-  "updatedAt": "2026-08-08T13:12:40Z"
+  "updatedAt": "2026-08-08T18:59:21Z"
 }
