@@ -321,11 +321,22 @@
       "label": "COMPETITION / CTF",
       "title": "Cyber Arena 2026 — 1st Place",
       "summary": "First place with team WillHack4Coffee",
-      "image": "assets/certificates/Cyber_Arena_Top1.jpg",
+      "image": "assets/competitions/cyber-arena-2026.webp",
       "tags": ["CTF", "team"],
       "body": "Awarded first place at Cyber Arena 2026 as a member of WillHack4Coffee.",
       "url": "",
       "createdAt": "2026-01-01T10:00:00.000Z"
+    },
+    {
+      "id": "cncc-2026-top-3",
+      "label": "COMPETITION / CTF",
+      "title": "CNCC 2026 — Top 3",
+      "summary": "Top 3 finish with team WillHack4Coffee",
+      "image": "assets/competitions/cncc-2026.webp",
+      "tags": ["CTF", "team", "CNCC"],
+      "body": "Achieved a Top 3 finish at CNCC 2026 as a member of WillHack4Coffee.",
+      "url": "",
+      "createdAt": "2026-01-02T10:00:00.000Z"
     }
   ]
 }

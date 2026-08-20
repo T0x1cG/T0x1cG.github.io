@@ -511,7 +511,7 @@ html[data-theme="dark"] .profile-copy h1 em,
 .hero,
 .profile-hero{
   min-height:100%;
-  grid-template-columns:minmax(0,1.05fr) minmax(330px,.72fr);
+  grid-template-columns:minmax(0,1fr);
   grid-template-rows:minmax(0,1fr);
   align-items:stretch;
   gap:18px;
@@ -581,6 +581,9 @@ html[data-theme="dark"] .profile-copy h1 em,
   display:flex;
   flex-direction:column;
   justify-content:center;
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
   padding:clamp(26px,4vw,58px);
 }
 
@@ -641,7 +644,8 @@ html[data-theme="dark"] .profile-copy h1 em,
 .button,
 .text-link,
 .email-link,
-.linkedin-link{
+.linkedin-link,
+.contact-card{
   border-radius:8px;
   letter-spacing:0;
 }
@@ -686,7 +690,8 @@ html[data-theme="dark"] .button-primary:hover{
 .text-link span,
 .button span,
 .email-link span,
-.linkedin-link span{
+.linkedin-link span,
+.contact-card span{
   color:var(--clean-accent);
 }
 
@@ -1609,7 +1614,17 @@ html[data-theme="light"] .markdown-document th{
 }
 
 .competition-grid{
-  grid-template-columns:minmax(280px,520px);
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  max-width:1180px;
+}
+
+.competition-grid .cert-image{
+  aspect-ratio:3/2;
+  min-height:0;
+}
+
+.competition-grid .cert-image img{
+  height:100%;
 }
 
 .cert-card{
@@ -1723,7 +1738,8 @@ html[data-theme="dark"] .cert-image b{
 }
 
 .email-link,
-.linkedin-link{
+.linkedin-link,
+.contact-card{
   display:inline-flex;
   align-items:center;
   gap:12px;
@@ -1738,7 +1754,8 @@ html[data-theme="dark"] .cert-image b{
   letter-spacing:0;
 }
 
-.linkedin-link{
+.linkedin-link,
+.contact-card{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
   gap:3px 12px;
@@ -1746,17 +1763,20 @@ html[data-theme="dark"] .cert-image b{
   padding:10px 14px;
 }
 
-.linkedin-link small{
+.linkedin-link small,
+.contact-card small{
   color:var(--clean-muted);
   font:600 11px/1 var(--mono);
 }
 
-.linkedin-link strong{
+.linkedin-link strong,
+.contact-card strong{
   color:var(--clean-text);
   font-size:17px;
 }
 
-.linkedin-link span{
+.linkedin-link span,
+.contact-card span{
   grid-row:1/3;
   grid-column:2;
   align-self:center;
@@ -2289,7 +2309,8 @@ dialog::backdrop{
     display:grid;
   }
   .email-link,
-  .linkedin-link{
+  .linkedin-link,
+  .contact-card{
     width:100%;
   }
   .desk-wrap,
@@ -2532,7 +2553,8 @@ html[data-theme="light"] .jeopardy-categories button,
 html[data-theme="light"] .writeup-toolbar button,
 html[data-theme="light"] .filter,
 html[data-theme="light"] .email-link,
-html[data-theme="light"] .linkedin-link{
+html[data-theme="light"] .linkedin-link,
+html[data-theme="light"] .contact-card{
   color:var(--clean-text);
   border-color:var(--clean-line);
   background:#fff;
