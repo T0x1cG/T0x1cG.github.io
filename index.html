@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="profile.css?v=20260716-home-profile-v3" />
     <link rel="stylesheet" href="trace-theme.css?v=20260717-writeup-taxonomy" />
     <link rel="stylesheet" href="caseboard-theme.css?v=20260717-htb-font-scale" />
-    <link rel="stylesheet" href="clean-interface.css?v=20260820-portrait-hero" />
+    <link rel="stylesheet" href="clean-interface.css?v=20260820-jeopardy-only" />
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
@@ -101,14 +101,11 @@
         <section class="research-section writeup-section section-pad" id="writeups">
           <div class="section-heading">
             <div><p class="eyebrow">AUTHORIZED LAB ARCHIVE</p><h2>Writeup <em>archive</em></h2></div>
-            <p>Boot2Root attack paths and categorized Jeopardy CTF research. Flags, credentials, and transient challenge tokens are removed.</p>
+            <p>Categorized Jeopardy CTF research from Cyber Arena. Flags, credentials, and transient challenge tokens are removed.</p>
           </div>
           <div class="writeup-classifier" aria-label="Writeup collection">
-            <button class="active" type="button" data-writeup-collection="boot2root" aria-pressed="true">
-              <span>Boot2Root</span><small>Machines and attack paths</small><b id="boot2rootCount">00</b>
-            </button>
-            <button type="button" data-writeup-collection="jeopardy" aria-pressed="false">
-              <span>Jeopardy CTF</span><small>Challenges grouped by category</small><b id="jeopardyCount">00</b>
+            <button class="active" type="button" data-writeup-collection="jeopardy" aria-pressed="true">
+              <span>Jeopardy CTF</span><small>Cyber Arena challenges by category</small><b id="jeopardyCount">00</b>
             </button>
           </div>
           <div class="jeopardy-categories" id="jeopardyCategories" aria-label="Jeopardy CTF category" hidden>
@@ -232,7 +229,7 @@
                 <label>Topic / issuer<input name="label" placeholder="e.g. Web Security" required maxlength="60" /></label>
               </div>
               <div class="field-row" id="writeupMetaFields" hidden>
-                <label>Writeup format<select name="collection" id="entryWriteupCollection" disabled><option value="boot2root">Boot2Root</option><option value="jeopardy">Jeopardy CTF</option></select></label>
+                <label>Writeup format<select name="collection" id="entryWriteupCollection" disabled><option value="jeopardy">Jeopardy CTF</option></select></label>
                 <label>Jeopardy category<select name="category" id="entryJeopardyCategory" disabled><option value="Crypto">Crypto</option><option value="Forensics">Forensics</option><option value="Web">Web</option><option value="Pwn">Pwn</option><option value="Reverse">Reverse</option><option value="Misc">Misc</option></select></label>
               </div>
               <label>Title<input name="title" placeholder="Give this entry a clear title" required maxlength="120" /></label>
@@ -280,6 +277,6 @@
         </aside>
       </div>
     </dialog>
-    <script src="app.js?v=20260820-competition-history"></script>
+    <script src="app.js?v=20260820-jeopardy-only"></script>
   </body>
 </html>

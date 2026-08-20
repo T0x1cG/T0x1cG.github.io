@@ -4,7 +4,7 @@ const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector
 let archive = { articles: [], writeups: [], notes: [], certifications: [], achievements: [] };
 let activeFilter = "all";
 let writeupPage = 0;
-let activeWriteupCollection = "boot2root";
+let activeWriteupCollection = "jeopardy";
 let activeJeopardyCategory = "all";
 const writeupsPerPage = 4;
 let activeNote = { collectionId: "", documentId: "" };
@@ -120,7 +120,7 @@ function renderArticles() {
 }
 
 function writeupCollection(item) {
-  return item.collection === "jeopardy" ? "jeopardy" : "boot2root";
+  return item.collection === "jeopardy" ? "jeopardy" : "";
 }
 
 function filteredWriteups() {
@@ -135,9 +135,7 @@ function filteredWriteups() {
 function renderWriteups() {
   const host = $("#writeupGrid");
   const items = filteredWriteups();
-  const boot2rootCount = (archive.writeups || []).filter((item) => writeupCollection(item) === "boot2root").length;
   const jeopardyCount = (archive.writeups || []).filter((item) => writeupCollection(item) === "jeopardy").length;
-  $("#boot2rootCount").textContent = String(boot2rootCount).padStart(2, "0");
   $("#jeopardyCount").textContent = String(jeopardyCount).padStart(2, "0");
   $$('[data-writeup-collection]').forEach((button) => {
     const active = button.dataset.writeupCollection === activeWriteupCollection;
@@ -457,13 +455,10 @@ function renderNotes() {
 function renderWriteupTree(query = "") {
   const normalized = query.trim().toLowerCase();
   const items = (archive.writeups || []).filter((item) => !normalized || `${item.title} ${item.label} ${item.category || ""} ${(item.tags || []).join(" ")}`.toLowerCase().includes(normalized));
-  const groups = [
-    { label: "BOOT2ROOT / HACK THE BOX", items: items.filter((item) => writeupCollection(item) === "boot2root") },
-    ...["Crypto", "Forensics", "Misc"].map((category) => ({
+  const groups = ["Crypto", "Forensics", "Misc"].map((category) => ({
       label: `JEOPARDY / ${category.toUpperCase()}`,
       items: items.filter((item) => writeupCollection(item) === "jeopardy" && item.category === category)
-    }))
-  ].filter((group) => group.items.length);
+    })).filter((group) => group.items.length);
   $("#writeupTree").innerHTML = groups.length
     ? groups.map((group) => `<section class="writeup-tree-section"><p>${escapeHtml(group.label)}</p>${group.items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml((item.label || item.category || "WRITEUP").replace(/^HTB\s*·?\s*/i, ""))}</small></button>`).join("")}</section>`).join("")
     : '<p class="knowledge-loading">No writeups matched your search.</p>';
