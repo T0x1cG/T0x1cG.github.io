@@ -578,16 +578,29 @@ html[data-theme="dark"] .profile-copy h1 em,
 }
 
 .profile-copy{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(260px,.7fr);
+  grid-template-areas:
+    "kicker portrait"
+    "title portrait"
+    "summary portrait"
+    "proof portrait"
+    "actions portrait";
+  align-content:center;
+  align-items:start;
+  column-gap:clamp(28px,4vw,64px);
   width:100%;
   max-width:1180px;
   margin:0 auto;
   padding:clamp(26px,4vw,58px);
 }
 
+.profile-copy>.eyebrow{
+  grid-area:kicker;
+}
+
 .profile-copy h1{
+  grid-area:title;
   max-width:880px;
   margin:0 0 20px;
   font-size:clamp(44px,5.2vw,76px);
@@ -595,6 +608,7 @@ html[data-theme="dark"] .profile-copy h1 em,
 }
 
 .profile-copy .hero-summary{
+  grid-area:summary;
   max-width:760px;
   color:var(--clean-muted);
   font-size:clamp(16px,1.3vw,18px);
@@ -605,7 +619,60 @@ html[data-theme="dark"] .profile-copy h1 em,
   color:var(--clean-text);
 }
 
+.profile-portrait{
+  position:relative;
+  grid-area:portrait;
+  align-self:stretch;
+  min-height:clamp(480px,62vh,640px);
+  margin:0;
+  overflow:hidden;
+  border:1px solid var(--clean-line);
+  border-radius:calc(var(--clean-radius) - 4px);
+  background:
+    radial-gradient(circle at 50% 34%,rgba(22,163,184,.18),transparent 42%),
+    linear-gradient(160deg,var(--clean-panel-2),var(--clean-soft));
+  isolation:isolate;
+}
+
+.profile-portrait::before,
+.profile-portrait::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  width:34px;
+  height:34px;
+  pointer-events:none;
+}
+
+.profile-portrait::before{
+  top:14px;
+  left:14px;
+  border-top:2px solid var(--clean-accent);
+  border-left:2px solid var(--clean-accent);
+}
+
+.profile-portrait::after{
+  right:14px;
+  bottom:14px;
+  border-right:2px solid var(--clean-accent-2);
+  border-bottom:2px solid var(--clean-accent-2);
+}
+
+.profile-portrait img{
+  position:absolute;
+  bottom:0;
+  left:50%;
+  z-index:1;
+  display:block;
+  width:min(100%,354px);
+  max-width:none;
+  height:auto;
+  filter:drop-shadow(0 20px 24px rgba(2,8,13,.22));
+  transform:translateX(-50%);
+}
+
 .hero-proof{
+  grid-area:proof;
   display:flex;
   flex-wrap:wrap;
   gap:8px;
@@ -634,6 +701,7 @@ html[data-theme="dark"] .profile-copy h1 em,
 }
 
 .hero-actions{
+  grid-area:actions;
   display:flex;
   flex-wrap:wrap;
   gap:14px;
@@ -2301,10 +2369,31 @@ dialog::backdrop{
     width:52%;
   }
   .profile-copy{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:
+      "kicker"
+      "title"
+      "portrait"
+      "summary"
+      "proof"
+      "actions";
+    column-gap:0;
     padding:24px;
   }
   .profile-copy h1{
     font-size:clamp(36px,11vw,56px);
+  }
+  .profile-portrait{
+    align-self:auto;
+    width:100%;
+    height:280px;
+    min-height:280px;
+    margin:2px 0 22px;
+  }
+  .profile-portrait img{
+    top:10px;
+    bottom:auto;
+    width:250px;
   }
   .profile-dossier{
     display:block;
@@ -2420,6 +2509,13 @@ dialog::backdrop{
   }
   .profile-copy h1{
     font-size:36px;
+  }
+  .profile-portrait{
+    height:240px;
+    min-height:240px;
+  }
+  .profile-portrait img{
+    width:220px;
   }
   .profile-copy .hero-summary{
     font-size:15px;
