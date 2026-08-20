@@ -1805,6 +1805,10 @@ html[data-theme="dark"] .cert-image b{
   margin-top:28px;
 }
 
+.contact-channels>.contact-card:last-child:nth-child(odd){
+  grid-column:1/-1;
+}
+
 .email-link,
 .linkedin-link,
 .contact-card{
@@ -1883,6 +1887,24 @@ html[data-theme="dark"] .cert-image b{
   height:22px;
   overflow:visible;
   fill:currentColor;
+}
+
+.channel-icon-htb{
+  color:#9fef00;
+  border-color:rgba(159,239,0,.34);
+  background:#111927;
+}
+
+.channel-icon-htb svg{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.contact-card-htb .contact-arrow{
+  color:#9fef00;
 }
 
 .channel-icon-email svg path{
