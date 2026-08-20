@@ -337,6 +337,28 @@
       "body": "Achieved a Top 3 finish at CNCC 2026 as a member of WillHack4Coffee.",
       "url": "",
       "createdAt": "2026-01-02T10:00:00.000Z"
+    },
+    {
+      "id": "cncc-2025-cryptography-selection",
+      "label": "COMPETITION / CRYPTOGRAPHY",
+      "title": "CNCC 2025 — Top Cryptography Selection",
+      "summary": "Selected among the top competitors in the Cryptography category",
+      "image": "assets/competitions/cncc-2025.webp",
+      "tags": ["CTF", "Cryptography", "CNCC"],
+      "body": "Selected among the top competitors in the Cryptography category at CNCC 2025.",
+      "url": "",
+      "createdAt": "2025-01-02T10:00:00.000Z"
+    },
+    {
+      "id": "koh-ker-osint-ctf-2025-top-10",
+      "label": "COMPETITION / OSINT",
+      "title": "Koh Ker OSINT CTF 2025 — Top 10",
+      "summary": "Placed 10th overall with 675 points",
+      "image": "assets/competitions/koh-ker-osint-ctf-2025.webp",
+      "tags": ["CTF", "OSINT", "Koh Ker"],
+      "body": "Placed 10th in Koh Ker OSINT CTF 2025 with a final score of 675 points.",
+      "url": "",
+      "createdAt": "2025-01-01T10:00:00.000Z"
     }
   ]
 }

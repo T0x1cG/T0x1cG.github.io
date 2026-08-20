@@ -82,7 +82,7 @@ function fileToDataUrl(file) {
   });
 }
 
-const pageIds = ["home", "research", "writeups", "notes", "projects", "credentials", "competitions", "contact"];
+const pageIds = ["home", "research", "writeups", "projects", "credentials", "competitions", "contact"];
 
 function activatePage(requestedId, updateHash = true) {
   const pageId = pageIds.includes(requestedId) ? requestedId : "home";

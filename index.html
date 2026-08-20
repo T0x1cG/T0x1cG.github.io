@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="profile.css?v=20260716-home-profile-v3" />
     <link rel="stylesheet" href="trace-theme.css?v=20260717-writeup-taxonomy" />
     <link rel="stylesheet" href="caseboard-theme.css?v=20260717-htb-font-scale" />
-    <link rel="stylesheet" href="clean-interface.css?v=20260820-profile-competition" />
+    <link rel="stylesheet" href="clean-interface.css?v=20260820-competition-history" />
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
@@ -49,11 +49,10 @@
           <a class="active" href="#home"><span>01</span> Start</a>
           <a href="#research"><span>02</span> Sharing</a>
           <a href="#writeups"><span>03</span> Writeups</a>
-          <a href="#notes"><span>04</span> Research Notes</a>
-          <a href="#projects"><span>05</span> Projects</a>
-          <a href="#credentials"><span>06</span> Certifications</a>
-          <a href="#competitions"><span>07</span> Competitions</a>
-          <a href="#contact"><span>08</span> Contact</a>
+          <a href="#projects"><span>04</span> Projects</a>
+          <a href="#credentials"><span>05</span> Certifications</a>
+          <a href="#competitions"><span>06</span> Competitions</a>
+          <a href="#contact"><span>07</span> Contact</a>
         </nav>
         <div class="rail-socials">
           <a href="https://github.com/T0x1cG" target="_blank" rel="noreferrer">GH</a>
@@ -129,42 +128,6 @@
             </div>
           </div>
           <div class="research-grid writeup-grid" id="writeupGrid" aria-live="polite"><div class="loading-card">Loading writeup archive…</div></div>
-        </section>
-
-        <section class="notebook-section section-pad" id="notes">
-          <div class="notebook-title">
-            <div><p class="eyebrow">KNOWLEDGE BASE</p><h2>Research <em>notes</em></h2></div>
-            <span class="scribble">Search. Read. Reuse.</span>
-          </div>
-          <div class="knowledge-shell">
-            <aside class="knowledge-sidebar" aria-label="Research notes navigation">
-              <label class="knowledge-search">
-                <span>SEARCH RESEARCH NOTES</span>
-                <input id="noteSearch" type="search" placeholder="Search the library…" autocomplete="off" />
-              </label>
-              <nav class="knowledge-tree" id="noteTree" aria-live="polite">
-                <p class="knowledge-loading">Loading note library…</p>
-              </nav>
-            </aside>
-            <article class="knowledge-reader">
-              <header class="knowledge-reader-header">
-                <div>
-                  <span id="noteCollectionLabel">RESEARCH NOTES</span>
-                  <strong id="noteDocumentTitle">Select a note</strong>
-                </div>
-                <span class="reader-status"><i></i> PUBLIC REFERENCE</span>
-              </header>
-              <div class="knowledge-scroll" id="noteScroll">
-                <div class="markdown-document" id="noteDocument">
-                  <p class="knowledge-loading">Choose a document from the library.</p>
-                </div>
-              </div>
-            </article>
-            <aside class="knowledge-outline">
-              <span>ON THIS PAGE</span>
-              <nav id="noteOutline"></nav>
-            </aside>
-          </div>
         </section>
 
         <section class="projects-section section-pad" id="projects">
@@ -251,7 +214,7 @@
             <div class="editor-heading"><div><p class="eyebrow">NEW ENTRY</p><h3>Add to the archive</h3></div><span class="signed-in">AUTHENTICATED <b></b></span></div>
             <form id="entryForm" class="entry-form">
               <div class="field-row">
-                <label>Entry type<select name="type" id="entryType"><option value="articles">Shared resource</option><option value="writeups">Writeup</option><option value="notes">Research note</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
+                <label>Entry type<select name="type" id="entryType"><option value="articles">Shared resource</option><option value="writeups">Writeup</option><option value="certifications">Certification</option><option value="achievements">Achievement / competition</option></select></label>
                 <label>Topic / issuer<input name="label" placeholder="e.g. Web Security" required maxlength="60" /></label>
               </div>
               <div class="field-row" id="writeupMetaFields" hidden>
@@ -303,6 +266,6 @@
         </aside>
       </div>
     </dialog>
-    <script src="app.js?v=20260820-competition-gallery"></script>
+    <script src="app.js?v=20260820-competition-history"></script>
   </body>
 </html>

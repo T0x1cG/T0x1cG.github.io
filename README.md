@@ -2,7 +2,7 @@
 
 A self-contained cybersecurity portfolio with a protected publishing desk.
 
-The public interface uses full-screen panels: Home opens first, scrolling is locked, and the left-side index switches between Research, Notes, Certifications, Competitions, and Contact.
+The public interface uses full-screen panels: Home opens first, scrolling is locked, and the left-side index switches between Sharing, Writeups, Projects, Certifications, Competitions, and Contact.
 
 The visual system is styled as a cybersecurity field dossier: warm paper, charcoal ink, red annotations, blue ledger lines, stamped labels, and document-style archive cards.
 
@@ -14,9 +14,9 @@ Run node server.js, then open http://localhost:3000.
 
 1. Select Publishing Desk in the top-right corner.
 2. On first use, set an administrator password (minimum 12 characters).
-3. Add research/writeups, short notes, or certifications. Published entries are saved to data/content.json.
+3. Add shared resources, writeups, certifications, or competition achievements. Published entries are saved to data/content.json.
 
-Certificate and achievement posts can include a JPG, PNG, or WebP image directly from the Publishing Desk. The current credential gallery includes the original CC, CRTA, eJPT, and Cyber Arena 2026 images under assets/certificates.
+Certificate and achievement posts can include a JPG, PNG, or WebP image directly from the Publishing Desk. Competition evidence is stored separately under assets/competitions.
 
 The password is stored only as a one-way scrypt hash in data/settings.json; that file is intentionally ignored by Git. Delete it only if you deliberately want to reset the desk password.
 
