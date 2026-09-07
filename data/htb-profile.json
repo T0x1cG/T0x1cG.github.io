@@ -5,13 +5,13 @@
   "username": "T0x1cG",
   "country": "Cambodia",
   "countryRank": 5,
-  "rank": "Master",
-  "rankImage": "https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/rank_master.svg",
-  "level": 75,
-  "grade": 3,
-  "totalExperiencePoints": 82420,
-  "levelExperiencePoints": 2382,
-  "experienceUntilNextLevel": 444,
-  "streakWeeks": 17,
-  "updatedAt": "2026-09-06T20:25:19Z"
+  "rank": "Prodigy",
+  "rankImage": "https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/rank_prodigy.svg",
+  "level": 76,
+  "grade": 1,
+  "totalExperiencePoints": 83070,
+  "levelExperiencePoints": 206,
+  "experienceUntilNextLevel": 2705,
+  "streakWeeks": 18,
+  "updatedAt": "2026-09-07T04:43:57Z"
 }
