@@ -82,11 +82,23 @@ function fileToDataUrl(file) {
   });
 }
 
-const pageIds = ["home", "research", "writeups", "projects", "credentials", "competitions", "contact"];
+const pageIds = ["home", "research", "writeups", "projects", "credentials", "competitions", "contact", "search"];
+const pageNames = { home: "Home", research: "Sharing", writeups: "Writeups", projects: "Projects", credentials: "Certifications", competitions: "Competitions", contact: "Contact", search: "Search" };
+const pageIcons = { research: "sharing", writeups: "writeup", projects: "projects", credentials: "certifications", competitions: "competitions", contact: "contact", search: "search" };
+const icon = (name) => `<svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#${name}" /></svg>`;
+
+function closeNavigation() {
+  document.body.classList.remove("menu-open");
+  $("#menuToggle").setAttribute("aria-expanded", "false");
+  $("#menuToggle").setAttribute("aria-label", "Open navigation");
+}
 
 function activatePage(requestedId, updateHash = true) {
   const pageId = pageIds.includes(requestedId) ? requestedId : "home";
-  $$("main > section").forEach((section) => section.classList.toggle("page-active", section.id === pageId));
+  $$("main > section").forEach((section) => {
+    section.classList.toggle("page-active", section.id === pageId);
+    section.hidden = section.id !== pageId;
+  });
   $$(".rail nav a").forEach((link) => {
     const active = link.getAttribute("href") === "#" + pageId;
     link.classList.toggle("active", active);
@@ -94,7 +106,44 @@ function activatePage(requestedId, updateHash = true) {
     else link.removeAttribute("aria-current");
   });
   document.body.dataset.page = pageId;
+  $("#currentPage").textContent = pageNames[pageId];
+  document.title = `${pageNames[pageId]} · T0x1cG — Security & Learning`;
+  closeNavigation();
   if (updateHash && location.hash !== "#" + pageId) history.pushState({ pageId }, "", "#" + pageId);
+  if (updateHash) window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function archiveEntries() {
+  return [
+    ...archive.writeups.map((item) => ({ ...item, kind: "writeup" })),
+    ...archive.articles.map((item) => ({ ...item, kind: "article" }))
+  ];
+}
+
+function entryCard(item) {
+  return `<button type="button" class="research-card" data-open-kind="${escapeHtml(item.kind)}" data-open-id="${escapeHtml(item.id)}">
+    <span class="card-top"><span class="topic">${icon(item.kind === "writeup" ? "writeup" : "sharing")}${escapeHtml(item.kind === "writeup" ? `CTF writeup · ${item.category}` : "Sharing · Learning resource")}</span><span>${dateLabel(item.createdAt)}</span></span>
+    <h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p>
+    <span class="card-bottom"><span class="tags">${(item.tags || []).slice(0, 3).map((tag) => `<i class="tag">${escapeHtml(tag)}</i>`).join("")}</span><span class="read-arrow" aria-hidden="true">↗</span></span>
+  </button>`;
+}
+
+function renderDiscovery() {
+  const entries = archiveEntries();
+  const byDate = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
+  const latest = [...entries.filter((item) => item.kind === "writeup").sort(byDate).slice(0, 4), ...entries.filter((item) => item.kind === "article").sort(byDate).slice(0, 2)].sort(byDate);
+  $("#latestGrid").innerHTML = latest.map(entryCard).join("") || '<p class="loading-card">New writing is on its way.</p>';
+  const topics = new Map();
+  entries.forEach((item) => (item.tags || []).forEach((tag) => topics.set(tag, (topics.get(tag) || 0) + 1)));
+  $("#topicCloud").innerHTML = [...topics].sort((a, b) => b[1] - a[1]).slice(0, 9).map(([tag]) => `<button type="button" data-search-topic="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`).join("");
+  renderSearch();
+}
+
+function renderSearch() {
+  const query = $("#siteSearch").value.trim().toLowerCase();
+  const items = archiveEntries().filter((item) => !query || `${item.title} ${item.summary} ${item.label} ${item.category || ""} ${(item.tags || []).join(" ")}`.toLowerCase().includes(query));
+  $("#searchSummary").textContent = query ? `${items.length} result${items.length === 1 ? "" : "s"} for “${$("#siteSearch").value.trim()}”` : "Browse all writeups and shared resources.";
+  $("#searchGrid").innerHTML = items.map(entryCard).join("") || '<p class="loading-card">No matches yet. Try a topic like crypto, web, or learning.</p>';
 }
 
 function renderArticles() {
@@ -108,7 +157,7 @@ function renderArticles() {
   }
   host.innerHTML = items.map((item, index) => `
     <button class="research-card" type="button" data-article-id="${escapeHtml(item.id)}" data-index="${String(index + 1).padStart(2, "0")}">
-      <span class="card-top"><span class="topic">${escapeHtml(item.label)}</span><span>${dateLabel(item.createdAt)}</span></span>
+      <span class="card-top"><span class="topic">${icon("sharing")}${escapeHtml(item.label)}</span><span>${dateLabel(item.createdAt)}</span></span>
       <h3>${escapeHtml(item.title)}</h3>
       <p>${escapeHtml(item.summary)}</p>
       <span class="card-bottom">
@@ -161,7 +210,7 @@ function renderWriteups() {
   }
   host.innerHTML = visible.map((item, index) => `
     <button class="research-card writeup-card" type="button" data-writeup-id="${escapeHtml(item.id)}" data-index="${String((writeupPage * writeupsPerPage) + index + 1).padStart(2, "0")}">
-      <span class="card-top"><span class="topic">${escapeHtml(item.label || "HTB / RETIRED")}</span><span>${dateLabel(item.createdAt)}</span></span>
+      <span class="card-top"><span class="topic">${icon("writeup")}${escapeHtml(item.label || "CTF WRITEUP")}</span><span>${dateLabel(item.createdAt)}</span></span>
       <h3>${escapeHtml(item.title)}</h3>
       <p>${escapeHtml(item.summary)}</p>
       <span class="card-bottom">
@@ -468,6 +517,11 @@ async function selectWriteup(id) {
   const item = (archive.writeups || []).find((entry) => entry.id === id);
   if (!item) return;
   activeWriteupId = id;
+  if ($("#documentDialog").open) {
+    const url = new URL(location.href);
+    url.searchParams.set("writeup", id);
+    history.replaceState({ pageId: "writeups", writeup: id }, "", url);
+  }
   renderWriteupTree($("#writeupSearch").value);
   await displayMarkdown(item, {
     content: "#writeupDocument",
@@ -592,7 +646,7 @@ function openEntry(entry) {
   $("#dialogContent").innerHTML = `
     <h2>${escapeHtml(entry.title)}</h2>
     <p class="article-meta">${(entry.tags || []).map(escapeHtml).join(" · ")}</p>
-    <div class="article-body">${escapeHtml(entry.body || entry.summary).split("\\n").map((line) => `<p>${line || "&nbsp;"}</p>`).join("")}</div>
+    <div class="article-body">${escapeHtml(entry.body || entry.summary).split(/\n\s*\n|\\n/).map((line) => `<p>${line || "&nbsp;"}</p>`).join("")}</div>
     ${entry.url ? `<a class="article-external" href="${escapeHtml(entry.url)}" target="_blank" rel="noreferrer">Open referenced resource ↗</a>` : ""}
   `;
   dialog.showModal();
@@ -643,10 +697,16 @@ function syncAuthView() {
 }
 
 async function refreshArchive() {
-  if (localBackend) {
-    archive = await request("/api/content");
-  } else {
-    backendOnline = false;
+  let loadedFromBackend = false;
+  if (localBackend && backendOnline) {
+    try {
+      archive = await request("/api/content");
+      loadedFromBackend = true;
+    } catch {
+      backendOnline = false;
+    }
+  }
+  if (!loadedFromBackend) {
     const archiveUrl = new URL("data/content.json", document.baseURI);
     archiveUrl.searchParams.set("v", String(Date.now()));
     archive = await request(archiveUrl.href, { cache: "no-store" });
@@ -658,8 +718,8 @@ async function refreshArchive() {
   archive.achievements ||= [];
   renderArticles();
   renderWriteups();
-  renderNotes();
   renderSeparatedCredentials();
+  renderDiscovery();
   renderManageList();
   const requestedWriteup = new URL(location.href).searchParams.get("writeup");
   if (requestedWriteup && archive.writeups.some((item) => item.id === requestedWriteup)) {
@@ -689,13 +749,53 @@ async function refreshStatus() {
 }
 
 function setupEvents() {
+  $("#menuToggle").addEventListener("click", () => {
+    const open = document.body.classList.toggle("menu-open");
+    $("#menuToggle").setAttribute("aria-expanded", String(open));
+    $("#menuToggle").setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".rail, #menuToggle")) closeNavigation();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && document.body.classList.contains("menu-open")) {
+      closeNavigation();
+      $("#menuToggle").focus();
+    }
+    if (event.key === "/" && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest("input, textarea, select, [contenteditable], dialog")) {
+      event.preventDefault();
+      $("#siteSearch").focus();
+    }
+  });
+  $("#siteSearch").addEventListener("input", () => {
+    activatePage("search");
+    renderSearch();
+  });
+  $("#topicCloud").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-search-topic]");
+    if (!button) return;
+    $("#siteSearch").value = button.dataset.searchTopic;
+    activatePage("search");
+    renderSearch();
+  });
+  ["#latestGrid", "#searchGrid"].forEach((selector) => $(selector).addEventListener("click", (event) => {
+    const button = event.target.closest("[data-open-id]");
+    if (!button) return;
+    if (button.dataset.openKind === "writeup") openWriteupReader(button.dataset.openId);
+    else if (button.dataset.openKind === "article") openEntry(archive.articles.find((item) => item.id === button.dataset.openId));
+  }));
   $$('a[href^="#"]').forEach((link) => link.addEventListener("click", (event) => {
     const target = link.getAttribute("href").slice(1);
     if (!pageIds.includes(target)) return;
     event.preventDefault();
     activatePage(target);
   }));
-  window.addEventListener("popstate", () => activatePage(location.hash.slice(1), false));
+  window.addEventListener("popstate", () => {
+    activatePage(location.hash.slice(1), false);
+    const id = new URL(location.href).searchParams.get("writeup");
+    if (id && archive.writeups.some((item) => item.id === id)) openWriteupReader(id, false);
+    else if ($("#documentDialog").open) $("#documentDialog").close();
+  });
   $$(".filter").forEach((button) => button.addEventListener("click", () => {
     $$(".filter").forEach((item) => item.classList.remove("active"));
     button.classList.add("active");
@@ -914,17 +1014,23 @@ function setupEvents() {
 }
 
 async function initialize() {
+  Object.entries(pageIcons).forEach(([page, name]) => {
+    const heading = $(`#${page} h2`);
+    if (heading) heading.insertAdjacentHTML("afterbegin", icon(name));
+  });
   $("#year").textContent = new Date().getFullYear();
   activatePage(location.hash.slice(1) || "home", false);
   setupEvents();
   try {
-    await Promise.all([refreshArchive(), refreshStatus(), refreshHtbRank()]);
+    await refreshStatus();
+    await Promise.all([refreshArchive(), refreshHtbRank()]);
   } catch (error) {
     const localHelp = localBackend
       ? 'Could not connect to the private archive. Start the server with <code>node server.js</code>.'
       : 'Could not load the public sharing archive. Refresh the page or clear the browser cache.';
     $("#articleGrid").innerHTML = '<div class="loading-card">' + localHelp + '</div>';
     $("#writeupGrid").innerHTML = '<div class="loading-card">' + localHelp + '</div>';
+    $("#latestGrid").innerHTML = '<div class="loading-card">Could not load the archive. Please refresh to try again.</div>';
     console.error(error);
   }
 }

@@ -16,7 +16,7 @@
     root.dataset.theme = isDark ? "dark" : "light";
 
     const themeColor = document.querySelector('meta[name="theme-color"]');
-    if (themeColor) themeColor.content = isDark ? "#0c1213" : "#edf2ef";
+    if (themeColor) themeColor.content = isDark ? "#1b1b1e" : "#ffffff";
 
     const toggle = document.querySelector("#themeToggle");
     if (toggle) {

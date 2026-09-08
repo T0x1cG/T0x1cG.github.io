@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#111718" />
+    <meta name="theme-color" content="#1b1b1e" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -11,30 +11,20 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="description" content="T0x1cG — aspiring Penetration Tester and Red Team learner focused on web application security." />
     <title>T0x1cG — Aspiring Penetration Tester &amp; Red Team Learner</title>
-    <script src="theme.js?v=20260717-theme-switch"></script>
+    <script src="theme.js?v=20260908"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=20260716-security-hardening" />
-    <link rel="stylesheet" href="credentials.css?v=20260716-security-hardening" />
-    <link rel="stylesheet" href="single-page.css?v=20260717-career-projects" />
-    <link rel="stylesheet" href="paper-theme.css?v=20260716-security-hardening" />
-    <link rel="stylesheet" href="knowledge.css?v=20260716-web-request-cleanup" />
-    <link rel="stylesheet" href="profile.css?v=20260716-home-profile-v3" />
-    <link rel="stylesheet" href="trace-theme.css?v=20260717-writeup-taxonomy" />
-    <link rel="stylesheet" href="caseboard-theme.css?v=20260717-htb-font-scale" />
-    <link rel="stylesheet" href="clean-interface.css?v=20260820-htb-contact" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="portfolio.css?v=20260908-icons" />
   </head>
   <body>
-    <div class="grain" aria-hidden="true"></div>
+    <a class="skip-link" href="#top">Skip to content</a>
     <div class="site-shell">
       <header class="topbar">
-        <a class="brand" href="#home" aria-label="T0x1cG home">
-          <span class="brand-mark"><i></i><i></i><i></i></span>
-          <span>T0<span class="accent">x</span>1cG</span>
-        </a>
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="siteNavigation">☰</button>
+        <span class="breadcrumb">T0x1cG <span aria-hidden="true">/</span> <span id="currentPage">Home</span></span>
         <div class="topbar-right">
-          <span class="live-status"><b></b> OPEN TO COLLABORATE</span>
+          <label class="site-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="siteSearch" type="search" placeholder="Search…" aria-label="Search writeups and learning resources" /><kbd>/</kbd></label>
           <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" aria-pressed="true">
             <span class="theme-toggle-track" aria-hidden="true"><i></i></span>
             <span class="theme-toggle-label">DARK</span>
@@ -43,41 +33,40 @@
         </div>
       </header>
 
-      <aside class="rail" aria-label="Section navigation">
-        <span class="rail-label">INDEX</span>
+      <aside class="rail" id="siteNavigation" aria-label="Section navigation">
+        <a class="sidebar-profile" href="#home" aria-label="T0x1cG home">
+          <span class="avatar"><img src="assets/profile/savon-chanserey-cutout.png" alt="Savon Chanserey" width="96" height="96" /></span>
+          <span class="site-name">T0x1cG<span class="name-dot">.</span></span>
+        </a>
+        <p class="sidebar-bio">Aspiring penetration tester.<br />Red team learner. Curious mind.</p>
         <nav>
-          <a class="active" href="#home"><span>01</span> Start</a>
-          <a href="#research"><span>02</span> Sharing</a>
-          <a href="#writeups"><span>03</span> Writeups</a>
-          <a href="#projects"><span>04</span> Projects</a>
-          <a href="#credentials"><span>05</span> Certifications</a>
-          <a href="#competitions"><span>06</span> Competitions</a>
-          <a href="#contact"><span>07</span> Contact</a>
+          <a class="active" href="#home"><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#home" /></svg> Home</a>
+          <a href="#writeups"><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#writeup" /></svg> Writeups</a>
+          <a href="#research"><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#sharing" /></svg> Sharing</a>
+          <a href="#projects"><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#projects" /></svg> Projects</a>
+          <a href="#credentials"><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#certifications" /></svg> Certifications</a>
+          <a href="#competitions"><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#competitions" /></svg> Competitions</a>
+          <a href="#contact"><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#contact" /></svg> Contact</a>
         </nav>
+        <div class="sidebar-bottom"><p><span class="location-dot"></span> Phnom Penh, Cambodia</p><div class="sidebar-links"><a href="https://github.com/T0x1cG" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/chanserey-savon-6b5332388" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="mailto:chansereysavon@gmail.com" aria-label="Email Savon">Email ↗</a></div></div>
       </aside>
 
-      <main id="top">
+      <main id="top" tabindex="-1">
         <section class="hero profile-hero section-pad page-active" id="home">
-          <div class="case-banner" aria-hidden="true">
-            <div class="capture-route">
-              <i></i><i></i><i></i><i></i><i></i>
-            </div>
-          </div>
           <div class="hero-copy profile-copy">
-            <p class="eyebrow"><span class="pulse"></span> T0X1CG / OPERATOR PROFILE</p>
-            <h1><span>Aspiring</span> <span>Penetration Tester</span><br /><em>&amp; Red Team Learner.</em></h1>
-            <figure class="profile-portrait">
-              <img src="assets/profile/savon-chanserey-cutout.png" alt="Savon Chanserey wearing a blue and white cybersecurity competition jersey" width="354" height="704" decoding="async" fetchpriority="high" />
-            </figure>
-            <p class="hero-summary">I’m <strong>T0x1cG / Savon Chanserey</strong>, an aspiring Penetration Tester and Red Team learner based in Phnom Penh, Cambodia. I focus on web application security. I enjoy solving CTF challenges, writing technical notes, building security tools, and improving my skills through hands-on labs and real-world-style scenarios. My goal is to grow as an ethical security professional who can identify vulnerabilities, validate impact responsibly, and help organizations strengthen their defenses.</p>
-            <div class="hero-proof" aria-label="Professional certifications">
-              <span>VERIFIED LEARNING</span><b>eJPTv2</b><i>•</i><b>CRTA</b><i>•</i><b>ISC2 CC</b>
-            </div>
-            <div class="hero-actions">
-              <a class="button button-primary" href="#research">Explore my work <span>↘</span></a>
-              <a class="text-link" href="#contact">Discuss an opportunity <span>→</span></a>
-            </div>
+            <p class="eyebrow">SECURITY · LEARNING · FIELD NOTES</p>
+            <h1>Learning by doing.<br /><span>Sharing what I find.</span></h1>
+            <p class="hero-summary">I’m <strong>Savon Chanserey</strong>, also known as <strong>T0x1cG</strong>. An aspiring penetration tester exploring web security, red teaming, and the occasional rabbit hole.</p>
+            <p class="hero-subtext">CTF writeups, shared resources, and things I build along the way.</p>
+            <a class="text-link" href="#contact">More about me &amp; get in touch <span>→</span></a>
           </div>
+          <div class="latest-heading"><h2><svg class="ui-icon" aria-hidden="true"><use href="assets/icons/ui.svg#writeup" /></svg>Latest writing</h2><a href="#writeups">All writeups <span aria-hidden="true">→</span></a></div>
+          <div id="latestGrid" class="research-grid" aria-live="polite"><p class="loading-card">Loading the latest writing…</p></div>
+        </section>
+
+        <section class="search-section section-pad" id="search">
+          <div class="section-heading"><div><p class="eyebrow">THE ARCHIVE</p><h2>Search results</h2></div><p id="searchSummary" aria-live="polite"></p></div>
+          <div id="searchGrid" class="research-grid"></div>
         </section>
 
         <section class="signal-strip section-pad" aria-label="Sharing focus">
@@ -92,7 +81,7 @@
 
         <section class="research-section section-pad" id="research">
           <div class="section-heading">
-            <div><p class="eyebrow">SELECTED WORK</p><h2>Sharing <em>stream</em></h2></div>
+            <div><p class="eyebrow">LEARN IN PUBLIC</p><h2>Sharing</h2></div>
             <p>Structured learning resources built from practical study, certification preparation, and repeatable security workflows.</p>
           </div>
           <div class="research-grid" id="articleGrid" aria-live="polite"><div class="loading-card">Loading sharing archive…</div></div>
@@ -100,7 +89,7 @@
 
         <section class="research-section writeup-section section-pad" id="writeups">
           <div class="section-heading">
-            <div><p class="eyebrow">AUTHORIZED LAB ARCHIVE</p><h2>Writeup <em>archive</em></h2></div>
+            <div><p class="eyebrow">FROM CHALLENGE TO UNDERSTANDING</p><h2>Writeups</h2></div>
             <p>Categorized Jeopardy CTF research from Cyber Arena. Flags, credentials, and transient challenge tokens are removed.</p>
           </div>
           <div class="writeup-classifier" aria-label="Writeup collection">
@@ -127,7 +116,7 @@
 
         <section class="projects-section section-pad" id="projects">
           <div class="section-heading projects-heading">
-            <div><p class="eyebrow">PRIVATE RESEARCH</p><h2>Current<br /><em>project</em></h2></div>
+            <div><p class="eyebrow">WORK IN PROGRESS</p><h2>Projects</h2></div>
             <p>Controlled security research. Implementation details remain private.</p>
           </div>
           <div class="project-ledger project-ledger-single">
@@ -142,7 +131,7 @@
 
         <section class="credentials-section section-pad" id="credentials">
           <div class="section-heading credentials-heading">
-            <div><p class="eyebrow">VERIFIED LEARNING</p><h2>Professional<br /><em>certifications</em></h2></div>
+            <div><p class="eyebrow">CONTINUING TO LEARN</p><h2>Certifications</h2></div>
             <div class="credential-note"><span class="tiny-mark">✦</span>Validated technical training across offensive security, red teaming, and cybersecurity foundations.</div>
           </div>
           <div class="credentials-grid" id="certGrid" aria-live="polite"><div class="loading-card">Loading certifications…</div></div>
@@ -150,7 +139,7 @@
 
         <section class="competitions-section section-pad" id="competitions">
           <div class="section-heading credentials-heading">
-            <div><p class="eyebrow">COMPETITIVE SECURITY</p><h2>Competition<br /><em>achievements</em></h2></div>
+            <div><p class="eyebrow">BETTER TOGETHER</p><h2>Competitions</h2></div>
             <div class="credential-note"><span class="tiny-mark">◆</span>Team results earned through practical problem solving, collaboration, and technical execution.</div>
           </div>
           <div class="credentials-grid competition-grid" id="competitionGrid" aria-live="polite"><div class="loading-card">Loading competition results…</div></div>
@@ -168,7 +157,8 @@
         <section class="contact-section section-pad" id="contact">
           <div class="contact-orbit" aria-hidden="true"><span>LET’S MAKE THE INTERNET · A LITTLE HARDER TO BREAK · </span></div>
           <div class="contact-content">
-            <p class="eyebrow">SECURE CHANNEL OPEN</p><h2>Have a problem<br />worth <em>unpacking?</em></h2>
+            <p class="eyebrow">LET’S CONNECT</p><h2>A conversation starts here.</h2>
+            <p class="contact-intro">I’m Savon Chanserey, a security learner based in Phnom Penh, Cambodia. I focus on web application security and enjoy solving CTF challenges, building tools, and sharing what I learn. My goal is to grow as an ethical security professional through practical, responsible research.</p>
             <div class="contact-channels">
               <a class="contact-card" href="mailto:chansereysavon@gmail.com" aria-label="Email Savon Chanserey">
                 <span class="channel-icon channel-icon-email" aria-hidden="true">
@@ -209,14 +199,21 @@
         </section>
       </main>
 
-      <footer><span>© <span id="year"></span> T0x1cG</span><span>BUILT FROM THE TERMINAL <i></i> WITH INTENTION</span><a href="#home">Back to start ↑</a></footer>
+      <aside class="context-sidebar" aria-label="About this notebook">
+        <section><h2>Currently exploring</h2><p>Web application security,<br />red teaming, and the art of<br />asking better questions.</p><a href="#research">Browse shared resources <span>→</span></a></section>
+        <section><h2>Topics</h2><div class="topic-cloud" id="topicCloud"></div></section>
+        <section><h2>Certifications</h2><a class="mini-credential" href="#credentials"><span>eJPTv2</span><small>INE Security</small></a><a class="mini-credential" href="#credentials"><span>CRTA</span><small>Cyberwarfare Labs</small></a><a class="mini-credential" href="#credentials"><span>CC</span><small>ISC2</small></a></section>
+        <section class="collaborate-note"><span class="location-dot"></span><h2>Open to collaborate</h2><p>Research, CTF teams, or a good<br />security conversation.</p><a href="#contact">Say hello <span>↗</span></a></section>
+      </aside>
+
+      <footer><span>© <span id="year"></span> T0x1cG</span><span>Always learning. Always curious.</span><a href="#home">Back to home ↑</a></footer>
     </div>
 
-    <dialog class="article-dialog" id="articleDialog">
+    <dialog class="article-dialog" id="articleDialog" aria-labelledby="dialogType">
       <div class="dialog-top"><button class="dialog-close" type="button" data-close-dialog aria-label="Close article">×</button><span id="dialogType">SHARING / 00</span></div>
       <article id="dialogContent"></article>
     </dialog>
-    <dialog class="desk-dialog" id="deskDialog">
+    <dialog class="desk-dialog" id="deskDialog" aria-label="Publishing desk">
       <div class="desk-wrap">
         <button class="dialog-close desk-close" type="button" data-close-dialog aria-label="Close publishing desk">×</button>
         <aside class="desk-aside">
@@ -255,7 +252,7 @@
         </div>
       </div>
     </dialog>
-    <dialog class="document-dialog" id="documentDialog">
+    <dialog class="document-dialog" id="documentDialog" aria-labelledby="writeupDocumentTitle">
       <div class="document-dialog-shell">
         <header class="document-dialog-header">
           <div>
@@ -284,6 +281,6 @@
         </aside>
       </div>
     </dialog>
-    <script src="app.js?v=20260820-jeopardy-only"></script>
+    <script src="app.js?v=20260908-icons"></script>
   </body>
 </html>
