@@ -217,11 +217,11 @@ function renderWriteups() {
   `).join("");
 }
 
-function safeDocumentUrl(value, format = "md") {
+function safeDocumentUrl(value) {
   if (!value || typeof value !== "string") return "";
   try {
     const url = new URL(value, document.baseURI);
-    const pathAllowed = format === "pdf" ? /^\/assets\/writeups\/[a-z0-9/_-]+\.pdf$/i.test(url.pathname) : /^\/assets\/writeups\/.*\.md$/i.test(url.pathname);
+    const pathAllowed = /^\/assets\/writeups\/[a-z0-9/_-]+\.md$/i.test(url.pathname);
     return url.origin === location.origin && !url.username && !url.password && pathAllowed ? url.href : "";
   } catch {
     return "";
@@ -416,14 +416,6 @@ async function displayMarkdown(item, options) {
   $(options.title).textContent = item.title;
   if (options.label) $(options.label).textContent = options.labelText || item.label || "NOTES";
   try {
-    if (item.pdf) {
-      const url = safeDocumentUrl(item.pdf, "pdf");
-      if (!url) throw new Error("This PDF path is not allowed.");
-      content.innerHTML = `<p class="eyebrow">${escapeHtml(writeupCompetitions[writeupCollection(item)])} · ${escapeHtml(item.category)}</p><h1>${escapeHtml(item.title)}</h1><p>${escapeHtml(item.summary)}</p><p class="pdf-details">PDF · ${escapeHtml(item.pages)} pages · ${Math.ceil(item.fileSize / 1024)} KB</p><div class="pdf-actions"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open PDF ↗</a><a href="${escapeHtml(url)}" download>Download PDF ↓</a></div><p>The complete writeup, including screenshots and code, is available in the original PDF.</p>`;
-      $(options.outline).innerHTML = '<span class="outline-empty">PDF document</span>';
-      scroll.scrollTop = 0;
-      return;
-    }
     const { markdown, sourcePath } = await readMarkdown(item);
     if (documentRenders.get(content) !== renderToken) return;
     const rendered = markdownToHtml(markdown, sourcePath);
@@ -446,7 +438,7 @@ function renderWriteupTree(query = "") {
       items: items.filter((item) => writeupCollection(item) === competition)
     })).filter((group) => group.items.length);
   $("#writeupTree").innerHTML = groups.length
-    ? groups.map((group) => `<section class="writeup-tree-section"><p>${escapeHtml(group.label)}</p>${group.items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml(item.category)}${item.pdf ? " · PDF" : ""}</small></button>`).join("")}</section>`).join("")
+    ? groups.map((group) => `<section class="writeup-tree-section"><p>${escapeHtml(group.label)}</p>${group.items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml(item.category)}</small></button>`).join("")}</section>`).join("")
     : '<p class="knowledge-loading">No writeups matched your search.</p>';
 }
 

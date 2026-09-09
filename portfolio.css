@@ -209,10 +209,6 @@ dialog::backdrop { background: #09090bc9; backdrop-filter: blur(4px); }
 .markdown-document h4 { font-size: 15px; }
 .markdown-document p, .markdown-document ul, .markdown-document ol { margin: 15px 0; color: var(--muted); }
 .markdown-document a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
-.pdf-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
-.pdf-actions a { padding: 10px 16px; border: 1px solid var(--line); border-radius: 6px; text-decoration: none; }
-.pdf-actions a:first-child { background: var(--accent-bg); border-color: var(--accent); }
-.pdf-details { font: 12px var(--mono); }
 .markdown-document strong { color: var(--text); }
 .markdown-document img { max-width: 100%; height: auto; border-radius: 5px; }
 .markdown-document code { font: 12px/1.7 var(--mono); background: var(--hover); padding: 2px 4px; border-radius: 3px; }

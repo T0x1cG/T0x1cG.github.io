@@ -43,10 +43,8 @@
         "algorithm confusion",
         "RSA"
       ],
-      "pdf": "assets/writeups/digital-dragons-2026/crypto-1.pdf",
-      "pages": 5,
-      "fileSize": 218504,
-      "createdAt": "2026-09-09T00:00:00.000Z"
+      "createdAt": "2026-09-09T00:00:00.000Z",
+      "document": "assets/writeups/digital-dragons-2026/crypto-1.md"
     },
     {
       "id": "digital-dragons-2026-crypto-2",
@@ -61,10 +59,8 @@
         "lattices",
         "LLL"
       ],
-      "pdf": "assets/writeups/digital-dragons-2026/crypto-2.pdf",
-      "pages": 8,
-      "fileSize": 231204,
-      "createdAt": "2026-09-09T00:00:00.000Z"
+      "createdAt": "2026-09-09T00:00:00.000Z",
+      "document": "assets/writeups/digital-dragons-2026/crypto-2.md"
     },
     {
       "id": "digital-dragons-2026-crypto-3",
@@ -79,10 +75,8 @@
         "nonce reuse",
         "signature forgery"
       ],
-      "pdf": "assets/writeups/digital-dragons-2026/crypto-3.pdf",
-      "pages": 6,
-      "fileSize": 231435,
-      "createdAt": "2026-09-09T00:00:00.000Z"
+      "createdAt": "2026-09-09T00:00:00.000Z",
+      "document": "assets/writeups/digital-dragons-2026/crypto-3.md"
     },
     {
       "id": "digital-dragons-2026-misc-2",
@@ -97,10 +91,8 @@
         "prompt injection",
         "trust boundaries"
       ],
-      "pdf": "assets/writeups/digital-dragons-2026/misc-2.pdf",
-      "pages": 5,
-      "fileSize": 297939,
-      "createdAt": "2026-09-09T00:00:00.000Z"
+      "createdAt": "2026-09-09T00:00:00.000Z",
+      "document": "assets/writeups/digital-dragons-2026/misc-2.md"
     },
     {
       "id": "digital-dragons-2026-osint-1",
@@ -115,10 +107,8 @@
         "link analysis",
         "Base64"
       ],
-      "pdf": "assets/writeups/digital-dragons-2026/osint-1.pdf",
-      "pages": 10,
-      "fileSize": 890971,
-      "createdAt": "2026-09-09T00:00:00.000Z"
+      "createdAt": "2026-09-09T00:00:00.000Z",
+      "document": "assets/writeups/digital-dragons-2026/osint-1.md"
     },
     {
       "id": "digital-dragons-2026-pwn-1",
@@ -133,10 +123,8 @@
         "ret2win",
         "binary exploitation"
       ],
-      "pdf": "assets/writeups/digital-dragons-2026/pwn-1.pdf",
-      "pages": 5,
-      "fileSize": 211215,
-      "createdAt": "2026-09-09T00:00:00.000Z"
+      "createdAt": "2026-09-09T00:00:00.000Z",
+      "document": "assets/writeups/digital-dragons-2026/pwn-1.md"
     },
     {
       "id": "digital-dragons-2026-reverse-2",
@@ -151,10 +139,8 @@
         "Protocol Buffers",
         "model metadata"
       ],
-      "pdf": "assets/writeups/digital-dragons-2026/reverse-2.pdf",
-      "pages": 5,
-      "fileSize": 345646,
-      "createdAt": "2026-09-09T00:00:00.000Z"
+      "createdAt": "2026-09-09T00:00:00.000Z",
+      "document": "assets/writeups/digital-dragons-2026/reverse-2.md"
     },
     {
       "id": "cyber-arena-angkor-encrypted-frames-2026",
