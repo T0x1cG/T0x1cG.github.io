@@ -1,13 +1,12 @@
 const $ = (selector, parent = document) => parent.querySelector(selector);
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 
-let archive = { articles: [], writeups: [], notes: [], certifications: [], achievements: [] };
+let archive = { articles: [], writeups: [], certifications: [], achievements: [] };
 let activeFilter = "all";
 let writeupPage = 0;
 let activeWriteupCollection = "jeopardy";
 let activeJeopardyCategory = "all";
 const writeupsPerPage = 4;
-let activeNote = { collectionId: "", documentId: "" };
 let activeWriteupId = "";
 const markdownCache = new Map();
 let adminStatus = { configured: false, authenticated: false };
@@ -225,17 +224,18 @@ function safeDocumentUrl(value) {
   if (!value || typeof value !== "string") return "";
   try {
     const url = new URL(value, document.baseURI);
-    return url.origin === location.origin && /^\/?assets\/(?:notes|writeups)\//.test(url.pathname.replace(/^\/+/, "")) ? url.href : "";
+    return url.origin === location.origin && /^assets\/writeups\/.*\.md$/i.test(url.pathname.replace(/^\/+/, "")) ? url.href : "";
   } catch {
     return "";
   }
 }
 
 function safeLinkUrl(value, sourcePath) {
+  if (typeof value !== "string" || !value.trim()) return null;
   try {
     const base = sourcePath ? new URL(sourcePath, document.baseURI) : new URL(document.baseURI);
     const url = new URL(value.trim(), base);
-    return ["http:", "https:", "mailto:"].includes(url.protocol) ? url : null;
+    return ["http:", "https:", "mailto:"].includes(url.protocol) && !url.username && !url.password ? url : null;
   } catch {
     return null;
   }
@@ -267,7 +267,7 @@ function formatInline(value, sourcePath) {
     .replace(/(^|[\s(])\*([^*\n]+)\*(?=$|[\s).,])/g, "$1<em>$2</em>")
     .replace(/~~([^~]+)~~/g, "<del>$1</del>");
   tokens.forEach((token, index) => {
-    html = html.replace(`\uE000${index}\uE001`, token);
+    html = html.replace(`\uE000${index}\uE001`, () => token);
   });
   return html;
 }
@@ -427,79 +427,6 @@ async function displayMarkdown(item, options) {
   }
 }
 
-function noteCollections() {
-  return (archive.notes || []).map((collection) => ({
-    ...collection,
-    documents: Array.isArray(collection.documents) && collection.documents.length
-      ? collection.documents
-      : [{ id: collection.id, title: collection.title, body: collection.body, summary: collection.summary, group: "Published notes" }]
-  }));
-}
-
-function renderNoteTree(query = "") {
-  const host = $("#noteTree");
-  const normalized = query.trim().toLowerCase();
-  const collections = noteCollections();
-  if (!collections.length) {
-    host.innerHTML = '<p class="knowledge-loading">No notes published yet.</p>';
-    return;
-  }
-  host.innerHTML = collections.map((collection) => {
-    let lastGroup = "";
-    const documents = collection.documents.filter((item) => !normalized || `${item.title} ${item.group || ""} ${collection.label}`.toLowerCase().includes(normalized));
-    if (!documents.length) return "";
-    return `
-      <section class="knowledge-tree-section">
-        <div class="knowledge-collection"><span>${escapeHtml(collection.label || "NOTES")}</span><small>${documents.length}</small></div>
-        ${documents.map((item) => {
-          const group = item.group || "Reference";
-          const groupLabel = group !== lastGroup ? `<span class="knowledge-group">${escapeHtml(group)}</span>` : "";
-          lastGroup = group;
-          const active = activeNote.collectionId === collection.id && activeNote.documentId === item.id;
-          return `${groupLabel}<button class="${active ? "active" : ""}" type="button" data-note-collection="${escapeHtml(collection.id)}" data-note-document="${escapeHtml(item.id)}"><i></i>${escapeHtml(item.title)}</button>`;
-        }).join("")}
-      </section>
-    `;
-  }).join("") || '<p class="knowledge-loading">No notes matched your search.</p>';
-}
-
-async function selectNoteDocument(collectionId, documentId) {
-  const collection = noteCollections().find((item) => item.id === collectionId);
-  const item = collection && collection.documents.find((documentItem) => documentItem.id === documentId);
-  if (!collection || !item) return;
-  activeNote = { collectionId, documentId };
-  renderNoteTree($("#noteSearch").value);
-  await displayMarkdown(item, {
-    content: "#noteDocument",
-    scroll: "#noteScroll",
-    outline: "#noteOutline",
-    title: "#noteDocumentTitle",
-    label: "#noteCollectionLabel",
-    labelText: collection.label || "NOTES"
-  });
-}
-
-function renderNotes() {
-  const collections = noteCollections();
-  if (!$("#noteTree")) {
-    const legacyHost = $("#notesGrid");
-    if (!legacyHost) return;
-    legacyHost.innerHTML = collections.map((collection) => `
-      <article class="note-card">
-        <div class="note-meta"><span>${escapeHtml(collection.label || "FIELD NOTE")}</span><span>·</span><span>${dateLabel(collection.createdAt)}</span></div>
-        <h3>${escapeHtml(collection.title)}</h3>
-        <p>${escapeHtml(collection.summary)}</p>
-        <button class="text-link note-open" type="button" data-legacy-note-id="${escapeHtml(collection.id)}">Open note <span>→</span></button>
-      </article>
-    `).join("") || '<div class="loading-card">No notes published yet.</div>';
-    return;
-  }
-  renderNoteTree($("#noteSearch").value);
-  if (!collections.length) return;
-  const selectedCollection = collections.find((item) => item.id === activeNote.collectionId) || collections[0];
-  const selectedDocument = selectedCollection.documents.find((item) => item.id === activeNote.documentId) || selectedCollection.documents[0];
-  selectNoteDocument(selectedCollection.id, selectedDocument.id);
-}
 
 function renderWriteupTree(query = "") {
   const normalized = query.trim().toLowerCase();
@@ -641,13 +568,14 @@ function renderManageList() {
 
 function openEntry(entry) {
   if (!entry) return;
+  const externalUrl = safeLinkUrl(entry.url);
   const dialog = $("#articleDialog");
   $("#dialogType").textContent = `${entry.label || entry.type.toUpperCase()} / ${dateLabel(entry.createdAt)}`;
   $("#dialogContent").innerHTML = `
     <h2>${escapeHtml(entry.title)}</h2>
     <p class="article-meta">${(entry.tags || []).map(escapeHtml).join(" · ")}</p>
     <div class="article-body">${escapeHtml(entry.body || entry.summary).split(/\n\s*\n|\\n/).map((line) => `<p>${line || "&nbsp;"}</p>`).join("")}</div>
-    ${entry.url ? `<a class="article-external" href="${escapeHtml(entry.url)}" target="_blank" rel="noreferrer">Open referenced resource ↗</a>` : ""}
+    ${externalUrl ? `<a class="article-external" href="${escapeHtml(externalUrl.href)}" target="_blank" rel="noopener noreferrer">Open referenced resource ↗</a>` : ""}
   `;
   dialog.showModal();
 }
@@ -713,7 +641,7 @@ async function refreshArchive() {
   }
   archive.articles ||= [];
   archive.writeups ||= [];
-  archive.notes ||= [];
+  delete archive.notes;
   archive.certifications ||= [];
   archive.achievements ||= [];
   renderArticles();
@@ -833,16 +761,6 @@ function setupEvents() {
     writeupPage += 1;
     renderWriteups();
   });
-  const noteTree = $("#noteTree");
-  if (noteTree) {
-    noteTree.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-note-document]");
-      if (!button) return;
-      selectNoteDocument(button.dataset.noteCollection, button.dataset.noteDocument);
-    });
-  }
-  const noteSearch = $("#noteSearch");
-  if (noteSearch) noteSearch.addEventListener("input", (event) => renderNoteTree(event.currentTarget.value));
   const writeupTree = $("#writeupTree");
   if (writeupTree) {
     writeupTree.addEventListener("click", (event) => {
@@ -853,18 +771,18 @@ function setupEvents() {
   }
   const writeupSearch = $("#writeupSearch");
   if (writeupSearch) writeupSearch.addEventListener("input", (event) => renderWriteupTree(event.currentTarget.value));
-  ["#noteOutline", "#writeupOutline"].forEach((selector) => {
+  ["#writeupOutline"].forEach((selector) => {
     const outline = $(selector);
     if (!outline) return;
     outline.addEventListener("click", (event) => {
       const button = event.target.closest("[data-outline-target]");
       if (!button) return;
-      const content = selector === "#noteOutline" ? $("#noteDocument") : $("#writeupDocument");
+      const content = $("#writeupDocument");
       const target = content.querySelector(`#${button.dataset.outlineTarget}`);
       if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
-  ["#noteDocument", "#writeupDocument"].forEach((selector) => {
+  ["#writeupDocument"].forEach((selector) => {
     const documentHost = $(selector);
     if (!documentHost) return;
     documentHost.addEventListener("click", async (event) => {
@@ -885,31 +803,13 @@ function setupEvents() {
       const url = new URL(link.href, document.baseURI);
       if (url.origin !== location.origin || !url.pathname.toLowerCase().endsWith(".md")) return;
       const documentPath = url.pathname.replace(/^\/+/, "");
-      if (selector === "#noteDocument") {
-        for (const collection of noteCollections()) {
-          const item = collection.documents.find((entry) => entry.document === documentPath);
-          if (!item) continue;
-          event.preventDefault();
-          selectNoteDocument(collection.id, item.id);
-          return;
-        }
-      } else {
-        const item = archive.writeups.find((entry) => entry.document === documentPath);
-        if (item) {
-          event.preventDefault();
-          selectWriteup(item.id);
-        }
+      const item = archive.writeups.find((entry) => entry.document === documentPath);
+      if (item) {
+        event.preventDefault();
+        selectWriteup(item.id);
       }
     });
   });
-  const legacyNotes = $("#notesGrid");
-  if (legacyNotes) {
-    legacyNotes.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-legacy-note-id]");
-      if (!button) return;
-      openEntry(archive.notes.find((item) => item.id === button.dataset.legacyNoteId));
-    });
-  }
   ["#certGrid", "#competitionGrid"].forEach((selector) => {
     $(selector).addEventListener("click", (event) => {
       const button = event.target.closest("[data-credential-id]");
@@ -1034,4 +934,4 @@ async function initialize() {
     console.error(error);
   }
 }
-initialize();
+if (document.documentElement.dataset.frameState === "allowed") initialize();

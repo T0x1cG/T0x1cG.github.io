@@ -1,0 +1,27 @@
+name: Security regression checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Check browser scripts
+        run: |
+          node --check app.js
+          node --check frame-guard.js
+          node --check theme.js
+      - name: Validate SVG handling
+        run: python3 scripts/test_sanitize_rank_svg.py
+      - name: Check published content
+        run: node scripts/check_public_content.mjs

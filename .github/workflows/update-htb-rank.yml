@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: update-htb-rank
@@ -15,13 +15,16 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 5
     env:
       HTB_ACCOUNT_ID: 9ef94565-2b8b-40c3-a6e0-ab5b00f00b52
       HTB_PROFILE_ID: 019c848b-a2c1-70ac-b264-2582fdf54af0
       HTB_PROFILE_URL: https://profile.hackthebox.com/profile/019c848b-a2c1-70ac-b264-2582fdf54af0
     steps:
       - name: Check out portfolio
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Fetch public HTB rank
         shell: bash
@@ -31,9 +34,11 @@ jobs:
           response="$(mktemp)"
           output="$(mktemp)"
           rank_output="$(mktemp)"
+          rank_clean="$(mktemp)"
+          trap 'rm -f -- "$response" "$output" "$rank_output" "$rank_clean"' EXIT
 
           curl --fail --silent --show-error --retry 3 --retry-all-errors \
-            --connect-timeout 15 --max-time 60 \
+            --proto '=https' --max-filesize 1048576 --connect-timeout 15 --max-time 60 \
             "$endpoint" -o "$response"
 
           jq -e '
@@ -48,9 +53,9 @@ jobs:
           country_rank="$(jq -r 'if ((.countryRank | type) == "number") and .countryRank > 0 then .countryRank else 5 end' data/htb-profile.json 2>/dev/null || echo 5)"
           rank_image="$(jq -r '.rankImage' "$response")"
           curl --fail --silent --show-error --retry 3 --retry-all-errors \
-            --connect-timeout 15 --max-time 60 --max-filesize 1048576 \
+            --proto '=https' --connect-timeout 15 --max-time 60 --max-filesize 1048576 \
             "$rank_image" -o "$rank_output"
-          grep -q '<svg' "$rank_output"
+          python3 scripts/sanitize_rank_svg.py "$rank_output" "$rank_clean"
 
           jq \
             --arg profile_id "$HTB_PROFILE_ID" \
@@ -80,7 +85,7 @@ jobs:
 
           mkdir -p data
           mv "$output" data/htb-profile.json
-          mv "$rank_output" data/htb-rank.svg
+          mv "$rank_clean" data/htb-rank.svg
 
       - name: Publish changed rank
         shell: bash

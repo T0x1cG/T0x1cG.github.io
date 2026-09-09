@@ -10,3 +10,7 @@ data/*.tmp
 server.js
 package.json
 package-lock.json
+
+# Python validation caches are local tooling artifacts.
+__pycache__/
+*.pyc

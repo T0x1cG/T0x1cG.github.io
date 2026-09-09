@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-frame-state="pending">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,13 +11,15 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="description" content="T0x1cG — aspiring Penetration Tester and Red Team learner focused on web application security." />
     <title>T0x1cG — Aspiring Penetration Tester &amp; Red Team Learner</title>
+    <link rel="stylesheet" href="frame-guard.css?v=20260908-security" />
+    <script src="frame-guard.js?v=20260908-security"></script>
     <script src="theme.js?v=20260908"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="portfolio.css?v=20260908-icons" />
   </head>
-  <body>
+  <body hidden>
     <a class="skip-link" href="#top">Skip to content</a>
     <div class="site-shell">
       <header class="topbar">
@@ -281,6 +283,6 @@
         </aside>
       </div>
     </dialog>
-    <script src="app.js?v=20260908-icons"></script>
+    <script src="app.js?v=20260908-security"></script>
   </body>
 </html>

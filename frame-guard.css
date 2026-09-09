@@ -1,0 +1,4 @@
+/* Stay hidden unless the early guard confirms a top-level window. */
+html:not([data-frame-state="allowed"]) body {
+  display: none !important;
+}
