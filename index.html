@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="portfolio.css?v=20260909-cleanup" />
+    <link rel="stylesheet" href="portfolio.css?v=20260909-competitions" />
   </head>
   <body hidden>
     <a class="skip-link" href="#top">Skip to content</a>
@@ -92,20 +92,17 @@
         <section class="research-section writeup-section section-pad" id="writeups">
           <div class="section-heading">
             <div><p class="eyebrow">FROM CHALLENGE TO UNDERSTANDING</p><h2>Writeups</h2></div>
-            <p>Categorized Jeopardy CTF research from Cyber Arena. Flags, credentials, and transient challenge tokens are removed.</p>
+            <p>Challenge walkthroughs, organized by competition and category. Select an event to explore its writeups.</p>
           </div>
-          <div class="writeup-classifier" aria-label="Writeup collection">
-            <button class="active" type="button" data-writeup-collection="jeopardy" aria-pressed="true">
-              <span>Jeopardy CTF</span><small>Cyber Arena challenges by category</small><b id="jeopardyCount">00</b>
+          <div class="writeup-classifier" aria-label="Writeup competition">
+            <button class="active" type="button" data-writeup-collection="digital-dragons-2026" aria-pressed="true">
+              <span>The Digital Dragons CTF 2026</span><b>00</b>
+            </button>
+            <button type="button" data-writeup-collection="cyber-arena-2026" aria-pressed="false">
+              <span>Cyber Arena 2026</span><b>00</b>
             </button>
           </div>
-          <div class="jeopardy-categories" id="jeopardyCategories" aria-label="Jeopardy CTF category" hidden>
-            <span>FILTER CATEGORY</span>
-            <button class="active" type="button" data-jeopardy-category="all" aria-pressed="true">All</button>
-            <button type="button" data-jeopardy-category="Crypto" aria-pressed="false">Crypto</button>
-            <button type="button" data-jeopardy-category="Forensics" aria-pressed="false">Forensics</button>
-            <button type="button" data-jeopardy-category="Misc" aria-pressed="false">Misc</button>
-          </div>
+          <div class="jeopardy-categories" id="jeopardyCategories" aria-label="Writeup category"></div>
           <div class="writeup-toolbar" aria-label="Writeup pages">
             <span id="writeupPageLabel">PAGE 01 / 01</span>
             <div>
@@ -276,6 +273,6 @@
         </aside>
       </div>
     </dialog>
-    <script src="app.js?v=20260909-cleanup"></script>
+    <script src="app.js?v=20260909-competitions"></script>
   </body>
 </html>

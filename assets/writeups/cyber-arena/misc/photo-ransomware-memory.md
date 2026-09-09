@@ -1,6 +1,6 @@
 # Photo Ransomware Memory Investigation
 
-> Cyber Arena · Misc · Public writeup
+> Cyber Arena 2026 · Misc · Public writeup
 
 ## Scenario
 

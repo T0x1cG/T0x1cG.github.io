@@ -1,6 +1,6 @@
 # Angkor Encrypted Frames
 
-> Cyber Arena · Crypto · Public writeup
+> Cyber Arena 2026 · Crypto · Public writeup
 
 ## Challenge
 

@@ -4,11 +4,16 @@ const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector
 let archive = { articles: [], writeups: [], certifications: [], achievements: [] };
 let activeFilter = "all";
 let writeupPage = 0;
-let activeWriteupCollection = "jeopardy";
+let activeWriteupCollection = "digital-dragons-2026";
 let activeJeopardyCategory = "all";
 const writeupsPerPage = 4;
 let activeWriteupId = "";
 const markdownCache = new Map();
+const documentRenders = new WeakMap();
+const writeupCompetitions = {
+  "digital-dragons-2026": "The Digital Dragons CTF 2026",
+  "cyber-arena-2026": "Cyber Arena 2026"
+};
 let adminStatus = { configured: false, authenticated: false };
 const localBackend = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
 let backendOnline = localBackend;
@@ -121,7 +126,7 @@ function archiveEntries() {
 
 function entryCard(item) {
   return `<button type="button" class="research-card" data-open-kind="${escapeHtml(item.kind)}" data-open-id="${escapeHtml(item.id)}">
-    <span class="card-top"><span class="topic">${icon(item.kind === "writeup" ? "writeup" : "sharing")}${escapeHtml(item.kind === "writeup" ? `CTF writeup · ${item.category}` : "Sharing · Learning resource")}</span><span>${dateLabel(item.createdAt)}</span></span>
+    <span class="card-top"><span class="topic">${icon(item.kind === "writeup" ? "writeup" : "sharing")}${escapeHtml(item.kind === "writeup" ? `${writeupCompetitions[writeupCollection(item)]} · ${item.category}` : "Sharing · Learning resource")}</span><span>${dateLabel(item.createdAt)}</span></span>
     <h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p>
     <span class="card-bottom"><span class="tags">${(item.tags || []).slice(0, 3).map((tag) => `<i class="tag">${escapeHtml(tag)}</i>`).join("")}</span><span class="read-arrow" aria-hidden="true">↗</span></span>
   </button>`;
@@ -165,14 +170,13 @@ function renderArticles() {
 }
 
 function writeupCollection(item) {
-  return item.collection === "jeopardy" ? "jeopardy" : "";
+  return item.competition || (item.collection === "jeopardy" ? "cyber-arena-2026" : "");
 }
 
 function filteredWriteups() {
   return (archive.writeups || []).filter((item) => {
     if (writeupCollection(item) !== activeWriteupCollection) return false;
-    return activeWriteupCollection !== "jeopardy"
-      || activeJeopardyCategory === "all"
+    return activeJeopardyCategory === "all"
       || item.category === activeJeopardyCategory;
   });
 }
@@ -180,20 +184,16 @@ function filteredWriteups() {
 function renderWriteups() {
   const host = $("#writeupGrid");
   const items = filteredWriteups();
-  const jeopardyCount = (archive.writeups || []).filter((item) => writeupCollection(item) === "jeopardy").length;
-  $("#jeopardyCount").textContent = String(jeopardyCount).padStart(2, "0");
   $$('[data-writeup-collection]').forEach((button) => {
     const active = button.dataset.writeupCollection === activeWriteupCollection;
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", String(active));
+    const count = archive.writeups.filter((item) => writeupCollection(item) === button.dataset.writeupCollection).length;
+    $("b", button).textContent = String(count).padStart(2, "0");
   });
   const categoryBar = $("#jeopardyCategories");
-  categoryBar.hidden = activeWriteupCollection !== "jeopardy";
-  $$('[data-jeopardy-category]').forEach((button) => {
-    const active = button.dataset.jeopardyCategory === activeJeopardyCategory;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
+  const categories = ["all", ...new Set(archive.writeups.filter((item) => writeupCollection(item) === activeWriteupCollection).map((item) => item.category))];
+  categoryBar.innerHTML = '<span>FILTER CATEGORY</span>' + categories.map((category) => `<button type="button" data-jeopardy-category="${escapeHtml(category)}" class="${category === activeJeopardyCategory ? "active" : ""}" aria-pressed="${category === activeJeopardyCategory}">${escapeHtml(category === "all" ? "All" : category)}</button>`).join("");
   const totalPages = Math.max(1, Math.ceil(items.length / writeupsPerPage));
   writeupPage = Math.min(writeupPage, totalPages - 1);
   const visible = items.slice(writeupPage * writeupsPerPage, (writeupPage + 1) * writeupsPerPage);
@@ -217,11 +217,12 @@ function renderWriteups() {
   `).join("");
 }
 
-function safeDocumentUrl(value) {
+function safeDocumentUrl(value, format = "md") {
   if (!value || typeof value !== "string") return "";
   try {
     const url = new URL(value, document.baseURI);
-    return url.origin === location.origin && /^assets\/writeups\/.*\.md$/i.test(url.pathname.replace(/^\/+/, "")) ? url.href : "";
+    const pathAllowed = format === "pdf" ? /^\/assets\/writeups\/[a-z0-9/_-]+\.pdf$/i.test(url.pathname) : /^\/assets\/writeups\/.*\.md$/i.test(url.pathname);
+    return url.origin === location.origin && !url.username && !url.password && pathAllowed ? url.href : "";
   } catch {
     return "";
   }
@@ -409,16 +410,28 @@ function renderOutline(headings, hostSelector) {
 async function displayMarkdown(item, options) {
   const content = $(options.content);
   const scroll = $(options.scroll);
+  const renderToken = {};
+  documentRenders.set(content, renderToken);
   content.innerHTML = '<p class="knowledge-loading">Opening document…</p>';
   $(options.title).textContent = item.title;
   if (options.label) $(options.label).textContent = options.labelText || item.label || "NOTES";
   try {
+    if (item.pdf) {
+      const url = safeDocumentUrl(item.pdf, "pdf");
+      if (!url) throw new Error("This PDF path is not allowed.");
+      content.innerHTML = `<p class="eyebrow">${escapeHtml(writeupCompetitions[writeupCollection(item)])} · ${escapeHtml(item.category)}</p><h1>${escapeHtml(item.title)}</h1><p>${escapeHtml(item.summary)}</p><p class="pdf-details">PDF · ${escapeHtml(item.pages)} pages · ${Math.ceil(item.fileSize / 1024)} KB</p><div class="pdf-actions"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open PDF ↗</a><a href="${escapeHtml(url)}" download>Download PDF ↓</a></div><p>The complete writeup, including screenshots and code, is available in the original PDF.</p>`;
+      $(options.outline).innerHTML = '<span class="outline-empty">PDF document</span>';
+      scroll.scrollTop = 0;
+      return;
+    }
     const { markdown, sourcePath } = await readMarkdown(item);
+    if (documentRenders.get(content) !== renderToken) return;
     const rendered = markdownToHtml(markdown, sourcePath);
     content.innerHTML = rendered.html || '<p>No content published yet.</p>';
     renderOutline(rendered.headings, options.outline);
     scroll.scrollTop = 0;
   } catch (error) {
+    if (documentRenders.get(content) !== renderToken) return;
     content.innerHTML = `<div class="document-error"><strong>Document unavailable</strong><p>${escapeHtml(error.message)}</p></div>`;
     $(options.outline).innerHTML = "";
   }
@@ -428,12 +441,12 @@ async function displayMarkdown(item, options) {
 function renderWriteupTree(query = "") {
   const normalized = query.trim().toLowerCase();
   const items = (archive.writeups || []).filter((item) => !normalized || `${item.title} ${item.label} ${item.category || ""} ${(item.tags || []).join(" ")}`.toLowerCase().includes(normalized));
-  const groups = ["Crypto", "Forensics", "Misc"].map((category) => ({
-      label: `JEOPARDY / ${category.toUpperCase()}`,
-      items: items.filter((item) => writeupCollection(item) === "jeopardy" && item.category === category)
+  const groups = Object.entries(writeupCompetitions).map(([competition, label]) => ({
+      label,
+      items: items.filter((item) => writeupCollection(item) === competition)
     })).filter((group) => group.items.length);
   $("#writeupTree").innerHTML = groups.length
-    ? groups.map((group) => `<section class="writeup-tree-section"><p>${escapeHtml(group.label)}</p>${group.items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml((item.label || item.category || "WRITEUP").replace(/^HTB\s*·?\s*/i, ""))}</small></button>`).join("")}</section>`).join("")
+    ? groups.map((group) => `<section class="writeup-tree-section"><p>${escapeHtml(group.label)}</p>${group.items.map((item) => `<button class="${item.id === activeWriteupId ? "active" : ""}" type="button" data-writeup-select="${escapeHtml(item.id)}"><i></i><span>${escapeHtml(item.title)}</span><small>${escapeHtml(item.category)}${item.pdf ? " · PDF" : ""}</small></button>`).join("")}</section>`).join("")
     : '<p class="knowledge-loading">No writeups matched your search.</p>';
 }
 
@@ -441,6 +454,12 @@ async function selectWriteup(id) {
   const item = (archive.writeups || []).find((entry) => entry.id === id);
   if (!item) return;
   activeWriteupId = id;
+  if (activeWriteupCollection !== writeupCollection(item)) {
+    activeWriteupCollection = writeupCollection(item);
+    activeJeopardyCategory = "all";
+    writeupPage = 0;
+    renderWriteups();
+  }
   if ($("#documentDialog").open) {
     const url = new URL(location.href);
     url.searchParams.set("writeup", id);
@@ -732,14 +751,17 @@ function setupEvents() {
   });
   $$('[data-writeup-collection]').forEach((button) => button.addEventListener("click", () => {
     activeWriteupCollection = button.dataset.writeupCollection;
+    activeJeopardyCategory = "all";
     writeupPage = 0;
     renderWriteups();
   }));
-  $$('[data-jeopardy-category]').forEach((button) => button.addEventListener("click", () => {
+  $("#jeopardyCategories").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-jeopardy-category]");
+    if (!button) return;
     activeJeopardyCategory = button.dataset.jeopardyCategory;
     writeupPage = 0;
     renderWriteups();
-  }));
+  });
   $("#writeupPrev").addEventListener("click", () => {
     if (writeupPage === 0) return;
     writeupPage -= 1;

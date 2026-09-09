@@ -5,7 +5,11 @@
       "label": "Learning",
       "title": "ISC2 Certified in Cybersecurity Study Guide",
       "summary": "My structured CC notes covering security principles, continuity and recovery, access control, network security, and security operations.",
-      "tags": ["ISC2 CC", "study guide", "security fundamentals"],
+      "tags": [
+        "ISC2 CC",
+        "study guide",
+        "security fundamentals"
+      ],
       "body": "After passing the ISC2 Certified in Cybersecurity exam, I organized my notes and useful resources into a public study guide for other learners.\n\nThe repository covers all five CC domains: Security Principles; Business Continuity, Disaster Recovery and Incident Response; Access Controls; Network Security; and Security Operations.\n\nThese are independent study notes, not official ISC2 course material. Verify objectives against the current official exam outline before preparing for an exam.",
       "url": "https://github.com/T0x1cG/Certified-in-Cybersecurity",
       "createdAt": "2026-02-12T05:27:36.000Z"
@@ -15,7 +19,11 @@
       "label": "Learning",
       "title": "eJPTv2 Practical Penetration Testing Notes",
       "summary": "The personal reconnaissance, Linux, Windows, and web-exploitation reference notes I used to complete eJPTv2 in four hours with a 91% score.",
-      "tags": ["eJPTv2", "penetration testing", "cheatsheet"],
+      "tags": [
+        "eJPTv2",
+        "penetration testing",
+        "cheatsheet"
+      ],
       "body": "A practical reference collection created during my eJPTv2 preparation. It includes information gathering, service enumeration, Linux and Windows techniques, web assessment, Metasploit workflows, file transfer, credential testing, and post-exploitation reminders.\n\nI completed the eJPTv2 exam in four hours and achieved 91% using my own notes. I published the collection to help other learners build a repeatable testing workflow.\n\nUse every command only in labs, CTFs, or systems where you have explicit authorization.",
       "url": "https://github.com/T0x1cG/eJPTv2",
       "createdAt": "2025-12-30T03:38:59.000Z"
@@ -23,82 +31,238 @@
   ],
   "writeups": [
     {
+      "id": "digital-dragons-2026-crypto-1",
+      "collection": "jeopardy",
+      "competition": "digital-dragons-2026",
+      "category": "Crypto",
+      "label": "The Digital Dragons CTF 2026 · Crypto",
+      "title": "Sometimes the Right Signature Is Still Wrong",
+      "summary": "Exploiting JWT algorithm confusion by reusing a published RSA public key as an HMAC secret to forge an administrator token.",
+      "tags": [
+        "JWT",
+        "algorithm confusion",
+        "RSA"
+      ],
+      "pdf": "assets/writeups/digital-dragons-2026/crypto-1.pdf",
+      "pages": 5,
+      "fileSize": 218504,
+      "createdAt": "2026-09-09T00:00:00.000Z"
+    },
+    {
+      "id": "digital-dragons-2026-crypto-2",
+      "collection": "jeopardy",
+      "competition": "digital-dragons-2026",
+      "category": "Crypto",
+      "label": "The Digital Dragons CTF 2026 · Crypto",
+      "title": "They Trusted the Numbers to Keep Their Secrets, but the Numbers Had Other Plans",
+      "summary": "Recovering a small LWE secret with a q-ary lattice, Kannan embedding, and LLL, then decrypting the encrypted message bits.",
+      "tags": [
+        "LWE",
+        "lattices",
+        "LLL"
+      ],
+      "pdf": "assets/writeups/digital-dragons-2026/crypto-2.pdf",
+      "pages": 8,
+      "fileSize": 231204,
+      "createdAt": "2026-09-09T00:00:00.000Z"
+    },
+    {
+      "id": "digital-dragons-2026-crypto-3",
+      "collection": "jeopardy",
+      "competition": "digital-dragons-2026",
+      "category": "Crypto",
+      "label": "The Digital Dragons CTF 2026 · Crypto",
+      "title": "Some Things Are Only Safe Because They Were Never Supposed to Happen Twice",
+      "summary": "Recovering an ECDSA private key from reused nonces and forging a signature for a restricted maintenance command.",
+      "tags": [
+        "ECDSA",
+        "nonce reuse",
+        "signature forgery"
+      ],
+      "pdf": "assets/writeups/digital-dragons-2026/crypto-3.pdf",
+      "pages": 6,
+      "fileSize": 231435,
+      "createdAt": "2026-09-09T00:00:00.000Z"
+    },
+    {
+      "id": "digital-dragons-2026-misc-2",
+      "collection": "jeopardy",
+      "competition": "digital-dragons-2026",
+      "category": "Misc",
+      "label": "The Digital Dragons CTF 2026 · Misc",
+      "title": "The Perfectly Secure System That Somehow Learned to Do the One Thing It Was Never Supposed to Do",
+      "summary": "Crossing an MCP assistant’s trust boundary through fetched protocol directives to modify session policy and invoke a restricted tool.",
+      "tags": [
+        "MCP",
+        "prompt injection",
+        "trust boundaries"
+      ],
+      "pdf": "assets/writeups/digital-dragons-2026/misc-2.pdf",
+      "pages": 5,
+      "fileSize": 297939,
+      "createdAt": "2026-09-09T00:00:00.000Z"
+    },
+    {
+      "id": "digital-dragons-2026-osint-1",
+      "collection": "jeopardy",
+      "competition": "digital-dragons-2026",
+      "category": "OSINT",
+      "label": "The Digital Dragons CTF 2026 · OSINT",
+      "title": "Operation: Ghost Researcher",
+      "summary": "Following a chain of simulated arXiv, social, GitHub, and Pastebin clues to uncover a hidden credential.",
+      "tags": [
+        "OSINT",
+        "link analysis",
+        "Base64"
+      ],
+      "pdf": "assets/writeups/digital-dragons-2026/osint-1.pdf",
+      "pages": 10,
+      "fileSize": 890971,
+      "createdAt": "2026-09-09T00:00:00.000Z"
+    },
+    {
+      "id": "digital-dragons-2026-pwn-1",
+      "collection": "jeopardy",
+      "competition": "digital-dragons-2026",
+      "category": "Pwn",
+      "label": "The Digital Dragons CTF 2026 · Pwn",
+      "title": "The Machine That Remembers Too Much",
+      "summary": "Analyzing an unsafe stack read in a 32-bit binary and redirecting execution to a hidden win function with a ret2win payload.",
+      "tags": [
+        "stack overflow",
+        "ret2win",
+        "binary exploitation"
+      ],
+      "pdf": "assets/writeups/digital-dragons-2026/pwn-1.pdf",
+      "pages": 5,
+      "fileSize": 211215,
+      "createdAt": "2026-09-09T00:00:00.000Z"
+    },
+    {
+      "id": "digital-dragons-2026-reverse-2",
+      "collection": "jeopardy",
+      "competition": "digital-dragons-2026",
+      "category": "Reverse",
+      "label": "The Digital Dragons CTF 2026 · Reverse",
+      "title": "onnx-model-secrets",
+      "summary": "Inspecting ONNX metadata and decoding Protocol Buffers to trace sensitive information hidden in model calibration data.",
+      "tags": [
+        "ONNX",
+        "Protocol Buffers",
+        "model metadata"
+      ],
+      "pdf": "assets/writeups/digital-dragons-2026/reverse-2.pdf",
+      "pages": 5,
+      "fileSize": 345646,
+      "createdAt": "2026-09-09T00:00:00.000Z"
+    },
+    {
       "id": "cyber-arena-angkor-encrypted-frames-2026",
       "collection": "jeopardy",
       "category": "Crypto",
-      "label": "CYBER ARENA · CRYPTO",
+      "label": "Cyber Arena 2026 · Crypto",
       "title": "Angkor Encrypted Frames",
       "summary": "Reused stream-cipher material across encrypted images, known file structure, crib-based keystream recovery, and frame reconstruction.",
-      "tags": ["Cyber Arena", "stream cipher", "known plaintext"],
+      "tags": [
+        "Cyber Arena 2026",
+        "stream cipher",
+        "known plaintext"
+      ],
       "body": "Cyber Arena crypto writeup covering reused keystream detection and known-plaintext recovery across encrypted image frames. The flag and challenge secrets are removed from the public copy.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/cyber-arena/crypto/angkor-encrypted-frames.md",
       "document": "assets/writeups/cyber-arena/crypto/angkor-encrypted-frames.md",
-      "createdAt": "2026-07-17T00:00:00.000Z"
+      "createdAt": "2026-07-17T00:00:00.000Z",
+      "competition": "cyber-arena-2026"
     },
     {
       "id": "cyber-arena-des-remix-2026",
       "collection": "jeopardy",
       "category": "Crypto",
-      "label": "CYBER ARENA · CRYPTO",
+      "label": "Cyber Arena 2026 · Crypto",
       "title": "DES Remix",
       "summary": "A meet-in-the-middle analysis of a custom multi-DES construction with forward tables, reverse search, and collision verification.",
-      "tags": ["Cyber Arena", "DES", "meet-in-the-middle"],
+      "tags": [
+        "Cyber Arena 2026",
+        "DES",
+        "meet-in-the-middle"
+      ],
       "body": "Cyber Arena crypto writeup documenting the attack design for a custom DES construction. The retired remote endpoint was unavailable for final flag verification.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/cyber-arena/crypto/des-remix.md",
       "document": "assets/writeups/cyber-arena/crypto/des-remix.md",
-      "createdAt": "2026-07-17T00:00:00.000Z"
+      "createdAt": "2026-07-17T00:00:00.000Z",
+      "competition": "cyber-arena-2026"
     },
     {
       "id": "cyber-arena-space-temu-aes-2026",
       "collection": "jeopardy",
       "category": "Crypto",
-      "label": "CYBER ARENA · CRYPTO",
+      "label": "Cyber Arena 2026 · Crypto",
       "title": "Space Temu AES",
       "summary": "Known-plaintext recovery against a deterministic home-built cipher using reversible substitution and repeating key material.",
-      "tags": ["Cyber Arena", "custom cipher", "known plaintext"],
+      "tags": [
+        "Cyber Arena 2026",
+        "custom cipher",
+        "known plaintext"
+      ],
       "body": "Cyber Arena crypto writeup explaining why an AES-inspired custom cipher fails under known plaintext. The flag and recovered challenge key are removed.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/cyber-arena/crypto/space-temu-aes.md",
       "document": "assets/writeups/cyber-arena/crypto/space-temu-aes.md",
-      "createdAt": "2026-07-17T00:00:00.000Z"
+      "createdAt": "2026-07-17T00:00:00.000Z",
+      "competition": "cyber-arena-2026"
     },
     {
       "id": "cyber-arena-twin-postcards-2026",
       "collection": "jeopardy",
       "category": "Crypto",
-      "label": "CYBER ARENA · CRYPTO",
+      "label": "Cyber Arena 2026 · Crypto",
       "title": "Digital Angkor Wat Postcard",
       "summary": "Partial-prime recovery with Coppersmith, AES-CTR image reconstruction, and Håstad's low-exponent broadcast attack.",
-      "tags": ["Cyber Arena", "RSA", "Coppersmith"],
+      "tags": [
+        "Cyber Arena 2026",
+        "RSA",
+        "Coppersmith"
+      ],
       "body": "Cyber Arena crypto writeup covering two independent RSA failures and AES-CTR payload recovery. Flags, private material, and solver constants are removed.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/cyber-arena/crypto/twin-postcards.md",
       "document": "assets/writeups/cyber-arena/crypto/twin-postcards.md",
-      "createdAt": "2026-07-17T00:00:00.000Z"
+      "createdAt": "2026-07-17T00:00:00.000Z",
+      "competition": "cyber-arena-2026"
     },
     {
       "id": "cyber-arena-telegram-image-steganography-2026",
       "collection": "jeopardy",
       "category": "Forensics",
-      "label": "CYBER ARENA · FORENSICS",
+      "label": "Cyber Arena 2026 · Forensics",
       "title": "Telegram Image Steganography",
       "summary": "PNG structure inspection, hidden-chunk extraction, ordered payload reconstruction, and validated symmetric decryption.",
-      "tags": ["Cyber Arena", "PNG", "steganography"],
+      "tags": [
+        "Cyber Arena 2026",
+        "PNG",
+        "steganography"
+      ],
       "body": "Cyber Arena forensics writeup using format-aware PNG parsing to recover a hidden payload. The flag and recovered secret are removed.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/cyber-arena/forensics/telegram-image-steganography.md",
       "document": "assets/writeups/cyber-arena/forensics/telegram-image-steganography.md",
-      "createdAt": "2026-07-17T00:00:00.000Z"
+      "createdAt": "2026-07-17T00:00:00.000Z",
+      "competition": "cyber-arena-2026"
     },
     {
       "id": "cyber-arena-photo-ransomware-memory-2026",
       "collection": "jeopardy",
       "category": "Misc",
-      "label": "CYBER ARENA · MISC",
+      "label": "Cyber Arena 2026 · Misc",
       "title": "Photo Ransomware Memory Investigation",
       "summary": "Evidence hashing, memory timeline analysis, static ransomware inspection, runtime key reconstruction, and safe archive recovery.",
-      "tags": ["Cyber Arena", "memory forensics", "ransomware"],
+      "tags": [
+        "Cyber Arena 2026",
+        "memory forensics",
+        "ransomware"
+      ],
       "body": "Cyber Arena mixed-discipline writeup documenting a memory-led ransomware investigation. Evidence images, binaries, passwords, keys, credentials, and flags are excluded.",
       "url": "https://github.com/T0x1cG/T0x1cG.github.io/blob/main/assets/writeups/cyber-arena/misc/photo-ransomware-memory.md",
       "document": "assets/writeups/cyber-arena/misc/photo-ransomware-memory.md",
-      "createdAt": "2026-07-17T00:00:00.000Z"
+      "createdAt": "2026-07-17T00:00:00.000Z",
+      "competition": "cyber-arena-2026"
     }
   ],
   "certifications": [
@@ -143,7 +307,10 @@
       "title": "Cyber Arena 2026 — 1st Place",
       "summary": "First place with team WillHack4Coffee",
       "image": "assets/competitions/cyber-arena-2026.webp",
-      "tags": ["CTF", "team"],
+      "tags": [
+        "CTF",
+        "team"
+      ],
       "body": "Awarded first place at Cyber Arena 2026 as a member of WillHack4Coffee.",
       "url": "",
       "createdAt": "2026-01-01T10:00:00.000Z"
@@ -154,7 +321,11 @@
       "title": "CNCC 2026 — Top 3",
       "summary": "Top 3 finish with team WillHack4Coffee",
       "image": "assets/competitions/cncc-2026.webp",
-      "tags": ["CTF", "team", "CNCC"],
+      "tags": [
+        "CTF",
+        "team",
+        "CNCC"
+      ],
       "body": "Achieved a Top 3 finish at CNCC 2026 as a member of WillHack4Coffee.",
       "url": "",
       "createdAt": "2026-01-02T10:00:00.000Z"
@@ -165,7 +336,11 @@
       "title": "CNCC 2025 — Top Cryptography Selection",
       "summary": "Selected among the top competitors in the Cryptography category",
       "image": "assets/competitions/cncc-2025.webp",
-      "tags": ["CTF", "Cryptography", "CNCC"],
+      "tags": [
+        "CTF",
+        "Cryptography",
+        "CNCC"
+      ],
       "body": "Selected among the top competitors in the Cryptography category at CNCC 2025.",
       "url": "",
       "createdAt": "2025-01-02T10:00:00.000Z"
@@ -176,7 +351,11 @@
       "title": "Koh Ker OSINT CTF 2025 — Top 10",
       "summary": "Placed 10th overall with 675 points",
       "image": "assets/competitions/koh-ker-osint-ctf-2025.webp",
-      "tags": ["CTF", "OSINT", "Koh Ker"],
+      "tags": [
+        "CTF",
+        "OSINT",
+        "Koh Ker"
+      ],
       "body": "Placed 10th in Koh Ker OSINT CTF 2025 with a final score of 675 points.",
       "url": "",
       "createdAt": "2025-01-01T10:00:00.000Z"

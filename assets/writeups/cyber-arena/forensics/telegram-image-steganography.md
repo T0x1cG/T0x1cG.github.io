@@ -1,6 +1,6 @@
 # Telegram Image Steganography
 
-> Cyber Arena · Forensics · Public writeup
+> Cyber Arena 2026 · Forensics · Public writeup
 
 ## Challenge
 
