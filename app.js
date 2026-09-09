@@ -132,9 +132,6 @@ function renderDiscovery() {
   const byDate = (a, b) => new Date(b.createdAt) - new Date(a.createdAt);
   const latest = [...entries.filter((item) => item.kind === "writeup").sort(byDate).slice(0, 4), ...entries.filter((item) => item.kind === "article").sort(byDate).slice(0, 2)].sort(byDate);
   $("#latestGrid").innerHTML = latest.map(entryCard).join("") || '<p class="loading-card">New writing is on its way.</p>';
-  const topics = new Map();
-  entries.forEach((item) => (item.tags || []).forEach((tag) => topics.set(tag, (topics.get(tag) || 0) + 1)));
-  $("#topicCloud").innerHTML = [...topics].sort((a, b) => b[1] - a[1]).slice(0, 9).map(([tag]) => `<button type="button" data-search-topic="${escapeHtml(tag)}">${escapeHtml(tag)}</button>`).join("");
   renderSearch();
 }
 
@@ -696,13 +693,6 @@ function setupEvents() {
     }
   });
   $("#siteSearch").addEventListener("input", () => {
-    activatePage("search");
-    renderSearch();
-  });
-  $("#topicCloud").addEventListener("click", (event) => {
-    const button = event.target.closest("[data-search-topic]");
-    if (!button) return;
-    $("#siteSearch").value = button.dataset.searchTopic;
     activatePage("search");
     renderSearch();
   });
