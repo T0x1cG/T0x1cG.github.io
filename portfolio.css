@@ -138,13 +138,13 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--line); padding: 23px 0
 .project-card h3 { margin: 24px 0 12px; font-size: 25px; }
 .project-card p { color: var(--muted); font-size: 15px; }
 .project-card-bottom { border-top: 1px solid var(--line); margin-top: 25px; padding-top: 18px; }
-.credentials-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.credentials-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .cert-card { min-width: 0; padding: 0; text-align: left; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--panel); }
 .cert-card:hover { border-color: var(--faint); }
-.cert-image { display: grid; place-items: center; position: relative; padding: 22px; background: var(--hover); border-bottom: 1px solid var(--line); }
-.cert-image img { display: block; width: 100%; height: auto; max-height: 540px; object-fit: contain; }
+.cert-image { display: grid; place-items: center; position: relative; height: 180px; padding: 15px; background: var(--hover); border-bottom: 1px solid var(--line); }
+.cert-image img { display: block; width: 100%; height: 145px; object-fit: contain; }
 .cert-image > b { position: absolute; bottom: 9px; right: 9px; background: var(--panel); border: 1px solid var(--line); color: var(--muted); font: 12px var(--mono); padding: 5px 7px; border-radius: 3px; }
-.cert-copy { display: block; padding: 24px; }
+.cert-copy { display: block; padding: 19px; }
 .cert-year { color: var(--faint); font: 12px var(--mono); }
 .cert-copy h3 { margin: 8px 0; font-size: 23px; }
 .cert-copy p { color: var(--accent); font-size: 12px; }
@@ -167,8 +167,6 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--line); padding: 23px 0
 dialog { padding: 0; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; max-width: calc(100vw - 32px); max-height: 90dvh; }
 dialog::backdrop { background: #09090bc9; backdrop-filter: blur(4px); }
 .article-dialog { width: 800px; }
-.article-dialog.credential-dialog { width: 1240px; }
-.credential-dialog article { padding: 20px; }
 .dialog-top { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 18px; padding: 15px 23px; background: var(--sidebar); border-bottom: 1px solid var(--line); color: var(--muted); font: 12px var(--mono); }
 .dialog-close { display: grid; place-items: center; flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 6px; font-size: 26px; line-height: 1; color: var(--muted); }
 .dialog-close:hover { color: var(--text); background: var(--hover); }
@@ -177,7 +175,7 @@ dialog::backdrop { background: #09090bc9; backdrop-filter: blur(4px); }
 .article-meta { color: var(--accent); font-size: 13px; margin-bottom: 24px; }
 .article-body p { color: var(--muted); margin: 16px 0; }
 .article-external { display: inline-block; color: var(--accent); margin-top: 20px; }
-.credential-preview img { width: 100%; height: auto; max-height: 74dvh; object-fit: contain; display: block; margin: 0 auto 25px; }
+.credential-preview img { max-width: 100%; max-height: 60vh; object-fit: contain; display: block; margin: 0 auto 25px; }
 .credential-preview p { color: var(--muted); }
 .document-dialog { width: 1250px; }
 .document-dialog-shell { display: grid; grid-template-columns: 215px minmax(0, 1fr) 180px; grid-template-rows: auto minmax(0, 1fr); height: 85dvh; }
@@ -303,10 +301,10 @@ form textarea { min-height: 180px; resize: vertical; }
   .writeup-classifier b { margin-left: auto; }
   .jeopardy-categories > span { width: 100%; margin-bottom: 5px; }
   .credentials-grid { grid-template-columns: 1fr; }
-  .cert-image { padding: 10px; }
+  .cert-image { height: 205px; }
+  .cert-image img { height: 175px; }
   .cert-copy { padding: 20px; }
   .cert-copy h3 { font-size: 21px; }
-  .credential-dialog article { padding: 12px; }
   .contact-card { gap: 12px; padding: 14px; }
   .channel-copy strong { font-size: 14px; }
   .document-dialog-shell { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); height: 90dvh; }
