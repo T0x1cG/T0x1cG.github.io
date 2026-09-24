@@ -4,6 +4,9 @@ The public portfolio is a static GitHub Pages site. The private publishing backe
 
 - Article and Markdown links allow only HTTP, HTTPS, and mailto URLs, without embedded usernames or passwords.
 - Markdown is escaped before rendering, and local documents are restricted to Markdown files under `assets/writeups/`.
+- Markdown input cannot supply the renderer's reserved placeholder characters. Regression tests cover token injection, escaped admin attributes, encoded delete paths, and digit-leading outline IDs.
+- The HTB update checkout does not persist credentials. Its write token is exposed only to the final publishing step, not while downloaded data is processed.
+- CI rejects brace-style flags and format examples in Markdown writeups. This text-pattern check does not inspect PDFs, images, encoded values, or earlier commits.
 - Downloaded HTB rank SVGs pass a strict geometry allowlist and are reserialized before publication. Scripts, events, styles, external references, XML declarations other than the optional XML header, and excessive input complexity are rejected. The workflow stops before publishing if validation fails.
 - GitHub Actions are pinned to full commit IDs. Regression checks run on pushes and pull requests with read-only repository access.
 - Study-note files and metadata have been removed from the current published tree. Earlier commits and third-party caches may still contain copies; history has not been rewritten.
@@ -19,6 +22,7 @@ This is an application-level mitigation, not HTTP-level frame prevention. The `g
 ```sh
 python3 scripts/test_sanitize_rank_svg.py
 node scripts/check_public_content.mjs
+node scripts/test_browser_security.mjs
 node --check app.js
 node --check frame-guard.js
 ```

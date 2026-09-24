@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Check out portfolio
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
 
       - name: Fetch public HTB rank
         shell: bash
@@ -89,7 +91,10 @@ jobs:
 
       - name: Publish changed rank
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/htb-profile.json data/htb-rank.svg
@@ -98,4 +103,4 @@ jobs:
             exit 0
           fi
           git commit -m "Update HTB rank snapshot"
-          git push
+          git -c credential.helper= push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main

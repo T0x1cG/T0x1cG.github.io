@@ -23,5 +23,7 @@ jobs:
           node --check theme.js
       - name: Validate SVG handling
         run: python3 scripts/test_sanitize_rank_svg.py
+      - name: Check browser security regressions
+        run: node scripts/test_browser_security.mjs
       - name: Check published content
         run: node scripts/check_public_content.mjs

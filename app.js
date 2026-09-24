@@ -246,7 +246,8 @@ function formatInline(value, sourcePath) {
     tokens.push(html);
     return marker;
   };
-  let text = String(value || "");
+  // Reserve internal placeholders so authored text cannot forge HTML tokens.
+  let text = String(value || "").replace(/[\uE000\uE001]/g, "");
   text = text.replace(/`([^`\n]+)`/g, (_, code) => preserve(`<code>${escapeHtml(code)}</code>`));
   text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, target) => {
     const url = safeLinkUrl(target, sourcePath);
@@ -569,9 +570,19 @@ function renderManageList() {
   host.innerHTML = allEntries().map((item) => `
     <div class="manage-item">
       <div><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.type)} / ${escapeHtml(item.label || "unlabeled")}</small></div>
-      <button class="delete-entry" type="button" data-delete-type="${item.type}" data-delete-id="${item.id}">Remove</button>
+      <button class="delete-entry" type="button" data-delete-type="${escapeHtml(item.type)}" data-delete-id="${escapeHtml(item.id)}">Remove</button>
     </div>
   `).join("") || '<p class="form-message">Your archive is empty.</p>';
+}
+
+function contentEntryPath(type, id) {
+  return `/api/content/${encodeURIComponent(type)}/${encodeURIComponent(id)}`;
+}
+
+function scrollWriteupHeading(id) {
+  const content = $("#writeupDocument");
+  const target = document.getElementById(id);
+  if (target && content.contains(target)) target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function openEntry(entry) {
@@ -781,9 +792,7 @@ function setupEvents() {
     outline.addEventListener("click", (event) => {
       const button = event.target.closest("[data-outline-target]");
       if (!button) return;
-      const content = $("#writeupDocument");
-      const target = content.querySelector(`#${button.dataset.outlineTarget}`);
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollWriteupHeading(button.dataset.outlineTarget);
     });
   });
   ["#writeupDocument"].forEach((selector) => {
@@ -902,7 +911,7 @@ function setupEvents() {
     const button = event.target.closest("[data-delete-id]");
     if (!button || !confirm("Remove this entry from your public archive?")) return;
     try {
-      await request(`/api/content/${button.dataset.deleteType}/${button.dataset.deleteId}`, { method: "DELETE" });
+      await request(contentEntryPath(button.dataset.deleteType, button.dataset.deleteId), { method: "DELETE" });
       await refreshArchive();
     } catch (error) {
       alert(error.message);

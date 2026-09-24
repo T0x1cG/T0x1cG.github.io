@@ -101,7 +101,7 @@ calibration_hash    = d986fbb31248e5b9267f7ef34d60fcb4dbd8b7e05a47e4f02f7978a351
 The model ships its own decryption recipe. Three observations settle the shape of the puzzle before writing any solve code:
 
 1. calibration_hash is not a hash, 84 hex chars = 42 bytes, and a hash would not be 42 bytes. It is the ciphertext.
-2. 42 bytes is exactly len("flag{") + 36 (UUID) + len("}") = 5 + 36 + 1. The plaintext is a flag{<uuid4>}.
+2. The 42-byte plaintext consists of a five-byte known prefix, a 36-character UUID, and a one-byte suffix. The recovered challenge answer is omitted from this public writeup.
 3. calibration_indices has 16 entries → a 16-byte key, repeating over 42 bytes.
 
 weight_indexed_xor names the scheme: index into a weight tensor, use it as XOR key material.
@@ -132,7 +132,7 @@ Every weight appears twice, once as X and once as X_t. These are genuine transpo
 What makes this a nasty trap rather than an obvious one: element [0,0] is shared between a matrix and its transpose, so index 0 gives the same key byte either way, and the wrong tensor still decrypts the first character to a correct f:
 
 ```text
-fc2.weight    -> b'flag{96d117a1-60d2-4367-8711-023f0083e265}'
+fc2.weight    -> [recovered challenge answer omitted]
 fc2.weight_t  -> b'f\xe6\xda\xfd,P\xe9Y\xf9&:g\xe9\x9a\x11\nd\xb8...'
                   ^ correct first byte, everything after is noise
 ```
@@ -151,7 +151,7 @@ w[11] =  0.034938650    raw(LE) = d4 1b 0f 3d
 ...
 ```
 
-Rather than guessing derivations (int(v*255), abs(v)*1000 & 0xff, …), use the known plaintext. The flag starts flag{, so the first key bytes are forced:
+Rather than guessing derivations (int(v*255), abs(v)*1000 & 0xff, …), use the known plaintext. The known prefix determines the first key bytes:
 
 ```text
 key[0] = ct[0] ^ 'f' = 0xd9 ^ 0x66 = 0xbf

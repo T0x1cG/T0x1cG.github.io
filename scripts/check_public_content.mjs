@@ -1,6 +1,18 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { hasPublishedFlag } from './flag-policy.mjs';
+
+function checkMarkdownFlags(directory) {
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const path = new URL(entry.name + (entry.isDirectory() ? '/' : ''), directory);
+    if (entry.isDirectory()) checkMarkdownFlags(path);
+    else if (entry.name.endsWith('.md')) {
+      assert.equal(hasPublishedFlag(readFileSync(path, 'utf8')), false, `Unredacted flag in ${path.pathname}`);
+    }
+  }
+}
+checkMarkdownFlags(new URL('../assets/writeups/', import.meta.url));
 
 const archive = JSON.parse(readFileSync(new URL('../data/content.json', import.meta.url)));
 assert.equal(Object.hasOwn(archive, 'notes'), false, 'Study-note metadata must not be published');
