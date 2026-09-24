@@ -288,6 +288,29 @@
   ],
   "achievements": [
     {
+      "id": "blackhat-mea-qualification-2026",
+      "label": "BLACK HAT MEA · SAFCSP",
+      "title": "BlackHat MEA Qualification CTF 2026 — 133rd Place",
+      "summary": "133rd place with team WillHack4Coffee",
+      "image": "assets/competitions/blackhat-mea-2026.webp",
+      "imageSource": "https://0xc0ff33.sh/assets/images/competitions/04417e9be6.webp",
+      "tags": ["CTF", "team", "Black Hat MEA"],
+      "body": "Team WillHack4Coffee placed 133rd in BlackHat MEA Qualification CTF 2026.",
+      "url": "https://flagyard.com/events/3468f495-a92c-498b-90c2-994dfb99ea0b",
+      "createdAt": "2026-09-05T00:00:00.000Z"
+    },
+    {
+      "id": "cyber-apocalypse-2026",
+      "label": "HACK THE BOX · THE SALT CROWN",
+      "title": "Cyber Apocalypse CTF 2026 — 102nd Place",
+      "summary": "WillHack4Coffee · 102nd of 6,744 teams · 136/136 challenges · 69,425 points",
+      "image": "assets/competitions/cyber-apocalypse-2026.png",
+      "tags": ["CTF", "team", "Hack The Box"],
+      "body": "Participated in Cyber Apocalypse CTF 2026: The Salt Crown, July 24–29, 2026. Certificate issued to Chanserey Savon for team WillHack4Coffee, ranked 102nd of 6,744 teams with all 136 challenges solved and 69,425 points.",
+      "url": "https://ctf.hackthebox.com/event/3432/scoreboard",
+      "createdAt": "2026-07-29T00:00:00.000Z"
+    },
+    {
       "id": "cyber-arena-2026",
       "label": "COMPETITION / CTF",
       "title": "Cyber Arena 2026 — 1st Place",

@@ -589,6 +589,7 @@ function openEntry(entry) {
   if (!entry) return;
   const externalUrl = safeLinkUrl(entry.url);
   const dialog = $("#articleDialog");
+  dialog.classList.remove("credential-dialog");
   $("#dialogType").textContent = `${entry.label || entry.type.toUpperCase()} / ${dateLabel(entry.createdAt)}`;
   $("#dialogContent").innerHTML = `
     <h2>${escapeHtml(entry.title)}</h2>
@@ -603,12 +604,15 @@ function openCredential(type, id) {
   const item = (archive[type] || []).find((entry) => entry.id === id);
   if (!item) return;
   const dialog = $("#articleDialog");
+  dialog.classList.add("credential-dialog");
+  const resultUrl = safeLinkUrl(item.url);
   $("#dialogType").textContent = (type === "achievements" ? "ACHIEVEMENT" : "CERTIFICATE") + " / " + dateLabel(item.createdAt);
   $("#dialogContent").innerHTML =
     '<div class="credential-preview">' +
       (item.image ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" />' : "") +
       '<h2>' + escapeHtml(item.title) + '</h2>' +
       '<p>' + escapeHtml(item.label + " · " + item.summary) + '</p>' +
+      (resultUrl ? '<a class="article-external" href="' + escapeHtml(resultUrl.href) + '" target="_blank" rel="noopener noreferrer">View event / results ↗</a>' : '') +
     '</div>';
   dialog.showModal();
 }
