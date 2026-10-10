@@ -9,9 +9,9 @@
   "rankImage": "https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/rank_prodigy.svg",
   "level": 84,
   "grade": 2,
-  "totalExperiencePoints": 109915,
-  "levelExperiencePoints": 1154,
-  "experienceUntilNextLevel": 2536,
+  "totalExperiencePoints": 110115,
+  "levelExperiencePoints": 1354,
+  "experienceUntilNextLevel": 2336,
   "streakWeeks": 21,
-  "updatedAt": "2026-10-10T05:54:50Z"
+  "updatedAt": "2026-10-10T12:34:20Z"
 }
