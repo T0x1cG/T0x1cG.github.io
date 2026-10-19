@@ -7,11 +7,11 @@
   "countryRank": 5,
   "rank": "Prodigy",
   "rankImage": "https://htb-experience-prod-public-storage.s3.amazonaws.com/assets/ranks/svg/rank_prodigy.svg",
-  "level": 84,
+  "level": 85,
   "grade": 2,
-  "totalExperiencePoints": 111710,
-  "levelExperiencePoints": 2949,
-  "experienceUntilNextLevel": 741,
-  "streakWeeks": 22,
-  "updatedAt": "2026-10-18T20:45:46Z"
+  "totalExperiencePoints": 112525,
+  "levelExperiencePoints": 74,
+  "experienceUntilNextLevel": 3725,
+  "streakWeeks": 23,
+  "updatedAt": "2026-10-19T04:42:52Z"
 }
